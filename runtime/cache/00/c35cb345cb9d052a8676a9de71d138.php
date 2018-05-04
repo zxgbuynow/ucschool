@@ -1,0 +1,4 @@
+<?php
+//000000000000
+ exit();?>
+a:1:{i:0;a:10:{s:2:"id";i:5;s:3:"pid";i:4;s:6:"module";s:4:"shop";s:5:"title";s:12:"系统功能";s:9:"url_value";s:0:"";s:8:"url_type";s:11:"module_shop";s:10:"url_target";s:5:"_self";s:4:"icon";s:12:"si si-wrench";s:6:"params";s:0:"";s:5:"child";a:2:{i:0;a:9:{s:2:"id";i:212;s:3:"pid";i:5;s:6:"module";s:4:"shop";s:5:"title";s:12:"个人设置";s:9:"url_value";s:28:"/shop.php/index/profile.html";s:8:"url_type";s:11:"module_shop";s:10:"url_target";s:5:"_self";s:4:"icon";s:16:"fa fa-fw fa-user";s:6:"params";s:0:"";}i:1;a:9:{s:2:"id";i:13;s:3:"pid";i:5;s:6:"module";s:4:"shop";s:5:"title";s:12:"节点管理";s:9:"url_value";s:25:"/shop.php/menu/index.html";s:8:"url_type";s:11:"module_shop";s:10:"url_target";s:5:"_self";s:4:"icon";s:16:"fa fa-fw fa-bars";s:6:"params";s:0:"";}}}}

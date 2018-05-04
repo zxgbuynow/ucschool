@@ -1,0 +1,857 @@
+---------------------------------------------------------------
+[ 2018-03-20T00:03:00+08:00 ] 10.0.2.2 GET /api.php?method=user.point&source=custom&account=18321730541
+[ info ] zg.daguan.com/api.php?method=user.point&source=custom&account=18321730541 [运行时间：0.693626s][吞吐率：1.44req/s] [内存消耗：866.39kb] [文件加载：61]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36',
+  'upgrade-insecure-requests' => '1',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => 'PHPSESSID=nbot83pag460ujonurgmllhf75; thinkphp_show_page_trace=0|0; __utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmc=20928819; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lpvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; Hm_lpvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fcounsellor%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'user.point',
+  'source' => 'custom',
+  'account' => '18321730541',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ DB ] INIT mysql
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.144186s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.048555s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.005969s ] mysql:host=127.0.0.1;port=3306;dbname=daguan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_config` [ RunTime:0.001572s ]
+[ sql ] [ SQL ] SELECT `name`,`value`,`type` FROM `dp_admin_config` [ RunTime:0.000665s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_module` [ RunTime:0.005459s ]
+[ sql ] [ SQL ] SELECT `name`,`config` FROM `dp_admin_module` WHERE  `config` <> '' [ RunTime:0.000408s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook` [ RunTime:0.001690s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_hook` WHERE  `status` = 1 [ RunTime:0.000836s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_plugin` [ RunTime:0.003114s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_plugin` WHERE  `status` = 1 [ RunTime:0.000631s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook_plugin` [ RunTime:0.001590s ]
+[ sql ] [ SQL ] SELECT * FROM `dp_admin_hook_plugin` WHERE  `status` = 1 ORDER BY hook,sort [ RunTime:0.000435s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_member` [ RunTime:0.001573s ]
+[ sql ] [ SQL ] SELECT `a`.*,`b`.* FROM `dp_member` `a` LEFT JOIN `dp_member_point` `b` ON `b`.`memberid`=`a`.`id` WHERE  `a`.`username` = '18321730541' LIMIT 1 [ RunTime:0.013808s ]
+[ error ] [10501]SQLSTATE[42S22]: Column not found: 1054 Unknown column 'point' in 'field list'[/data/httpd/daguan/thinkphp/library/think/db/Connection.php:388]
+---------------------------------------------------------------
+[ 2018-03-20T00:07:00+08:00 ] 10.0.2.2 GET /api.php?method=user.point&source=custom&account=18321730541
+[ info ] zg.daguan.com/api.php?method=user.point&source=custom&account=18321730541 [运行时间：0.445770s][吞吐率：2.24req/s] [内存消耗：863.38kb] [文件加载：57]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36',
+  'upgrade-insecure-requests' => '1',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => 'PHPSESSID=nbot83pag460ujonurgmllhf75; thinkphp_show_page_trace=0|0; __utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmc=20928819; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lpvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; Hm_lpvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fcounsellor%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'user.point',
+  'source' => 'custom',
+  'account' => '18321730541',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ DB ] INIT mysql
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.099864s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.037138s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.000288s ] mysql:host=127.0.0.1;port=3306;dbname=daguan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_config` [ RunTime:0.001737s ]
+[ sql ] [ SQL ] SELECT `name`,`value`,`type` FROM `dp_admin_config` [ RunTime:0.000284s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_module` [ RunTime:0.002116s ]
+[ sql ] [ SQL ] SELECT `name`,`config` FROM `dp_admin_module` WHERE  `config` <> '' [ RunTime:0.000232s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook` [ RunTime:0.000850s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_hook` WHERE  `status` = 1 [ RunTime:0.000284s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_plugin` [ RunTime:0.000932s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_plugin` WHERE  `status` = 1 [ RunTime:0.000253s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook_plugin` [ RunTime:0.000916s ]
+[ sql ] [ SQL ] SELECT * FROM `dp_admin_hook_plugin` WHERE  `status` = 1 ORDER BY hook,sort [ RunTime:0.000440s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_member` [ RunTime:0.001602s ]
+[ sql ] [ SQL ] SELECT `a`.*,`b`.* FROM `dp_member` `a` LEFT JOIN `dp_member_point` `b` ON `b`.`memberid`=`a`.`id` WHERE  `a`.`username` = '18321730541' LIMIT 1 [ RunTime:0.000349s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_member_point` [ RunTime:0.004489s ]
+[ sql ] [ SQL ] SELECT SUM(point) AS tp_sum FROM `dp_member_point` WHERE  `memberid` = 1  AND `behavior_type` = '0' LIMIT 1 [ RunTime:0.006904s ]
+---------------------------------------------------------------
+[ 2018-03-20T11:02:18+08:00 ] 10.0.2.2 GET /api.php?method=user.point&source=custom&account=18321730541
+[ info ] zg.daguan.com/api.php?method=user.point&source=custom&account=18321730541 [运行时间：1.012352s][吞吐率：0.99req/s] [内存消耗：1,062.28kb] [文件加载：60]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36',
+  'upgrade-insecure-requests' => '1',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => 'PHPSESSID=nbot83pag460ujonurgmllhf75; thinkphp_show_page_trace=0|0; __utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmc=20928819; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lpvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; Hm_lpvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fcounsellor%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'user.point',
+  'source' => 'custom',
+  'account' => '18321730541',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ DB ] INIT mysql
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.335027s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.074206s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.016270s ] mysql:host=127.0.0.1;port=3306;dbname=daguan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_config` [ RunTime:0.077006s ]
+[ sql ] [ SQL ] SELECT `name`,`value`,`type` FROM `dp_admin_config` [ RunTime:0.007002s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_module` [ RunTime:0.012774s ]
+[ sql ] [ SQL ] SELECT `name`,`config` FROM `dp_admin_module` WHERE  `config` <> '' [ RunTime:0.005718s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook` [ RunTime:0.008926s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_hook` WHERE  `status` = 1 [ RunTime:0.004654s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_plugin` [ RunTime:0.006074s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_plugin` WHERE  `status` = 1 [ RunTime:0.001537s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook_plugin` [ RunTime:0.004052s ]
+[ sql ] [ SQL ] SELECT * FROM `dp_admin_hook_plugin` WHERE  `status` = 1 ORDER BY hook,sort [ RunTime:0.003239s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_member` [ RunTime:0.006465s ]
+[ sql ] [ SQL ] SELECT `a`.*,`b`.* FROM `dp_member` `a` LEFT JOIN `dp_member_point` `b` ON `b`.`memberid`=`a`.`id` WHERE  `a`.`username` = '18321730541' [ RunTime:0.007294s ]
+[ error ] [8]未定义数组索引: memberid[/data/httpd/daguan/application/api/home/Index.php:337]
+---------------------------------------------------------------
+[ 2018-03-20T11:04:19+08:00 ] 10.0.2.2 GET /api.php?method=user.point&source=custom&account=18321730541
+[ info ] zg.daguan.com/api.php?method=user.point&source=custom&account=18321730541 [运行时间：0.492298s][吞吐率：2.03req/s] [内存消耗：1,057.15kb] [文件加载：60]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36',
+  'upgrade-insecure-requests' => '1',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => 'PHPSESSID=nbot83pag460ujonurgmllhf75; thinkphp_show_page_trace=0|0; __utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmc=20928819; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lpvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; Hm_lpvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fcounsellor%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'user.point',
+  'source' => 'custom',
+  'account' => '18321730541',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ DB ] INIT mysql
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.093289s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.043297s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.001148s ] mysql:host=127.0.0.1;port=3306;dbname=daguan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_config` [ RunTime:0.000990s ]
+[ sql ] [ SQL ] SELECT `name`,`value`,`type` FROM `dp_admin_config` [ RunTime:0.000294s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_module` [ RunTime:0.000611s ]
+[ sql ] [ SQL ] SELECT `name`,`config` FROM `dp_admin_module` WHERE  `config` <> '' [ RunTime:0.001221s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook` [ RunTime:0.000852s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_hook` WHERE  `status` = 1 [ RunTime:0.000249s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_plugin` [ RunTime:0.001337s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_plugin` WHERE  `status` = 1 [ RunTime:0.000338s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook_plugin` [ RunTime:0.001151s ]
+[ sql ] [ SQL ] SELECT * FROM `dp_admin_hook_plugin` WHERE  `status` = 1 ORDER BY hook,sort [ RunTime:0.000381s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_member` [ RunTime:0.000915s ]
+[ sql ] [ SQL ] SELECT `a`.*,`b`.* FROM `dp_member` `a` LEFT JOIN `dp_member_point` `b` ON `b`.`memberid`=`a`.`id` WHERE  `a`.`username` = '18321730541' [ RunTime:0.001004s ]
+[ error ] [8]未定义数组索引: memberid[/data/httpd/daguan/application/api/home/Index.php:337]
+---------------------------------------------------------------
+[ 2018-03-20T11:04:46+08:00 ] 10.0.2.2 GET /api.php?method=user.point&source=custom&account=18321730541
+[ info ] zg.daguan.com/api.php?method=user.point&source=custom&account=18321730541 [运行时间：0.439740s][吞吐率：2.27req/s] [内存消耗：1,041.16kb] [文件加载：57]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36',
+  'upgrade-insecure-requests' => '1',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => 'PHPSESSID=nbot83pag460ujonurgmllhf75; thinkphp_show_page_trace=0|0; __utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmc=20928819; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lpvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; Hm_lpvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fcounsellor%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'user.point',
+  'source' => 'custom',
+  'account' => '18321730541',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ DB ] INIT mysql
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.098417s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.042711s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.004422s ] mysql:host=127.0.0.1;port=3306;dbname=daguan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_config` [ RunTime:0.002351s ]
+[ sql ] [ SQL ] SELECT `name`,`value`,`type` FROM `dp_admin_config` [ RunTime:0.000896s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_module` [ RunTime:0.001111s ]
+[ sql ] [ SQL ] SELECT `name`,`config` FROM `dp_admin_module` WHERE  `config` <> '' [ RunTime:0.000436s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook` [ RunTime:0.000670s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_hook` WHERE  `status` = 1 [ RunTime:0.000528s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_plugin` [ RunTime:0.003239s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_plugin` WHERE  `status` = 1 [ RunTime:0.000335s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook_plugin` [ RunTime:0.000689s ]
+[ sql ] [ SQL ] SELECT * FROM `dp_admin_hook_plugin` WHERE  `status` = 1 ORDER BY hook,sort [ RunTime:0.000238s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_member` [ RunTime:0.001859s ]
+[ sql ] [ SQL ] SELECT `a`.*,`b`.* FROM `dp_member` `a` LEFT JOIN `dp_member_point` `b` ON `b`.`memberid`=`a`.`id` WHERE  `a`.`username` = '18321730541' [ RunTime:0.000493s ]
+---------------------------------------------------------------
+[ 2018-03-20T11:05:47+08:00 ] 10.0.2.2 GET /api.php?method=user.point&source=custom&account=18321730541
+[ info ] zg.daguan.com/api.php?method=user.point&source=custom&account=18321730541 [运行时间：0.675708s][吞吐率：1.48req/s] [内存消耗：1,039.63kb] [文件加载：57]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36',
+  'upgrade-insecure-requests' => '1',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => 'PHPSESSID=nbot83pag460ujonurgmllhf75; thinkphp_show_page_trace=0|0; __utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmc=20928819; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lpvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; Hm_lpvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fcounsellor%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'user.point',
+  'source' => 'custom',
+  'account' => '18321730541',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ DB ] INIT mysql
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.118770s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.036794s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.003499s ] mysql:host=127.0.0.1;port=3306;dbname=daguan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_config` [ RunTime:0.000925s ]
+[ sql ] [ SQL ] SELECT `name`,`value`,`type` FROM `dp_admin_config` [ RunTime:0.000290s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_module` [ RunTime:0.006621s ]
+[ sql ] [ SQL ] SELECT `name`,`config` FROM `dp_admin_module` WHERE  `config` <> '' [ RunTime:0.000393s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook` [ RunTime:0.001007s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_hook` WHERE  `status` = 1 [ RunTime:0.000327s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_plugin` [ RunTime:0.001573s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_plugin` WHERE  `status` = 1 [ RunTime:0.000886s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook_plugin` [ RunTime:0.000989s ]
+[ sql ] [ SQL ] SELECT * FROM `dp_admin_hook_plugin` WHERE  `status` = 1 ORDER BY hook,sort [ RunTime:0.000331s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_member` [ RunTime:0.002265s ]
+[ sql ] [ SQL ] SELECT `a`.*,`b`.* FROM `dp_member` `a` LEFT JOIN `dp_member_point` `b` ON `b`.`memberid`=`a`.`id` WHERE  `a`.`username` = '18321730541' [ RunTime:0.000785s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_member_point` [ RunTime:0.001662s ]
+[ sql ] [ SQL ] SELECT SUM(point) AS tp_sum FROM `dp_member_point` WHERE  `memberid` = 1  AND `behavior_type` = '0' LIMIT 1 [ RunTime:0.004451s ]
+---------------------------------------------------------------
+[ 2018-03-20T13:10:40+08:00 ] 10.0.2.2 GET /api.php?method=user.point&source=custom&account=18321730541
+[ info ] zg.daguan.com/api.php?method=user.point&source=custom&account=18321730541 [运行时间：0.459399s][吞吐率：2.18req/s] [内存消耗：867.06kb] [文件加载：57]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36',
+  'upgrade-insecure-requests' => '1',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => 'PHPSESSID=nbot83pag460ujonurgmllhf75; thinkphp_show_page_trace=0|0; __utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmc=20928819; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lpvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; Hm_lpvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fcounsellor%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'user.point',
+  'source' => 'custom',
+  'account' => '18321730541',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ DB ] INIT mysql
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.115697s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.036756s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.008616s ] mysql:host=127.0.0.1;port=3306;dbname=daguan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_config` [ RunTime:0.001540s ]
+[ sql ] [ SQL ] SELECT `name`,`value`,`type` FROM `dp_admin_config` [ RunTime:0.000142s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_module` [ RunTime:0.001719s ]
+[ sql ] [ SQL ] SELECT `name`,`config` FROM `dp_admin_module` WHERE  `config` <> '' [ RunTime:0.000374s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook` [ RunTime:0.001392s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_hook` WHERE  `status` = 1 [ RunTime:0.000154s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_plugin` [ RunTime:0.000951s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_plugin` WHERE  `status` = 1 [ RunTime:0.000274s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook_plugin` [ RunTime:0.000631s ]
+[ sql ] [ SQL ] SELECT * FROM `dp_admin_hook_plugin` WHERE  `status` = 1 ORDER BY hook,sort [ RunTime:0.000719s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_member` [ RunTime:0.001791s ]
+[ sql ] [ SQL ] SELECT `a`.*,`b`.* FROM `dp_member` `a` RIGHT JOIN `dp_member_point` `b` ON `b`.`memberid`=`a`.`id` WHERE  `a`.`username` = '18321730541' [ RunTime:0.014194s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_member_point` [ RunTime:0.001111s ]
+[ sql ] [ SQL ] SELECT SUM(point) AS tp_sum FROM `dp_member_point` WHERE  `memberid` = 1  AND `behavior_type` = '0' LIMIT 1 [ RunTime:0.000353s ]
+---------------------------------------------------------------
+[ 2018-03-20T13:11:03+08:00 ] 10.0.2.2 GET /api.php?method=user.point&source=custom&account=18321730541
+[ info ] zg.daguan.com/api.php?method=user.point&source=custom&account=18321730541 [运行时间：0.455787s][吞吐率：2.19req/s] [内存消耗：863.95kb] [文件加载：57]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36',
+  'upgrade-insecure-requests' => '1',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => 'PHPSESSID=nbot83pag460ujonurgmllhf75; thinkphp_show_page_trace=0|0; __utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmc=20928819; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lpvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; Hm_lpvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fcounsellor%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'user.point',
+  'source' => 'custom',
+  'account' => '18321730541',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ DB ] INIT mysql
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.112498s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.040686s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.002584s ] mysql:host=127.0.0.1;port=3306;dbname=daguan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_config` [ RunTime:0.001102s ]
+[ sql ] [ SQL ] SELECT `name`,`value`,`type` FROM `dp_admin_config` [ RunTime:0.000603s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_module` [ RunTime:0.000854s ]
+[ sql ] [ SQL ] SELECT `name`,`config` FROM `dp_admin_module` WHERE  `config` <> '' [ RunTime:0.000296s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook` [ RunTime:0.000853s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_hook` WHERE  `status` = 1 [ RunTime:0.000256s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_plugin` [ RunTime:0.001343s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_plugin` WHERE  `status` = 1 [ RunTime:0.000376s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook_plugin` [ RunTime:0.002421s ]
+[ sql ] [ SQL ] SELECT * FROM `dp_admin_hook_plugin` WHERE  `status` = 1 ORDER BY hook,sort [ RunTime:0.000574s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_member` [ RunTime:0.000822s ]
+[ sql ] [ SQL ] SELECT `a`.*,`b`.* FROM `dp_member` `a` RIGHT JOIN `dp_member_point` `b` ON `b`.`memberid`=`a`.`id` WHERE  `a`.`username` = '18321730541' [ RunTime:0.000980s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_member_point` [ RunTime:0.001566s ]
+[ sql ] [ SQL ] SELECT SUM(point) AS tp_sum FROM `dp_member_point` WHERE  `memberid` = 1  AND `behavior_type` = '0' LIMIT 1 [ RunTime:0.000299s ]
+---------------------------------------------------------------
+[ 2018-03-20T19:03:43+08:00 ] 10.0.2.2 GET /api.php?method=user.userinfo&source=custom&account=18321730541
+[ info ] zg.daguan.com/api.php?method=user.userinfo&source=custom&account=18321730541 [运行时间：1.033305s][吞吐率：0.97req/s] [内存消耗：867.87kb] [文件加载：57]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36',
+  'upgrade-insecure-requests' => '1',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => 'PHPSESSID=nbot83pag460ujonurgmllhf75; thinkphp_show_page_trace=0|0; __utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmc=20928819; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lpvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; Hm_lpvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fcounsellor%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'user.userinfo',
+  'source' => 'custom',
+  'account' => '18321730541',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ DB ] INIT mysql
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.350491s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.092698s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.014024s ] mysql:host=127.0.0.1;port=3306;dbname=daguan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_config` [ RunTime:0.080230s ]
+[ sql ] [ SQL ] SELECT `name`,`value`,`type` FROM `dp_admin_config` [ RunTime:0.005932s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_module` [ RunTime:0.004359s ]
+[ sql ] [ SQL ] SELECT `name`,`config` FROM `dp_admin_module` WHERE  `config` <> '' [ RunTime:0.009198s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook` [ RunTime:0.008827s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_hook` WHERE  `status` = 1 [ RunTime:0.008853s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_plugin` [ RunTime:0.003927s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_plugin` WHERE  `status` = 1 [ RunTime:0.003234s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook_plugin` [ RunTime:0.009069s ]
+[ sql ] [ SQL ] SELECT * FROM `dp_admin_hook_plugin` WHERE  `status` = 1 ORDER BY hook,sort [ RunTime:0.013432s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_member` [ RunTime:0.007031s ]
+[ sql ] [ SQL ] SELECT * FROM `dp_member` WHERE  `username` = '18321730541'  AND `status` = 1 LIMIT 1 [ RunTime:0.010591s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_member_point` [ RunTime:0.011983s ]
+[ sql ] [ SQL ] SELECT SUM(point) AS tp_sum FROM `dp_member_point` WHERE  `memberid` = 1  AND `behavior_type` = '0' LIMIT 1 [ RunTime:0.005854s ]
+---------------------------------------------------------------
+[ 2018-03-20T21:48:59+08:00 ] 10.0.2.2 GET /api.php?method=user.updategender&source=custom&account=18321730541
+[ info ] zg.daguan.com/api.php?method=user.updategender&source=custom&account=18321730541 [运行时间：0.565395s][吞吐率：1.77req/s] [内存消耗：1,065.99kb] [文件加载：60]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36',
+  'upgrade-insecure-requests' => '1',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => 'PHPSESSID=nbot83pag460ujonurgmllhf75; thinkphp_show_page_trace=0|0; __utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmc=20928819; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lpvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; Hm_lpvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fcounsellor%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'user.updategender',
+  'source' => 'custom',
+  'account' => '18321730541',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ DB ] INIT mysql
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.127093s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.034866s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.007536s ] mysql:host=127.0.0.1;port=3306;dbname=daguan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_config` [ RunTime:0.008310s ]
+[ sql ] [ SQL ] SELECT `name`,`value`,`type` FROM `dp_admin_config` [ RunTime:0.000599s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_module` [ RunTime:0.001222s ]
+[ sql ] [ SQL ] SELECT `name`,`config` FROM `dp_admin_module` WHERE  `config` <> '' [ RunTime:0.000310s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook` [ RunTime:0.001406s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_hook` WHERE  `status` = 1 [ RunTime:0.000278s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_plugin` [ RunTime:0.000820s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_plugin` WHERE  `status` = 1 [ RunTime:0.000351s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook_plugin` [ RunTime:0.002119s ]
+[ sql ] [ SQL ] SELECT * FROM `dp_admin_hook_plugin` WHERE  `status` = 1 ORDER BY hook,sort [ RunTime:0.000348s ]
+[ error ] [8]未定义变量: params[/data/httpd/daguan/application/api/home/Index.php:467]
+---------------------------------------------------------------
+[ 2018-03-20T22:04:23+08:00 ] 10.0.2.2 GET /api.php?method=user.checkpassword&source=custom&account=1&password=123456
+[ info ] zg.daguan.com/api.php?method=user.checkpassword&source=custom&account=1&password=123456 [运行时间：0.646088s][吞吐率：1.55req/s] [内存消耗：1,070.91kb] [文件加载：59]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36',
+  'upgrade-insecure-requests' => '1',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => 'PHPSESSID=nbot83pag460ujonurgmllhf75; thinkphp_show_page_trace=0|0; __utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmc=20928819; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lpvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; Hm_lpvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fcounsellor%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'user.checkpassword',
+  'source' => 'custom',
+  'account' => '1',
+  'password' => '123456',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ DB ] INIT mysql
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.120004s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.048288s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.004511s ] mysql:host=127.0.0.1;port=3306;dbname=daguan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_config` [ RunTime:0.007141s ]
+[ sql ] [ SQL ] SELECT `name`,`value`,`type` FROM `dp_admin_config` [ RunTime:0.000472s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_module` [ RunTime:0.001799s ]
+[ sql ] [ SQL ] SELECT `name`,`config` FROM `dp_admin_module` WHERE  `config` <> '' [ RunTime:0.000475s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook` [ RunTime:0.001362s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_hook` WHERE  `status` = 1 [ RunTime:0.000157s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_plugin` [ RunTime:0.004774s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_plugin` WHERE  `status` = 1 [ RunTime:0.000359s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook_plugin` [ RunTime:0.002441s ]
+[ sql ] [ SQL ] SELECT * FROM `dp_admin_hook_plugin` WHERE  `status` = 1 ORDER BY hook,sort [ RunTime:0.000344s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_member` [ RunTime:0.002024s ]
+[ sql ] [ SQL ] SELECT * FROM `dp_member` WHERE  `id` = 1  AND `password` = '$2y$10$KtYp/38i21AWj9uRQzAy0OmacPr5D0xr.yy6wuyhH6HqE4Szt3OWi' LIMIT 1 [ RunTime:0.000507s ]
+---------------------------------------------------------------
+[ 2018-03-20T22:05:11+08:00 ] 10.0.2.2 GET /api.php?method=user.checkpassword&source=custom&account=1&password=123456
+[ info ] zg.daguan.com/api.php?method=user.checkpassword&source=custom&account=1&password=123456 [运行时间：0.595615s][吞吐率：1.68req/s] [内存消耗：1,070.44kb] [文件加载：59]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36',
+  'upgrade-insecure-requests' => '1',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => 'PHPSESSID=nbot83pag460ujonurgmllhf75; thinkphp_show_page_trace=0|0; __utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmc=20928819; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lpvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; Hm_lpvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fcounsellor%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'user.checkpassword',
+  'source' => 'custom',
+  'account' => '1',
+  'password' => '123456',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ DB ] INIT mysql
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.114442s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.063498s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.004444s ] mysql:host=127.0.0.1;port=3306;dbname=daguan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_config` [ RunTime:0.001596s ]
+[ sql ] [ SQL ] SELECT `name`,`value`,`type` FROM `dp_admin_config` [ RunTime:0.000547s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_module` [ RunTime:0.001733s ]
+[ sql ] [ SQL ] SELECT `name`,`config` FROM `dp_admin_module` WHERE  `config` <> '' [ RunTime:0.000521s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook` [ RunTime:0.001825s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_hook` WHERE  `status` = 1 [ RunTime:0.000566s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_plugin` [ RunTime:0.001734s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_plugin` WHERE  `status` = 1 [ RunTime:0.000620s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook_plugin` [ RunTime:0.002154s ]
+[ sql ] [ SQL ] SELECT * FROM `dp_admin_hook_plugin` WHERE  `status` = 1 ORDER BY hook,sort [ RunTime:0.000761s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_member` [ RunTime:0.000962s ]
+[ sql ] [ SQL ] SELECT * FROM `dp_member` WHERE  `id` = 1  AND `password` = '$2y$10$Lt78fVZAj0W7SZfYHoBcTuNdszdddbtevFk3xM4cq561u.zOWVnX.' LIMIT 1 [ RunTime:0.000341s ]
+---------------------------------------------------------------
+[ 2018-03-20T22:05:26+08:00 ] 10.0.2.2 GET /api.php?method=user.checkpassword&source=custom&account=1&password=123456
+[ info ] zg.daguan.com/api.php?method=user.checkpassword&source=custom&account=1&password=123456 [运行时间：0.540568s][吞吐率：1.85req/s] [内存消耗：1,053.88kb] [文件加载：59]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36',
+  'upgrade-insecure-requests' => '1',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => 'PHPSESSID=nbot83pag460ujonurgmllhf75; thinkphp_show_page_trace=0|0; __utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmc=20928819; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lpvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; Hm_lpvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fcounsellor%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'user.checkpassword',
+  'source' => 'custom',
+  'account' => '1',
+  'password' => '123456',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ DB ] INIT mysql
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.110497s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.036296s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.003594s ] mysql:host=127.0.0.1;port=3306;dbname=daguan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_config` [ RunTime:0.004837s ]
+[ sql ] [ SQL ] SELECT `name`,`value`,`type` FROM `dp_admin_config` [ RunTime:0.000395s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_module` [ RunTime:0.002416s ]
+[ sql ] [ SQL ] SELECT `name`,`config` FROM `dp_admin_module` WHERE  `config` <> '' [ RunTime:0.000284s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook` [ RunTime:0.001219s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_hook` WHERE  `status` = 1 [ RunTime:0.000456s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_plugin` [ RunTime:0.000915s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_plugin` WHERE  `status` = 1 [ RunTime:0.000569s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook_plugin` [ RunTime:0.001614s ]
+[ sql ] [ SQL ] SELECT * FROM `dp_admin_hook_plugin` WHERE  `status` = 1 ORDER BY hook,sort [ RunTime:0.000587s ]
+---------------------------------------------------------------
+[ 2018-03-20T22:06:14+08:00 ] 10.0.2.2 GET /api.php?method=user.checkpassword&source=custom&account=1&password=admin123
+[ info ] zg.daguan.com/api.php?method=user.checkpassword&source=custom&account=1&password=admin123 [运行时间：0.556179s][吞吐率：1.80req/s] [内存消耗：1,053.75kb] [文件加载：59]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36',
+  'upgrade-insecure-requests' => '1',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => 'PHPSESSID=nbot83pag460ujonurgmllhf75; thinkphp_show_page_trace=0|0; __utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmc=20928819; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lpvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; Hm_lpvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fcounsellor%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'user.checkpassword',
+  'source' => 'custom',
+  'account' => '1',
+  'password' => 'admin123',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ DB ] INIT mysql
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.103417s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.041589s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.007868s ] mysql:host=127.0.0.1;port=3306;dbname=daguan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_config` [ RunTime:0.001308s ]
+[ sql ] [ SQL ] SELECT `name`,`value`,`type` FROM `dp_admin_config` [ RunTime:0.000282s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_module` [ RunTime:0.001006s ]
+[ sql ] [ SQL ] SELECT `name`,`config` FROM `dp_admin_module` WHERE  `config` <> '' [ RunTime:0.000290s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook` [ RunTime:0.000838s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_hook` WHERE  `status` = 1 [ RunTime:0.000296s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_plugin` [ RunTime:0.000861s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_plugin` WHERE  `status` = 1 [ RunTime:0.000243s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook_plugin` [ RunTime:0.000834s ]
+[ sql ] [ SQL ] SELECT * FROM `dp_admin_hook_plugin` WHERE  `status` = 1 ORDER BY hook,sort [ RunTime:0.000276s ]
+---------------------------------------------------------------
+[ 2018-03-20T22:07:45+08:00 ] 10.0.2.2 GET /api.php?method=user.checkpassword&source=custom&account=1&password=admin123
+[ info ] zg.daguan.com/api.php?method=user.checkpassword&source=custom&account=1&password=admin123 [运行时间：0.687797s][吞吐率：1.45req/s] [内存消耗：1,069.70kb] [文件加载：59]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36',
+  'upgrade-insecure-requests' => '1',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => 'PHPSESSID=nbot83pag460ujonurgmllhf75; thinkphp_show_page_trace=0|0; __utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmc=20928819; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lpvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; Hm_lpvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fcounsellor%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'user.checkpassword',
+  'source' => 'custom',
+  'account' => '1',
+  'password' => 'admin123',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ DB ] INIT mysql
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.159668s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.063726s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.001816s ] mysql:host=127.0.0.1;port=3306;dbname=daguan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_config` [ RunTime:0.004701s ]
+[ sql ] [ SQL ] SELECT `name`,`value`,`type` FROM `dp_admin_config` [ RunTime:0.001923s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_module` [ RunTime:0.003196s ]
+[ sql ] [ SQL ] SELECT `name`,`config` FROM `dp_admin_module` WHERE  `config` <> '' [ RunTime:0.001133s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook` [ RunTime:0.003992s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_hook` WHERE  `status` = 1 [ RunTime:0.002035s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_plugin` [ RunTime:0.005519s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_plugin` WHERE  `status` = 1 [ RunTime:0.000299s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook_plugin` [ RunTime:0.002632s ]
+[ sql ] [ SQL ] SELECT * FROM `dp_admin_hook_plugin` WHERE  `status` = 1 ORDER BY hook,sort [ RunTime:0.000797s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_member` [ RunTime:0.001915s ]
+[ sql ] [ SQL ] SELECT * FROM `dp_member` WHERE  `id` = 1 LIMIT 1 [ RunTime:0.000642s ]
+---------------------------------------------------------------
+[ 2018-03-20T22:07:51+08:00 ] 10.0.2.2 GET /api.php?method=user.checkpassword&source=custom&account=1&password=123456
+[ info ] zg.daguan.com/api.php?method=user.checkpassword&source=custom&account=1&password=123456 [运行时间：0.697759s][吞吐率：1.43req/s] [内存消耗：1,069.50kb] [文件加载：59]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36',
+  'upgrade-insecure-requests' => '1',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => 'PHPSESSID=nbot83pag460ujonurgmllhf75; thinkphp_show_page_trace=0|0; __utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmc=20928819; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lpvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; Hm_lpvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fcounsellor%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'user.checkpassword',
+  'source' => 'custom',
+  'account' => '1',
+  'password' => '123456',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ DB ] INIT mysql
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.134952s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.051925s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.002970s ] mysql:host=127.0.0.1;port=3306;dbname=daguan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_config` [ RunTime:0.001528s ]
+[ sql ] [ SQL ] SELECT `name`,`value`,`type` FROM `dp_admin_config` [ RunTime:0.000339s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_module` [ RunTime:0.001341s ]
+[ sql ] [ SQL ] SELECT `name`,`config` FROM `dp_admin_module` WHERE  `config` <> '' [ RunTime:0.000582s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook` [ RunTime:0.002543s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_hook` WHERE  `status` = 1 [ RunTime:0.000746s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_plugin` [ RunTime:0.002868s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_plugin` WHERE  `status` = 1 [ RunTime:0.001782s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook_plugin` [ RunTime:0.002187s ]
+[ sql ] [ SQL ] SELECT * FROM `dp_admin_hook_plugin` WHERE  `status` = 1 ORDER BY hook,sort [ RunTime:0.001438s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_member` [ RunTime:0.001089s ]
+[ sql ] [ SQL ] SELECT * FROM `dp_member` WHERE  `id` = 1 LIMIT 1 [ RunTime:0.000457s ]
+---------------------------------------------------------------
+[ 2018-03-20T22:28:33+08:00 ] 10.0.2.2 GET /api.php?method=article.contentinfo&source=custom&id=1
+[ info ] zg.daguan.com/api.php?method=article.contentinfo&source=custom&id=1 [运行时间：0.532894s][吞吐率：1.88req/s] [内存消耗：1,068.91kb] [文件加载：57]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36',
+  'upgrade-insecure-requests' => '1',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => 'PHPSESSID=nbot83pag460ujonurgmllhf75; thinkphp_show_page_trace=0|0; __utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmc=20928819; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lpvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; Hm_lpvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fcounsellor%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'article.contentinfo',
+  'source' => 'custom',
+  'id' => '1',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ DB ] INIT mysql
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.148536s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.039310s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.005868s ] mysql:host=127.0.0.1;port=3306;dbname=daguan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_config` [ RunTime:0.001953s ]
+[ sql ] [ SQL ] SELECT `name`,`value`,`type` FROM `dp_admin_config` [ RunTime:0.000378s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_module` [ RunTime:0.006682s ]
+[ sql ] [ SQL ] SELECT `name`,`config` FROM `dp_admin_module` WHERE  `config` <> '' [ RunTime:0.001065s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook` [ RunTime:0.000877s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_hook` WHERE  `status` = 1 [ RunTime:0.000599s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_plugin` [ RunTime:0.000745s ]
+[ sql ] [ SQL ] SELECT `name`,`status` FROM `dp_admin_plugin` WHERE  `status` = 1 [ RunTime:0.000087s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_admin_hook_plugin` [ RunTime:0.001030s ]
+[ sql ] [ SQL ] SELECT * FROM `dp_admin_hook_plugin` WHERE  `status` = 1 ORDER BY hook,sort [ RunTime:0.001111s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_cms_page` [ RunTime:0.034327s ]
+[ sql ] [ SQL ] SELECT * FROM `dp_cms_page` WHERE  `id` = 1 LIMIT 1 [ RunTime:0.003127s ]

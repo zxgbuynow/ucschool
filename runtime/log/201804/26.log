@@ -1,0 +1,333 @@
+---------------------------------------------------------------
+[ 2018-04-26T09:08:55+08:00 ] 10.0.2.2 GET /api.php?method=calenda.today&source=custom&account=2&day=1524672000
+[ info ] zg.daguan.com/api.php?method=calenda.today&source=custom&account=2&day=1524672000 [运行时间：1.120600s][吞吐率：0.89req/s] [内存消耗：649.04kb] [文件加载：53]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => '__utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; OUTFOX_SEARCH_USER_ID_NCOO=1789161781.1770723; PHPSESSID=3ecsfomqsu3q0ifddm1s95c682; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fagency%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'calenda.today',
+  'source' => 'custom',
+  'account' => '2',
+  'day' => '1524672000',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.059028s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.095165s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.027760s ] mysql:host=127.0.0.1;port=3306;dbname=daguan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_calendar` [ RunTime:0.119984s ]
+[ sql ] [ SQL ] SELECT * FROM `dp_calendar` WHERE  `memberid` = 2  AND `start_time` BETWEEN 1524672000 AND 1524758400 [ RunTime:0.004403s ]
+---------------------------------------------------------------
+[ 2018-04-26T09:09:03+08:00 ] 10.0.2.2 GET /api.php?method=calenda.today&source=custom&account=2&day=1524672000
+[ info ] zg.daguan.com/api.php?method=calenda.today&source=custom&account=2&day=1524672000 [运行时间：0.275181s][吞吐率：3.63req/s] [内存消耗：1,094.38kb] [文件加载：50]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => '__utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; OUTFOX_SEARCH_USER_ID_NCOO=1789161781.1770723; PHPSESSID=3ecsfomqsu3q0ifddm1s95c682; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fagency%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'calenda.today',
+  'source' => 'custom',
+  'account' => '2',
+  'day' => '1524672000',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.020455s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.036935s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.008534s ] mysql:host=127.0.0.1;port=3306;dbname=daguan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_calendar` [ RunTime:0.012877s ]
+[ sql ] [ SQL ] SELECT * FROM `dp_calendar` WHERE  `memberid` = 2  AND `start_time` BETWEEN 1524672000 AND 1524758400 [ RunTime:0.000753s ]
+---------------------------------------------------------------
+[ 2018-04-26T09:22:59+08:00 ] 10.0.2.2 GET /api.php?method=calenda.today&source=custom&account=2&day=1524672000
+[ info ] zg.daguan.com/api.php?method=calenda.today&source=custom&account=2&day=1524672000 [运行时间：0.474677s][吞吐率：2.11req/s] [内存消耗：1,083.46kb] [文件加载：53]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => '__utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; OUTFOX_SEARCH_USER_ID_NCOO=1789161781.1770723; PHPSESSID=3ecsfomqsu3q0ifddm1s95c682; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fagency%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'calenda.today',
+  'source' => 'custom',
+  'account' => '2',
+  'day' => '1524672000',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.032105s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.045581s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.003678s ] mysql:host=127.0.0.1;port=3306;dbname=daguan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_calendar` [ RunTime:0.015373s ]
+[ sql ] [ SQL ] SELECT * FROM `dp_calendar` WHERE  `memberid` = 2  AND `start_time` BETWEEN 1524672000 AND 1524758400 [ RunTime:0.003198s ]
+---------------------------------------------------------------
+[ 2018-04-26T09:23:11+08:00 ] 10.0.2.2 GET /api.php?method=calenda.today&source=custom&account=2&day=1524672000
+[ info ] zg.daguan.com/api.php?method=calenda.today&source=custom&account=2&day=1524672000 [运行时间：0.408602s][吞吐率：2.45req/s] [内存消耗：1,083.48kb] [文件加载：53]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => '__utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; OUTFOX_SEARCH_USER_ID_NCOO=1789161781.1770723; PHPSESSID=3ecsfomqsu3q0ifddm1s95c682; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fagency%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'calenda.today',
+  'source' => 'custom',
+  'account' => '2',
+  'day' => '1524672000',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.038419s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.043718s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.004260s ] mysql:host=127.0.0.1;port=3306;dbname=daguan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_calendar` [ RunTime:0.007989s ]
+[ sql ] [ SQL ] SELECT * FROM `dp_calendar` WHERE  `memberid` = 2  AND `start_time` BETWEEN 1524672000 AND 1524758400 [ RunTime:0.000430s ]
+---------------------------------------------------------------
+[ 2018-04-26T09:23:54+08:00 ] 10.0.2.2 GET /api.php?method=calenda.today&source=custom&account=2&day=1524672000
+[ info ] zg.daguan.com/api.php?method=calenda.today&source=custom&account=2&day=1524672000 [运行时间：0.402769s][吞吐率：2.48req/s] [内存消耗：1,083.97kb] [文件加载：53]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => '__utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; OUTFOX_SEARCH_USER_ID_NCOO=1789161781.1770723; PHPSESSID=3ecsfomqsu3q0ifddm1s95c682; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fagency%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'calenda.today',
+  'source' => 'custom',
+  'account' => '2',
+  'day' => '1524672000',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.033111s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.042487s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.002708s ] mysql:host=127.0.0.1;port=3306;dbname=daguan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_calendar` [ RunTime:0.002969s ]
+[ sql ] [ SQL ] SELECT * FROM `dp_calendar` WHERE  `memberid` = 2  AND `start_time` BETWEEN 1524672000 AND 1524758400 [ RunTime:0.000442s ]
+---------------------------------------------------------------
+[ 2018-04-26T09:34:42+08:00 ] 10.0.2.2 GET /api.php?method=calenda.today&source=custom&account=2&day=1524672000
+[ info ] zg.daguan.com/api.php?method=calenda.today&source=custom&account=2&day=1524672000 [运行时间：0.381163s][吞吐率：2.62req/s] [内存消耗：1,091.95kb] [文件加载：53]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => '__utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; OUTFOX_SEARCH_USER_ID_NCOO=1789161781.1770723; PHPSESSID=3ecsfomqsu3q0ifddm1s95c682; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fagency%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'calenda.today',
+  'source' => 'custom',
+  'account' => '2',
+  'day' => '1524672000',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.028347s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.040813s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.004184s ] mysql:host=127.0.0.1;port=3306;dbname=daguan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_calendar` [ RunTime:0.003234s ]
+[ sql ] [ SQL ] SELECT * FROM `dp_calendar` WHERE  `memberid` = 2  AND `start_time` BETWEEN 1524672000 AND 1524758400 [ RunTime:0.000811s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_member` [ RunTime:0.001181s ]
+[ sql ] [ SQL ] SELECT `username` FROM `dp_member` WHERE  `id` = 2 [ RunTime:0.000341s ]
+---------------------------------------------------------------
+[ 2018-04-26T09:34:55+08:00 ] 10.0.2.2 GET /api.php?method=calenda.today&source=custom&account=2&day=1524672000
+[ info ] zg.daguan.com/api.php?method=calenda.today&source=custom&account=2&day=1524672000 [运行时间：0.442351s][吞吐率：2.26req/s] [内存消耗：1,092.02kb] [文件加载：53]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => '__utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; OUTFOX_SEARCH_USER_ID_NCOO=1789161781.1770723; PHPSESSID=3ecsfomqsu3q0ifddm1s95c682; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fagency%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'calenda.today',
+  'source' => 'custom',
+  'account' => '2',
+  'day' => '1524672000',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.039414s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.055913s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.003635s ] mysql:host=127.0.0.1;port=3306;dbname=daguan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_calendar` [ RunTime:0.002045s ]
+[ sql ] [ SQL ] SELECT * FROM `dp_calendar` WHERE  `memberid` = 2  AND `start_time` BETWEEN 1524672000 AND 1524758400 [ RunTime:0.000658s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_member` [ RunTime:0.004847s ]
+[ sql ] [ SQL ] SELECT `username` FROM `dp_member` WHERE  `id` = 2 [ RunTime:0.000352s ]
+---------------------------------------------------------------
+[ 2018-04-26T09:35:16+08:00 ] 10.0.2.2 GET /api.php?method=calenda.today&source=custom&account=2&day=1524672000
+[ info ] zg.daguan.com/api.php?method=calenda.today&source=custom&account=2&day=1524672000 [运行时间：0.464403s][吞吐率：2.15req/s] [内存消耗：1,092.09kb] [文件加载：53]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => '__utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; OUTFOX_SEARCH_USER_ID_NCOO=1789161781.1770723; PHPSESSID=3ecsfomqsu3q0ifddm1s95c682; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fagency%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'calenda.today',
+  'source' => 'custom',
+  'account' => '2',
+  'day' => '1524672000',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.034268s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.043089s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.004171s ] mysql:host=127.0.0.1;port=3306;dbname=daguan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_calendar` [ RunTime:0.001839s ]
+[ sql ] [ SQL ] SELECT * FROM `dp_calendar` WHERE  `memberid` = 2  AND `start_time` BETWEEN 1524672000 AND 1524758400 [ RunTime:0.000351s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_member` [ RunTime:0.003469s ]
+[ sql ] [ SQL ] SELECT `username` FROM `dp_member` WHERE  `id` = 2 [ RunTime:0.000658s ]

@@ -1,0 +1,78 @@
+---------------------------------------------------------------
+[ 2018-05-03T13:20:30+08:00 ] 127.0.0.1 GET /
+[ info ] 127.0.0.1/ [运行时间：0.870961s][吞吐率：1.15req/s] [内存消耗：529.64kb] [文件加载：53]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => '',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'user-agent' => 'curl/7.19.7 (x86_64-redhat-linux-gnu) libcurl/7.19.7 NSS/3.19.1 Basic ECC zlib/1.2.3 libidn/1.18 libssh2/1.4.2',
+  'host' => '127.0.0.1',
+  'accept' => '*/*',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.058446s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.080629s ]
+[ info ] [ LOG ] INIT File
+---------------------------------------------------------------
+[ 2018-05-03T13:24:43+08:00 ] 10.0.2.2 GET /
+[ info ] zg.gn.com/ [运行时间：0.384714s][吞吐率：2.60req/s] [内存消耗：523.78kb] [文件加载：53]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => '',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.gn.com',
+  'user-agent' => 'curl/7.51.0',
+  'accept' => '*/*',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.028075s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.038324s ]
+[ info ] [ LOG ] INIT File
+---------------------------------------------------------------
+[ 2018-05-03T13:24:57+08:00 ] 10.0.2.2 GET /
+[ info ] zg.kejie.com/ [运行时间：0.363299s][吞吐率：2.75req/s] [内存消耗：523.80kb] [文件加载：53]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => '',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.kejie.com',
+  'user-agent' => 'curl/7.51.0',
+  'accept' => '*/*',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.028902s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.044074s ]
+[ info ] [ LOG ] INIT File

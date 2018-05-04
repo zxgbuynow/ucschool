@@ -1,0 +1,114 @@
+---------------------------------------------------------------
+[ 2018-04-12T08:42:42+08:00 ] 10.0.2.2 GET /counsellor.php/counsellor/plus.html
+[ info ] zg.daguan.com/counsellor.php/counsellor/plus.html [运行时间：1.025217s][吞吐率：0.98req/s] [内存消耗：593.88kb] [文件加载：56]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'counsellor',
+    1 => 'counsellor',
+    2 => 'plus',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => '___rl__test__cookies=1522719004622; __utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; OUTFOX_SEARCH_USER_ID_NCOO=1789161781.1770723; PHPSESSID=3ecsfomqsu3q0ifddm1s95c682; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fagency%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.058227s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.094143s ]
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'dolphin_admin_',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ RUN ] app\counsellor\home\Counsellor->plus[ /data/httpd/daguan/application/counsellor/home/Counsellor.php ]
+[ info ] [ VIEW ] /data/httpd/daguan/public/../application/counsellor/view/counsellor/plus.html [ array (
+  0 => '__Cuser',
+) ]
+[ info ] [ LOG ] INIT File
+---------------------------------------------------------------
+[ 2018-04-12T08:42:43+08:00 ] 10.0.2.2 GET /api.php?method=income&account=1&source=shop
+[ info ] zg.daguan.com/api.php?method=income&account=1&source=shop [运行时间：0.648779s][吞吐率：1.54req/s] [内存消耗：640.47kb] [文件加载：53]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'accept' => '*/*',
+  'x-requested-with' => 'XMLHttpRequest',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'referer' => 'http://zg.daguan.com/counsellor.php/counsellor/plus.html',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => '__utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; OUTFOX_SEARCH_USER_ID_NCOO=1789161781.1770723; PHPSESSID=3ecsfomqsu3q0ifddm1s95c682; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fagency%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'income',
+  'account' => '1',
+  'source' => 'shop',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.019253s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.028445s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.034399s ] mysql:host=127.0.0.1;port=3306;dbname=daguan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `dp_trade` [ RunTime:0.108247s ]
+[ sql ] [ SQL ] SELECT * FROM `dp_trade` WHERE  `mid` = 1 ORDER BY id DESC [ RunTime:0.016910s ]
+[ sql ] [ SQL ] SELECT SUM(payment) AS tp_sum FROM `dp_trade` WHERE  `mid` = 1 LIMIT 1 [ RunTime:0.041411s ]
+---------------------------------------------------------------
+[ 2018-04-12T09:21:49+08:00 ] 10.0.2.2 GET /
+[ info ] zg.kejie.com/ [运行时间：0.598407s][吞吐率：1.67req/s] [内存消耗：526.42kb] [文件加载：53]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => '',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.kejie.com',
+  'connection' => 'keep-alive',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.041434s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.050466s ]
+[ info ] [ LOG ] INIT File

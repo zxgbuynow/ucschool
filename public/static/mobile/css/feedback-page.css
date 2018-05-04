@@ -1,0 +1,272 @@
+.feedback body {
+	background-color: #f7f7f7;
+}
+.mui-bar{
+	background:#2bb266;
+}
+header.mui-bar a,header.mui-bar h1{
+	color:#fff;
+}
+.mui-bar-nav {
+	-webkit-box-shadow: none;
+	box-shadow: none;	
+}
+.feedback .mui-content{
+	background-color: #f7f7f7;
+}
+.feedback .mui-content .select-btn{
+	width: 100%!important;
+	position: relative;
+	display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.feedback .mui-content .select-btn select{
+   display: block;
+   color:#7d7d7d;
+   height: 3.0rem;
+   line-height: 3.0rem;
+   direction: rtl;
+   padding-right: 3.125rem;
+   font-size: 0.9375rem;
+}
+.feedback .mui-content .select-btn .mui-icon-arrowdown{
+	position: absolute;
+    top: 50%;
+    right: 1.5rem;
+    color: #c3c3c3;
+    margin-top: -12px;
+}  
+.feedback-type-title{
+	padding: 0;
+    font-size: 0.9375rem;
+    color: #5d4d4d;
+    position: absolute;
+    top: 50%;
+    left: 1.5rem;
+    margin-top: -0.58rem;
+}
+.feedback-mobile{
+    padding: 0;
+    font-size: 0.9375rem;
+    color: #5d4d4d;
+    position: absolute;
+    top: 50%;
+    left: 1.5rem;
+    margin-top: -0.58rem;
+}
+.feedback .row {
+	width: 100%;
+	background-color: #fff;
+	height: 9.375rem;
+}
+.feedback .row1 {
+    width: 100%;
+    background-color: #fff;
+}
+.feedback input,.feedback textarea {
+	border: none !important;
+}
+.feedback textarea {
+	height: 9.375rem;
+	margin-bottom: 0 !important;
+	font-size: 0.9375rem;
+	color:#7d7d7d;
+	box-sizing: border-box;
+}
+.limit-alert{
+	height: 2.125rem;
+	line-height: 2.125rem;
+	float: right;
+	margin-right: 0.5625rem;
+}
+.limit-alert p{
+	font-size: 0.75rem;
+	color: #747474;
+	margin-bottom: 0;
+}
+.mui-button-row {
+    padding-top: 0;
+    padding-bottom: 20px;
+    text-align: center;
+    width: 95.2%;
+    margin: 0 auto;
+    overflow: hidden;
+
+}
+.feedback button { 
+	width: 100%;
+	height: 2.625rem;
+	border-radius:5px;
+    border: 1px solid #2bb266;
+    background-color: #2bb266;
+}
+.mui-button-row button{
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+.feedback .hidden {
+	display: none;
+}
+.feedback .image-list {
+	width: 100%;
+	height: 85px;
+	background-size: cover;
+	padding: 10px 10px;
+	overflow: hidden;
+}
+.feedback .image-item {
+	width: 65px;
+	height: 65px;
+	background-image: url(../img/iconfont-tianjia.png);
+	background-size: 100% 100%;
+	display: inline-block;
+	position: relative;
+	border-radius: 5px;
+	margin-right: 10px;
+	margin-bottom: 10px;
+	border: solid 1px #e8e8e8;
+}
+.feedback .image-item input[type="file"] {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	cursor: pointer;
+	z-index: 0;
+}
+.feedback .image-item.space {
+	border: none;
+}
+.feedback .image-item .image-close {
+	position: absolute;
+	display: inline-block;
+	right: -6px;
+	top: -6px;
+	width: 20px;
+	height: 20px;
+	text-align: center;
+	line-height: 20px;
+	border-radius: 12px;
+	background-color: #FF5053;
+	color: #f3f3f3;
+	border: solid 1px #FF5053;
+	font-size: 9px;
+	font-weight: 200;
+	z-index: 1;
+}
+.feedback .image-item.space .image-close {
+	display: none;
+}
+
+/*提交成功*/
+.success-img{
+	height: 5.6875rem;
+	width: 100%;
+	/*background-image: url(../images/duigou.png);
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;*/
+	margin-top: 7.3125rem;
+}
+.success-img.icon-zhifuchenggong{
+	font-size: 5.6875rem;
+    text-align: center;
+    color: #2cb267;
+}
+	
+.success-title{
+	width: 100%;
+	text-align: center;
+	font-size: 1rem;
+	color:#949494;
+	margin-top: 1.625rem;
+	font-weight: bold;
+}
+.success-btn{
+	width: 40%;
+	margin:5.3125rem auto 0;
+}
+.feedback .success-btn button {
+    width: 100%;
+    height: 2.625rem;
+    border-radius: 5px;
+    border: 1px solid #ff6d00;
+    background-color: #ff6d00;
+    color: #fff;
+}
+/*提交成功 end*/
+
+
+/*拍照上传开始*/
+.reg-card-item{
+	margin-top:30px;
+}
+.cardBox{
+	width: 100px;
+	height: 100px;
+	margin: 15px auto;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	position: relative;
+	/*overflow: hidden;*/
+	border: 1px dashed #C0C0C0;
+}
+.cardImg{
+	width: 100%;
+	position: relative;
+}
+.cardImg, .cardEdit{
+	position: absolute;
+}
+.cardEdit{
+	right: -10px;
+	top: -10px;
+	color: white;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	background-color: red;
+	padding: 2px 5px;
+	text-align: center;
+	font-size: small;
+	cursor: pointer;
+	border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    text-align: center;
+}
+.cardEdit .mui-icon-closeempty{
+	line-height: 20px;
+    margin: 0;
+    font-size: 16px;
+}
+.cardEmpty{
+	text-align: center;
+	color: #C2C2C2;
+	background: #FFFFFF;
+	height: 100%;
+	cursor: pointer;
+	overflow: hidden;
+}
+.cardEmptyIco{
+	font-size:60px;
+	margin-top: 25px;
+}
+.cardEmptyDesc{
+	font-size: small;
+	margin-top: 20px;
+}
+.cardEmpty:hover{
+	color: #008009;
+}
+/*拍照上传结束*/

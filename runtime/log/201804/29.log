@@ -1,0 +1,287 @@
+---------------------------------------------------------------
+[ 2018-04-29T17:19:01+08:00 ] 10.0.2.2 GET /api.php?method=user.vcode&source=shop&mobile=18321271831
+[ info ] zg.daguan.com/api.php?method=user.vcode&source=shop&mobile=18321271831 [运行时间：2.183234s][吞吐率：0.46req/s] [内存消耗：480.59kb] [文件加载：44]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => '__utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; OUTFOX_SEARCH_USER_ID_NCOO=1789161781.1770723; PHPSESSID=3ecsfomqsu3q0ifddm1s95c682; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fagency%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'user.vcode',
+  'source' => 'shop',
+  'mobile' => '18321271831',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.075379s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.177131s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ LOG ] INIT File
+---------------------------------------------------------------
+[ 2018-04-29T17:19:56+08:00 ] 10.0.2.2 GET /api.php?method=user.vcode&source=shop&mobile=18321271831
+[ info ] zg.daguan.com/api.php?method=user.vcode&source=shop&mobile=18321271831 [运行时间：0.368940s][吞吐率：2.71req/s] [内存消耗：951.86kb] [文件加载：44]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => '__utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; OUTFOX_SEARCH_USER_ID_NCOO=1789161781.1770723; PHPSESSID=3ecsfomqsu3q0ifddm1s95c682; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fagency%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'user.vcode',
+  'source' => 'shop',
+  'mobile' => '18321271831',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.031922s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.038707s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ LOG ] INIT File
+---------------------------------------------------------------
+[ 2018-04-29T17:20:52+08:00 ] 10.0.2.2 GET /api.php?method=user.vcode&source=shop&mobile=18321271831
+[ info ] zg.daguan.com/api.php?method=user.vcode&source=shop&mobile=18321271831 [运行时间：0.595480s][吞吐率：1.68req/s] [内存消耗：956.33kb] [文件加载：44]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => '__utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; OUTFOX_SEARCH_USER_ID_NCOO=1789161781.1770723; PHPSESSID=3ecsfomqsu3q0ifddm1s95c682; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fagency%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'user.vcode',
+  'source' => 'shop',
+  'mobile' => '18321271831',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.026687s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.038186s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ LOG ] INIT File
+---------------------------------------------------------------
+[ 2018-04-29T17:21:42+08:00 ] 10.0.2.2 GET /api.php?method=user.vcode&source=shop&mobile=18321271831
+[ info ] zg.daguan.com/api.php?method=user.vcode&source=shop&mobile=18321271831 [运行时间：0.592639s][吞吐率：1.69req/s] [内存消耗：956.33kb] [文件加载：44]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => '__utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; OUTFOX_SEARCH_USER_ID_NCOO=1789161781.1770723; PHPSESSID=3ecsfomqsu3q0ifddm1s95c682; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fagency%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'user.vcode',
+  'source' => 'shop',
+  'mobile' => '18321271831',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.033250s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.037820s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ LOG ] INIT File
+---------------------------------------------------------------
+[ 2018-04-29T17:21:45+08:00 ] 10.0.2.2 GET /api.php?method=user.vcode&source=shop&mobile=18321271831
+[ info ] zg.daguan.com/api.php?method=user.vcode&source=shop&mobile=18321271831 [运行时间：0.393956s][吞吐率：2.54req/s] [内存消耗：956.33kb] [文件加载：44]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => '__utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; OUTFOX_SEARCH_USER_ID_NCOO=1789161781.1770723; PHPSESSID=3ecsfomqsu3q0ifddm1s95c682; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fagency%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'user.vcode',
+  'source' => 'shop',
+  'mobile' => '18321271831',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.020154s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.024956s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ LOG ] INIT File
+---------------------------------------------------------------
+[ 2018-04-29T17:51:07+08:00 ] 10.0.2.2 GET /api.php?method=user.vcode&source=shop&mobile=18321271831
+[ info ] zg.daguan.com/api.php?method=user.vcode&source=shop&mobile=18321271831 [运行时间：0.791419s][吞吐率：1.26req/s] [内存消耗：487.04kb] [文件加载：44]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => '__utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; OUTFOX_SEARCH_USER_ID_NCOO=1789161781.1770723; PHPSESSID=3ecsfomqsu3q0ifddm1s95c682; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fagency%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'user.vcode',
+  'source' => 'shop',
+  'mobile' => '18321271831',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.032044s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.039323s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ LOG ] INIT File
+---------------------------------------------------------------
+[ 2018-04-29T17:54:21+08:00 ] 10.0.2.2 GET /api.php?method=user.vcode&source=shop&mobile=18321271831
+[ info ] zg.daguan.com/api.php?method=user.vcode&source=shop&mobile=18321271831 [运行时间：0.614909s][吞吐率：1.63req/s] [内存消耗：956.38kb] [文件加载：44]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => '__utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; OUTFOX_SEARCH_USER_ID_NCOO=1789161781.1770723; PHPSESSID=3ecsfomqsu3q0ifddm1s95c682; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fagency%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'user.vcode',
+  'source' => 'shop',
+  'mobile' => '18321271831',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.034199s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.045046s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ LOG ] INIT File
+---------------------------------------------------------------
+[ 2018-04-29T17:58:48+08:00 ] 10.0.2.2 GET /api.php?method=user.vcode&source=shop&mobile=18321271831
+[ info ] zg.daguan.com/api.php?method=user.vcode&source=shop&mobile=18321271831 [运行时间：5.790792s][吞吐率：0.17req/s] [内存消耗：956.20kb] [文件加载：44]
+[ info ] [ LANG ] /data/httpd/daguan/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.daguan.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => '__utma=20928819.1559574946.1520434694.1520434694.1520434694.1; __utmz=20928819.1520434694.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); Hm_lvt_601c92cd729f5d300329945382cb791f=1520434694; Hm_lvt_c3d6eaa135e0c7778dc8a6c73a86db89=1520434694; UM_distinctid=16200f84991461-097a858aec44ca-163f6657-13c680-16200f849953e0; CNZZDATA1254779168=543334044-1520434408-%7C1520434408; OUTFOX_SEARCH_USER_ID_NCOO=1789161781.1770723; PHPSESSID=3ecsfomqsu3q0ifddm1s95c682; dolphin_home___forward__=%2Fadmin.php%2Fcms%2Fagency%2Findex.html',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'user.vcode',
+  'source' => 'shop',
+  'mobile' => '18321271831',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.033379s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.045846s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/daguan/application/api/home/Index.php ]
+[ info ] [ LOG ] INIT File

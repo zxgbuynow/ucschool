@@ -1,0 +1,214 @@
+.counsellor-homepage-content {
+    padding: 45px 10px 0;
+}
+.counsellor-homepage-content .brief-info .avatar-container {
+    position: relative;
+    left: 50%;
+    margin-left: -85px;
+    width: 170px;
+    height: 105px;
+    text-align: center;
+}
+.counsellor-homepage-content .brief-info .avatar-container .avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+}
+.counsellor-homepage-content .brief-info .teacher-name {
+    margin-top: 12px;
+    margin-bottom: 8px;
+    font-size: 24px;
+    color: #4a4a4a;
+    font-weight: 700;
+    text-align: center;
+}
+
+.counsellor-homepage-content .zixun-time-block {
+    position: relative;
+    width: 100%;
+    padding-bottom: 15%;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #fff;
+    overflow: hidden;
+}
+
+.counsellor-homepage-content .zixun-time-block .txt {
+    position: absolute;
+    top: 22%;
+    font-size: 14px;
+    color: #4a4a4a;
+    width: 100%;
+    text-align: center;
+}
+
+.counsellor-homepage-content .qualification-block {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100%;
+    margin-bottom: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+}
+.counsellor-homepage-content .qualification-block .section {
+    position: relative;
+    margin: 0 18px;
+    border-bottom: 1px solid #eaeaea;
+}
+.counsellor-homepage-content .qualification-block .section .title {
+    font-size: 15px;
+    color: #4a4a4a;
+    padding-top: 18px;
+    margin-bottom: 13px;
+    font-weight: 700;
+}
+.counsellor-homepage-content .qualification-block .section .certification {
+    height: 45px;
+    margin-bottom: 13px;
+    font-size: 13px;
+    color: #666;
+    line-height: 23px;
+    display: -webkit-box!important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.counsellor-homepage-content .qualification-block .section .title {
+    font-size: 15px;
+    color: #4a4a4a;
+    padding-top: 18px;
+    margin-bottom: 13px;
+    font-weight: 700;
+}
+.counsellor-homepage-content .qualification-block .section .tags {
+    position: relative;
+    padding-right: 20px;
+    padding-bottom: 8px;
+}
+.counsellor-homepage-content .qualification-block .section .tags .tag1 {
+    display: inline-block;
+    padding: 0 10px;
+    margin-bottom: 10px;
+    margin-right: 3px;
+    border-radius: 50px;
+    border: 1px solid #459cf3;
+    font-size: 12px;
+    line-height: 26px;
+    color: #459cf3;
+    text-align: center;
+}
+
+.zixun-way-section {
+    clear: both;
+    overflow: hidden;
+}
+ .zixun-way-section .zixun-way {
+    float: left;
+    width: 25%;
+    text-align: center;
+    margin-bottom: 10px;
+}
+.counsellor-homepage-content .zixun-way-section .zixun-way .label {
+    display: block;
+    font-size: 13px;
+    color: #4a4a4a;
+    margin-bottom: 10px;
+}
+.counsellor-homepage-content  .zixun-way-section .zixun-way .price {
+    font-size: 12px;
+    color: #9b9b9b;
+}
+.zixun-way img{
+	width: 39px;
+    height: 39px;
+}
+
+.consult_form .form {
+    height: auto;
+    overflow: hidden;
+    margin-top: 15px;
+}
+.consult_form .zxfs {
+    font-size: 15px;
+    color: #444;
+    height: auto;
+    overflow: hidden;
+    background: #fff;
+    margin-bottom: 15px;
+}
+.consult_form .form .hd {
+    position: relative;
+    height: 47px;
+    padding-left: 12px;
+    padding-right: 12px;
+    line-height: 47px;
+    color: #444;
+    font-size: 16px;
+}
+.consult_form .form .body {
+    margin: 0 12px;
+    border-top: 1px solid #ddd;
+}
+.consult_form .zxfs .foot {
+    padding: 10px 12px;
+    border-top: 1px solid #ddd;
+    text-align: right;
+    color: #999;
+    font-size: 11px;
+    clear: both;
+    overflow: hidden;
+}
+
+.consult_form .zxfs ul {
+    height: auto;
+    overflow: hidden;
+    margin: 15px 0;
+}
+.consult_form .zxfs ul li {
+    /*width: 30.4%;*/
+   width: 100%;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    height: 60px;
+    margin-right: 13px;
+    float: left;
+    display: inline;
+    background-color: #f7f7f7;
+    border-radius: 3px;
+    text-align: center;
+    cursor: pointer;
+}
+.consult_form .zxfs ul li h2 {
+    padding-top: 5px;
+}
+.consult_form .zxfs ul li p {
+    color: #999;
+    font-size: 11px;
+}
+.consult_form .zxfs .attr {
+    clear: both;
+    padding-bottom: 7.5px;
+    position: relative;
+    height: 45px;
+}
+.consult_form .zxfs .attr .attr-txt {
+	float: left;
+    font-size: 14px;
+    color: #2B343A;
+    line-height: 41px;
+}
+.spinner {
+    position: relative;
+    width: 120px;
+    height: 35px;
+    overflow: hidden;
+    border-radius: 3px;
+    border: 1px solid #bbc7ce;
+    float: right;
+    margin-top: -7px;
+    margin-bottom: 10px;
+}

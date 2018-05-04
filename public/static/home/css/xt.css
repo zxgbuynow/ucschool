@@ -1,0 +1,57 @@
+/*信托*/
+.bgf9{ background:#f9f9f9;}
+.pl40{ padding-left:40px;}
+.crumbs{overflow:hidden;line-height:54px;}
+.crumbs a{color:#333;}
+.crumbs i{display:inline-block;width:11px;height:14px;background:url(/static/common/images/index.png) no-repeat -214px -42px; vertical-align:text-top;margin-right:5px;}
+.crumbs em{display:inline-block;width:7px;height:12px;background:url(/static/common/images/index.png) no-repeat -3px -179px; margin-right:5px;margin:0 8px;}
+/*公司详情 */
+.agency{overflow:hidden;padding:40px 0 0 30px;}
+.agency dt{float:left;margin-right:35px;}
+.agency dt img{ width:100px; height:100px; border-radius:50%; box-shadow: 0 0px 8px #ddd;}
+.agency dd{float:left;}
+.agency dd p{line-height:1;padding-bottom:28px;display:inline-block;width:210px;color:#888;*display:inline;*zoom:1;}
+.agency dd span{display:block;}
+/*产品介绍 */
+.xt-prolt{ width:871px;}
+.xt-prort{ width:309px;}
+.xt-prodetail{ background:#fff; padding:25px 20px 20px 20px ; font-size:16px; color:333; line-height:30px;}
+.xt-prodetail .detail,.xt-prodetail .detail p{ margin-top:20px;}
+.xt-prodetail-h2{ border-left:4px #e8ce95 solid; line-height:19px; padding-left:8px; font-weight:bold;}
+.xt-prodetail-tb{ border:1px #f0f0f0 solid;}
+.xt-prodetail-tb th{ background:#f9f9f9; font-weight:normal; font-size:14px; color:#555; border-bottom:1px #f0f0f0 solid;}
+.xt-prodetail-tb td{ line-height:24px; padding:12px 33px; font-size:16px; color:#333; border-bottom:1px #f0f0f0 solid;}
+.xt-prodeta-proce { margin:30px 0 5px 0;}
+.xt-prodeta-proce li{ background:#f7f8fc; padding:15px 10px; margin-top:10px; line-height:24px; font-size:14px; color:#333;}
+.xt-prodeta-proce li h3{ font-size:16px; color:333; margin-bottom:10px; font-weight:bold;}
+.xt-prodetail-gdgc{ border:1px #f0f0f0 solid; font-size:14px; line-height:48px;text-align:left}
+.xt-prodetail-gdgc th{ color:#888;  border-bottom:1px #f0f0f0 solid; font-weight:normal;}
+.xt-prodetail-gdgc tr{ line-height:48px; border-bottom:1px solid #f0f0f0; font-size:14px; color:#333;}
+.xt-prodetail-gdgc tr:nth-of-type(odd){ background:#f9f9f9}
+.xt-prodetail-gdgc tr:nth-of-type(even){ background: #fff}
+/*知名公司*/
+.proddtl-zmgs li{padding: 30px 0 30px 0;}
+.proddtl-zmgsimg img{ width:80px; height:80px; border-radius:50%; box-shadow: 0 0px 8px #ddd; margin-right:18px;}
+.proddtl-frp2 h4{ font-size:18px; color:#333; margin-bottom:8px;}
+
+/*票据*/
+.pj-prolist li{ padding:35px 0 30px 0; background:#fff; margin-top:15px;*width:1200px;*float:left;}
+.pj-prolist li:hover{ box-shadow:0 0 15px #e1e1e1;}
+.pj-prolist-img{ width:160px;}
+.pj-prolist-img img{ width:94px; height:94px; display:block; margin:0 auto; border-radius:50%; box-shadow:0 0 10px #e8e8e8;}
+.pj-prolist-mn{ width:810px;}
+.pj-listh4{max-width: 720px; font-weight:bold;}
+.pj-listmain{ line-height:26px; margin-top:25px;}
+.pj-listmn1{ width:100px; border-right:1px #f0f0f0 solid; margin-right:40px;}
+.pj-listmn2{ width:120px; border-right:1px #f0f0f0 solid; margin-right:40px;}
+.pj-listmn3{ width:110px; border-right:1px #f0f0f0 solid; margin-right:40px;}
+.pj-listmn4{ width:120px; border-right:1px #f0f0f0 solid; margin-right:40px;}
+.pj-listmn5{ width:140px;}
+.pj-prolist-js{ width:725px; line-height:24px; height:48px; overflow:hidden; margin-top:10px;}
+.pj-prolist-js i{ width:21px; height:18px; margin:5px 8px 0 0; display:block; float:left; background:url(/static/common/images/index.png) -71px -42px;}
+.pj-prolist-ckxq{ width:160px; margin-right:55px;}
+.pj-prolist-ckxq a{ width:141px; line-height:43px; border:1px #9d1d22 solid; color:#9d1d22; display:block; border-radius:5px; margin:10px auto 0 auto;}
+.pj-prolist-ckxq a:hover{ background:#9d1d22; color:#fff !important;}
+.bordtop{ border-top:1px #e9e9e9 solid;}
+
+
