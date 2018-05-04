@@ -54,6 +54,8 @@ class Index
      */
     public function login($params)
     {   
+        return $this->error($params['method'].'方法不存在');
+
         //参数手机号，密码
         $username = trim($params['account']);
         $password = trim($params['password']);
@@ -70,7 +72,7 @@ class Index
         if (!Hash::check((string)$password, $user['password'])) {
            return $this->error( '密码错误！');
         }
-        
+
        
         $data = [
             'Success'=>true,
@@ -79,6 +81,26 @@ class Index
             'Data'=>$user
         ];
         return json($data);
+    }
+
+    /**
+     * [findPassword ]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function findPassword($params)
+    {
+        return $this->error($params['method'].'方法不存在');
+    }
+
+    /**
+     * [register description]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function register($params)
+    {
+        return $this->error($params['method'].'方法不存在');
     }
     
 }
