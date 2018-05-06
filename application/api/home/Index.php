@@ -258,7 +258,7 @@ class Index
         $type = trim($params['type']);
 
         //是否是手机号
-        if(!preg_match('/^1([0-9]{9})/',$mobile)){
+        if(!preg_match('/^1([0-9]{9})/',$phone)){
             return $this->error('手机号格式不对');
         }
         // if (!db('toplearning_login')->where(['mobile'=>$phone])->find()) {
