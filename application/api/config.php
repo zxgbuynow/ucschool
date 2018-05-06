@@ -7,6 +7,7 @@ return [
         'logout'=>'user.logout',//退出
         'register'=>'user.register',//注册
         'findPassword'=>'user.findPassword',
-        'sendSms'=>'user.sendSms'
+        'sendSms'=>'user.sendSms',
+        'getUserInfo'=>'user.getUserInfo'
     ]
 ];
