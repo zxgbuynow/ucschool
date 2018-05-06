@@ -72,7 +72,7 @@ class Index
         }
 
         //生成token
-        $ret['token'] = $this->encrypt($user['id']);
+        $ret['token'] = $this->encrypt($user['user_id']);
         //设置过期时间
         Session::set($ret['token'], time() + 3600) ;
 
