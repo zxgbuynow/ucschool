@@ -240,7 +240,7 @@ class Index
         $data = [
             'Code'=>'0',
             'Msg'=>'操作成功',
-            'Data'=>$user,
+            'Data'=>$ret,
             'Success'=>true
         ];
         return json($data);
