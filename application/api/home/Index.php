@@ -341,7 +341,7 @@ class Index
      }
 
     function encrypt($data) { 
-        $key = passkey();
+        $key = $this->passkey();
         $prep_code = serialize($data); 
         $block = mcrypt_get_block_size('des', 'ecb'); 
         if (($pad = $block - (strlen($prep_code) % $block)) < $block) { 
@@ -353,7 +353,7 @@ class Index
     } 
 
     function decrypt($str) { 
-        $key = passkey();
+        $key = $this->passkey();
         $str = base64_decode($str); 
         $str = mcrypt_decrypt(MCRYPT_DES, $key, $str, MCRYPT_MODE_ECB); 
         $block = mcrypt_get_block_size('des', 'ecb'); 
@@ -365,4 +365,8 @@ class Index
 
         return unserialize($str); 
     }
+
+    function passkey(){
+        return 'ucschool';
+    } 
 }
