@@ -1251,3 +1251,40 @@ INSERT INTO `admin_user` VALUES ('1', 'admin', '超级管理员', '$2y$10$Brw6wm
 [ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.044137s ]
 [ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/ucschool/application/api/home/Index.php ]
 [ info ] [ LOG ] INIT File
+---------------------------------------------------------------
+[ 2018-05-04T13:27:46+08:00 ] 10.0.2.2 GET /api.php?method=user.findPassword&phone=18321271831&code=3642&password=12345678
+[ info ] zg.ucschool.com/api.php?method=user.findPassword&phone=18321271831&code=3642&password=12345678 [运行时间：0.406701s][吞吐率：2.46req/s] [内存消耗：444.52kb] [文件加载：47]
+[ info ] [ LANG ] /data/httpd/ucschool/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.ucschool.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => 'PHPSESSID=2tkom1rtvcprbs8b0oi2ri7kl7',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'user.findPassword',
+  'phone' => '18321271831',
+  'code' => '3642',
+  'password' => '12345678',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.034126s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.046010s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/ucschool/application/api/home/Index.php ]
+[ info ] [ LOG ] INIT File
