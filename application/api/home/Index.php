@@ -99,7 +99,7 @@ class Index
         $data = [
             'Success'=>true,
             'Code'=>'0',
-            'Msg'=>$msg,
+            'Msg'=>'操作成功',
             'Data'=>$ret
         ];
         return json($data);
