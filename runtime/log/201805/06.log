@@ -78,3 +78,364 @@
 [ sql ] [ DB ] CONNECT:[ UseTime:0.269561s ] mysql:host=139.196.20.81;port=3306;dbname=uxueyuan;charset=utf8
 [ sql ] [ SQL ] SHOW COLUMNS FROM `toplearning_login` [ RunTime:0.144039s ]
 [ sql ] [ SQL ] SELECT * FROM `toplearning_login` WHERE  `mobile` = '18321271831' LIMIT 1 [ RunTime:0.315245s ]
+---------------------------------------------------------------
+[ 2018-05-06T22:52:38+08:00 ] 10.0.2.2 GET /api.php?method=find.findSearch&token=18321271831&text=%E6%8B%93%E7%BF%8E%E6%B5%8B%E8%AF%95%E5%AD%A6%E9%99%A2&type=1
+[ info ] zg.ucschool.com/api.php?method=find.findSearch&token=18321271831&text=%E6%8B%93%E7%BF%8E%E6%B5%8B%E8%AF%95%E5%AD%A6%E9%99%A2&type=1 [运行时间：0.662886s][吞吐率：1.51req/s] [内存消耗：666.63kb] [文件加载：53]
+[ info ] [ LANG ] /data/httpd/ucschool/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.ucschool.com',
+  'connection' => 'keep-alive',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => 'PHPSESSID=2tkom1rtvcprbs8b0oi2ri7kl7',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'find.findSearch',
+  'token' => '18321271831',
+  'text' => '拓翎测试学院',
+  'type' => '1',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.039416s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.047358s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/ucschool/application/api/home/Index.php ]
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'dolphin_admin_',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.053753s ] mysql:host=139.196.20.81;port=3306;dbname=uxueyuan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `toplearning_school` [ RunTime:0.038697s ]
+[ sql ] [ SQL ] SELECT * FROM `toplearning_school` WHERE  `school_name` LIKE '%拓翎测试学院%'  AND `del` = 0 [ RunTime:0.095795s ]
+---------------------------------------------------------------
+[ 2018-05-06T22:53:00+08:00 ] 10.0.2.2 GET /api.php?method=find.getFocusCollege&token=18321271831&text=%E6%8B%93%E7%BF%8E%E6%B5%8B%E8%AF%95%E5%AD%A6%E9%99%A2&type=1
+[ info ] zg.ucschool.com/api.php?method=find.getFocusCollege&token=18321271831&text=%E6%8B%93%E7%BF%8E%E6%B5%8B%E8%AF%95%E5%AD%A6%E9%99%A2&type=1 [运行时间：0.368469s][吞吐率：2.71req/s] [内存消耗：446.35kb] [文件加载：47]
+[ info ] [ LANG ] /data/httpd/ucschool/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.ucschool.com',
+  'connection' => 'keep-alive',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => 'PHPSESSID=2tkom1rtvcprbs8b0oi2ri7kl7',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'find.getFocusCollege',
+  'token' => '18321271831',
+  'text' => '拓翎测试学院',
+  'type' => '1',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.040732s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.046523s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/ucschool/application/api/home/Index.php ]
+[ info ] [ LOG ] INIT File
+---------------------------------------------------------------
+[ 2018-05-06T22:53:13+08:00 ] 10.0.2.2 GET /api.php?method=find.findSearch&token=18321271831&text=%E6%8B%93%E7%BF%8E%E6%B5%8B%E8%AF%95%E5%AD%A6%E9%99%A2&type=1
+[ info ] zg.ucschool.com/api.php?method=find.findSearch&token=18321271831&text=%E6%8B%93%E7%BF%8E%E6%B5%8B%E8%AF%95%E5%AD%A6%E9%99%A2&type=1 [运行时间：0.895262s][吞吐率：1.12req/s] [内存消耗：663.37kb] [文件加载：53]
+[ info ] [ LANG ] /data/httpd/ucschool/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.ucschool.com',
+  'connection' => 'keep-alive',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => 'PHPSESSID=2tkom1rtvcprbs8b0oi2ri7kl7',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'find.findSearch',
+  'token' => '18321271831',
+  'text' => '拓翎测试学院',
+  'type' => '1',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.030662s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.045940s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/ucschool/application/api/home/Index.php ]
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'dolphin_admin_',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.158945s ] mysql:host=139.196.20.81;port=3306;dbname=uxueyuan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `toplearning_school` [ RunTime:0.154261s ]
+[ sql ] [ SQL ] SELECT * FROM `toplearning_school` WHERE  `school_name` LIKE '%拓翎测试学院%'  AND `del` = 0 [ RunTime:0.168559s ]
+---------------------------------------------------------------
+[ 2018-05-06T22:53:37+08:00 ] 10.0.2.2 GET /api.php?method=find.changeCollege&token=18321271831&collegeid=1
+[ info ] zg.ucschool.com/api.php?method=find.changeCollege&token=18321271831&collegeid=1 [运行时间：0.374319s][吞吐率：2.67req/s] [内存消耗：465.57kb] [文件加载：50]
+[ info ] [ LANG ] /data/httpd/ucschool/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.ucschool.com',
+  'connection' => 'keep-alive',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => 'PHPSESSID=2tkom1rtvcprbs8b0oi2ri7kl7',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'find.changeCollege',
+  'token' => '18321271831',
+  'collegeid' => '1',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.038832s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.043393s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/ucschool/application/api/home/Index.php ]
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'dolphin_admin_',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ LOG ] INIT File
+[ error ] [8]unserialize(): Error at offset 0 of 8 bytes[/data/httpd/ucschool/application/api/home/Index.php:505]
+---------------------------------------------------------------
+[ 2018-05-06T22:54:35+08:00 ] 10.0.2.2 GET /api.php?method=find.changeCollege&token=J9FqNKq0RfpfKy4sZLPgWg==&collegeid=1
+[ info ] zg.ucschool.com/api.php?method=find.changeCollege&token=J9FqNKq0RfpfKy4sZLPgWg==&collegeid=1 [运行时间：0.857092s][吞吐率：1.17req/s] [内存消耗：644.81kb] [文件加载：57]
+[ info ] [ LANG ] /data/httpd/ucschool/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.ucschool.com',
+  'connection' => 'keep-alive',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => 'PHPSESSID=2tkom1rtvcprbs8b0oi2ri7kl7',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'find.changeCollege',
+  'token' => 'J9FqNKq0RfpfKy4sZLPgWg==',
+  'collegeid' => '1',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.032421s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.050918s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/ucschool/application/api/home/Index.php ]
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'dolphin_admin_',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.144607s ] mysql:host=139.196.20.81;port=3306;dbname=uxueyuan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `toplearning_school` [ RunTime:0.081818s ]
+[ error ] [10501]SQLSTATE[42S22]: Column not found: 1054 Unknown column 'collegeid' in 'where clause'[/data/httpd/ucschool/thinkphp/library/think/db/Connection.php:388]
+---------------------------------------------------------------
+[ 2018-05-06T22:55:18+08:00 ] 10.0.2.2 GET /api.php?method=find.changeCollege&token=J9FqNKq0RfpfKy4sZLPgWg==&collegeid=1
+[ info ] zg.ucschool.com/api.php?method=find.changeCollege&token=J9FqNKq0RfpfKy4sZLPgWg==&collegeid=1 [运行时间：0.841473s][吞吐率：1.19req/s] [内存消耗：657.65kb] [文件加载：53]
+[ info ] [ LANG ] /data/httpd/ucschool/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.ucschool.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => 'PHPSESSID=2tkom1rtvcprbs8b0oi2ri7kl7',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'find.changeCollege',
+  'token' => 'J9FqNKq0RfpfKy4sZLPgWg==',
+  'collegeid' => '1',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.042698s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.054388s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/ucschool/application/api/home/Index.php ]
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'dolphin_admin_',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.052874s ] mysql:host=139.196.20.81;port=3306;dbname=uxueyuan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `toplearning_school` [ RunTime:0.036351s ]
+[ sql ] [ SQL ] SELECT * FROM `toplearning_school` WHERE  `school_id` = 1 LIMIT 1 [ RunTime:0.095138s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `toplearning_login` [ RunTime:0.099018s ]
+[ sql ] [ SQL ] UPDATE `toplearning_login`  SET `school_id`=1  WHERE  `school_id` = 1 [ RunTime:0.091910s ]
+---------------------------------------------------------------
+[ 2018-05-06T22:55:31+08:00 ] 10.0.2.2 GET /api.php?method=find.getCollegeInfo&token=J9FqNKq0RfpfKy4sZLPgWg==&collegeid=1
+[ info ] zg.ucschool.com/api.php?method=find.getCollegeInfo&token=J9FqNKq0RfpfKy4sZLPgWg==&collegeid=1 [运行时间：0.643348s][吞吐率：1.55req/s] [内存消耗：644.63kb] [文件加载：57]
+[ info ] [ LANG ] /data/httpd/ucschool/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.ucschool.com',
+  'connection' => 'keep-alive',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => 'PHPSESSID=2tkom1rtvcprbs8b0oi2ri7kl7',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'find.getCollegeInfo',
+  'token' => 'J9FqNKq0RfpfKy4sZLPgWg==',
+  'collegeid' => '1',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.044936s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.049596s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/ucschool/application/api/home/Index.php ]
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'dolphin_admin_',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.050098s ] mysql:host=139.196.20.81;port=3306;dbname=uxueyuan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `toplearning_school` [ RunTime:0.035139s ]
+[ error ] [10501]SQLSTATE[42S22]: Column not found: 1054 Unknown column 'collegeid' in 'where clause'[/data/httpd/ucschool/thinkphp/library/think/db/Connection.php:388]
+---------------------------------------------------------------
+[ 2018-05-06T22:55:43+08:00 ] 10.0.2.2 GET /api.php?method=find.getCollegeInfo&token=J9FqNKq0RfpfKy4sZLPgWg==&collegeid=1
+[ info ] zg.ucschool.com/api.php?method=find.getCollegeInfo&token=J9FqNKq0RfpfKy4sZLPgWg==&collegeid=1 [运行时间：0.843205s][吞吐率：1.19req/s] [内存消耗：665.27kb] [文件加载：53]
+[ info ] [ LANG ] /data/httpd/ucschool/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.ucschool.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => 'PHPSESSID=2tkom1rtvcprbs8b0oi2ri7kl7',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'find.getCollegeInfo',
+  'token' => 'J9FqNKq0RfpfKy4sZLPgWg==',
+  'collegeid' => '1',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.033278s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.047194s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/ucschool/application/api/home/Index.php ]
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'dolphin_admin_',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.118954s ] mysql:host=139.196.20.81;port=3306;dbname=uxueyuan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `toplearning_school` [ RunTime:0.153170s ]
+[ sql ] [ SQL ] SELECT * FROM `toplearning_school` WHERE  `school_id` = 1 LIMIT 1 [ RunTime:0.173004s ]

@@ -288,6 +288,145 @@ class Index
         return json($data);
     }
 
+    public function findSearch($params)
+    {
+        //params
+        $token = trim($params['token']);
+        $text = trim($params['text']);
+
+        $type = trim($params['type']);
+
+        //通过token获取 uid
+        // $token_uid = $this->decrypt($token);
+
+        //检查过期时间
+        if (Session::get($token)&&Session::get($token)<time()) {
+            return $this->error('token失效，请重新登录');
+        }
+
+       
+        $map['school_name'] = array('like','%'.$text.'%');
+        $map['del'] = 0;
+        //用户信息
+        $school = db('toplearning_school')->where($map)->select();
+        
+        $ret = array();
+        foreach ($school as $key => $value) {
+            $ret[$key]['collegeid'] = $value['school_id'];
+            $ret[$key]['title'] = $value['school_name'];
+            $ret[$key]['image'] = $value['logo'];
+        }
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$school,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+
+    public function getFocusCollege($params)
+    {
+
+        $ret = array();
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+
+    public function changeCollege($params)
+    {
+
+        //params
+        $token = trim($params['token']);
+        $collegeid = trim($params['collegeid']);
+
+        //检查过期时间
+        if (Session::get($token)&&Session::get($token)<time()) {
+            return $this->error('token失效，请重新登录');
+        }
+
+
+        //是否有该学院
+        //通过token获取 uid
+        $token_uid = $this->decrypt($token);
+        $map['school_id'] = $collegeid;
+
+        if (!db('toplearning_school')->where($map)->find()) {
+            return $this->error('该学院不存在或删除');
+        }
+
+        //更新学院信息
+        $umap['user_id'] = $token_uid;
+        $save['school_id'] = $collegeid;
+        db('toplearning_login')->where($map)->update($save);
+
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>1,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+
+    public function getCollegeInfo($params)
+    {
+
+        //params
+        $token = trim($params['token']);
+        $collegeid = trim($params['collegeid']);
+
+        //检查过期时间
+        if (Session::get($token)&&Session::get($token)<time()) {
+            return $this->error('token失效，请重新登录');
+        }
+
+        //是否有该学院
+        $map['school_id'] = $collegeid;
+        $ret = db('toplearning_school')->where($map)->find();
+        if (!$ret) {
+            return $this->error('该学院不存在或删除');
+        }
+
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+
+    public function focusCollege($params)
+    {
+
+        
+        $ret = array();
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>1,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+
+    //---------- common function-----------
     /**
      * [sendmsg description]
      * @param  [type] $mobile [description]
