@@ -110,7 +110,7 @@ class Index
      * @param  [type] $params [description]
      * @return [type]         [description]
      */
-    public function findpassword($params)
+    public function findPassword($params)
     {
         //参数
         $phone = trim($params['phone']);
