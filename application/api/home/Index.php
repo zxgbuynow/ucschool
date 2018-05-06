@@ -78,7 +78,7 @@ class Index
 
 
         //组数据  
-        $ret['userid'] = $this->encrypt($user['user_id']);
+        $ret['userid'] = $user['user_id'];
         $ret['phone'] = $user['mobile'];
 
         $ret['nickname'] = $user['nickname'];
