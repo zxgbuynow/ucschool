@@ -72,13 +72,13 @@ class Index
         }
 
         //生成token
-        $ret['token'] = encrypt($user['id']);
+        $ret['token'] = $this->encrypt($user['id']);
         //设置过期时间
         Session::set($ret['token'], time() + 3600) ;
 
 
         //组数据  
-        $ret['userid'] = encrypt($user['user_id']);
+        $ret['userid'] = $this->encrypt($user['user_id']);
         $ret['phone'] = $user['mobile'];
 
         $ret['nickname'] = $user['nickname'];
@@ -201,7 +201,7 @@ class Index
         $userid = trim($params['userid']);
 
         //通过token获取 uid
-        $token_uid = decrypt($token);
+        $token_uid = $this->decrypt($token);
 
         //检查过期时间
         if (Session::get($token)&&Session::get($token)<time()) {
@@ -219,7 +219,7 @@ class Index
 
         //组数据
         $ret['token'] = $token;
-        $ret['userid'] = encrypt($user['user_id']);
+        $ret['userid'] = $this->encrypt($user['user_id']);
         $ret['phone'] = $user['mobile'];
 
         $ret['nickname'] = $user['nickname'];
