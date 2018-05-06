@@ -257,10 +257,13 @@ class Index
         $phone = trim($params['phone']);
         $type = trim($params['type']);
 
-        //是否是会员
-        if (!db('toplearning_login')->where(['mobile'=>$phone])->find()) {
-            return $this->error('账号不存在');
+        //是否是手机号
+        if(!preg_match('/^1([0-9]{9})/',$mobile)){
+            return $this->error('手机号格式不对');
         }
+        // if (!db('toplearning_login')->where(['mobile'=>$phone])->find()) {
+        //     return $this->error('账号不存在');
+        // }
         
         //短信
         $code = $this->sendmsg($phone);
