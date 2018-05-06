@@ -258,7 +258,7 @@ class Index
         $type = trim($params['type']);
 
         //是否是会员
-        if (!db('toplearning_login')->where(['phone'=>$phone])->find()) {
+        if (!db('toplearning_login')->where(['mobile'=>$phone])->find()) {
             return $this->error('账号不存在');
         }
         
