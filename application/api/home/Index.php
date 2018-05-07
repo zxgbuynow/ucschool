@@ -78,7 +78,7 @@ class Index
 
         //用户类型
         $ret['customerType'] = 1;
-        $customerType = db('toplearning_user_account')->where('status',1)->column('type');
+        $customerType = db('toplearning_user_account')->where('user_id',$user['user_id'])->column('type');
         $ret['customerType'] = $customerType[0];
         //组数据  
         $ret['userid'] = $user['user_id'];
@@ -105,6 +105,7 @@ class Index
             'Msg'=>'操作成功',
             'Data'=>$ret
         ];
+        error_log(json_encode($data),3,'/home/wwwroot/ucschool/error.log');
         return json($data);
     }
 
@@ -181,6 +182,8 @@ class Index
         if (!$me) {
             return $this->error('注册失败！请稍后重试');
         }
+
+        //插入关联表
         
         //返回信息
         $data = [
