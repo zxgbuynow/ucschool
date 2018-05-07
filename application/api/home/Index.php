@@ -74,7 +74,7 @@ class Index
         //生成token
         $ret['token'] = $this->encrypt($user['user_id']);
         //设置过期时间
-        Session::set($ret['token'], time() + 3600) ;
+        cache($ret['token'], time() + 3600) ;
 
         //用户类型
         $ret['customerType'] = 1;
@@ -125,12 +125,12 @@ class Index
 
 
         //检查过期时间
-        // if (Session::get($username.$code)&&Session::get($username.$code)<time()) {
+        // if (cache($username.$code)&&cache($username.$code)<time()) {
         //     return $this->error('验证码已过期');
         // }
         
         //检查是否正确
-        if (Session::get($phone.'vcode')!=$code) {
+        if (cache($phone.'vcode')!=$code) {
             return $this->error('验证码不正确');
         }
 
@@ -170,9 +170,9 @@ class Index
         if (db('toplearning_login')->where(['mobile'=>$data['mobile']])->find()) {
             return $this->error('账号已存在！');
         }
-
+        // error_log(cache($data['mobile'].'vcode').'||'.$data['code'],3,'/home/wwwroot/ucschool/logl.log');
         //检查是否正确
-        if (Session::get($data['mobile'].'vcode')!=$data['code']) {
+        if (cache($data['mobile'].'vcode')!=$data['code']) {
             return $this->error('验证码不正确');
         }
 
@@ -212,7 +212,7 @@ class Index
         $token_uid = $this->decrypt($token);
 
         //检查过期时间
-        if (Session::get($token)&&Session::get($token)<time()) {
+        if (cache($token)&&cache($token)<time()) {
             return $this->error('token失效，请重新登录');
         }
 
@@ -280,10 +280,10 @@ class Index
         }
         
         //生成session 
-        Session::set($phone.'vcode',$code);
+        cache($phone.'vcode',$code);
 
         //设置过期时间
-        // Session::set($account.$code,time() + 1800);
+        // cache($account.$code,time() + 1800);
 
         //返回信息
         $data = [
@@ -308,7 +308,7 @@ class Index
         // $token_uid = $this->decrypt($token);
 
         //检查过期时间
-        if (Session::get($token)&&Session::get($token)<time()) {
+        if (cache($token)&&cache($token)<time()) {
             return $this->error('token失效，请重新登录');
         }
 
@@ -358,7 +358,7 @@ class Index
         $collegeid = trim($params['collegeid']);
 
         //检查过期时间
-        if (Session::get($token)&&Session::get($token)<time()) {
+        if (cache($token)&&cache($token)<time()) {
             return $this->error('token失效，请重新登录');
         }
 
@@ -396,7 +396,7 @@ class Index
         $collegeid = trim($params['collegeid']);
 
         //检查过期时间
-        if (Session::get($token)&&Session::get($token)<time()) {
+        if (cache($token)&&cache($token)<time()) {
             return $this->error('token失效，请重新登录');
         }
 
