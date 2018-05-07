@@ -76,7 +76,10 @@ class Index
         //设置过期时间
         Session::set($ret['token'], time() + 3600) ;
 
-
+        //用户类型
+        $ret['customerType'] = 1;
+        $customerType = db('toplearning_user_account')->where('status',1)->column('type');
+        $ret['customerType'] = $customerType[0];
         //组数据  
         $ret['userid'] = $user['user_id'];
         $ret['phone'] = $user['mobile'];
