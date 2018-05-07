@@ -79,7 +79,10 @@ class Index
         //用户类型
         $ret['customerType'] = 1;
         $customerType = db('toplearning_user_account')->where('user_id',$user['user_id'])->column('type');
-        $ret['customerType'] = $customerType[0];
+        if ($customerType) {
+           $ret['customerType'] = $customerType[0];
+        }
+        
         //组数据  
         $ret['userid'] = $user['user_id'];
         $ret['phone'] = $user['mobile'];
