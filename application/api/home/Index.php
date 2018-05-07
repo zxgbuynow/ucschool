@@ -108,7 +108,6 @@ class Index
             'Msg'=>'操作成功',
             'Data'=>$ret
         ];
-        error_log(json_encode($data),3,'/home/wwwroot/ucschool/error.log');
         return json($data);
     }
 
