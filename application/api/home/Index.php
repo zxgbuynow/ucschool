@@ -88,7 +88,7 @@ class Index
         $ret['phone'] = $user['mobile'];
 
         $ret['nickname'] = $user['nickname'];
-        $ret['birthday'] = $user['mobile'];
+        $ret['birthday'] = $user['birthday'];
         $ret['sex'] = $user['sex'];
 
         $ret['headurl'] = $user['avatar'];
