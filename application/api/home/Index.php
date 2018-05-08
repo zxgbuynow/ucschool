@@ -280,6 +280,9 @@ class Index
         }
         
         //生成session 
+        if (cache($phone.'vcode')) {
+            cache($phone.'vcode', NULL);
+        }
         cache($phone.'vcode',$code);
 
         //设置过期时间
@@ -295,7 +298,11 @@ class Index
 
         return json($data);
     }
-
+    /**
+     * [findSearch  搜索学院]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
     public function findSearch($params)
     {
         //params
@@ -335,15 +342,35 @@ class Index
         return json($data);
     }
 
+    /**
+     * [getFocusCollege 2.  获取关注的学院]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
     public function getFocusCollege($params)
     {
+        //params
+        $token = trim($params['token']);
 
-        $ret = array();
+        //通过token获取 uid
+        $token_uid = $this->decrypt($token);
+
+        //检查过期时间
+        if (cache($token)&&cache($token)<time()) {
+            return $this->error('token失效，请重新登录');
+        }
+
+       
+        $map['a.type'] = 2;
+        $map['a.del'] = 0;
+        //关注信息
+        $attention = db('toplearning_attention')->alias('a')->join('toplearning_school s','a.source_id = s.school_id')->where($map)->select();
+
         //返回信息
         $data = [
             'Code'=>'0',
             'Msg'=>'操作成功',
-            'Data'=>$ret,
+            'Data'=>$attention,
             'Success'=>true
         ];
 
@@ -420,6 +447,63 @@ class Index
 
     public function focusCollege($params)
     {
+        //params
+        $token = trim($params['token']);
+        $collegeid = trim($params['collegeid']);
+        $type = trim($params['type']);
+
+        //检查过期时间
+        if (cache($token)&&cache($token)<time()) {
+            return $this->error('token失效，请重新登录');
+        }
+
+
+        
+        //通过token获取 uid
+        $token_uid = $this->decrypt($token);
+
+
+        //关注或取关 （有状态）
+        
+        $map['source_id'] = $collegeid;
+        $map['user_id'] = $token_uid;
+        $map['type'] = 2;
+
+        //存在关注记录
+        if (db('toplearning_attention')->where($map)->find()) {
+            //type 1 关注 2取消
+            if ($type == 1) {
+                //更新学院信息
+                $umap['user_id'] = $token_uid;
+                $save['del'] = 0;
+                db('toplearning_attention')->where($map)->update($save);
+            }else{
+                //更新学院信息
+                $umap['user_id'] = $token_uid;
+                $save['del'] = 1;
+                db('toplearning_attention')->where($map)->update($save);
+            }
+
+        }else{
+            //type 1 关注 2取消
+            if ($type == 1) {
+                //更新学院信息
+                $save['user_id'] = $token_uid;
+                $save['source_id'] = $collegeid;
+                $save['type'] = 2;
+                $save['create_time'] = time();
+                $save['del'] = 0;
+                db('toplearning_attention')->insert($save);
+            }else{
+                //更新学院信息
+                $save['user_id'] = $token_uid;
+                $save['source_id'] = $collegeid;
+                $save['type'] = 2;
+                $save['create_time'] = time();
+                $save['del'] = 1;
+                db('toplearning_attention')->insert($save);
+            }
+        }
 
         
         $ret = array();
