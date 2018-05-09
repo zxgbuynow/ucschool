@@ -366,6 +366,15 @@ class Index
         //关注信息
         $attention = db('toplearning_attention')->alias('a')->join('toplearning_school s','a.source_id = s.school_id')->where($map)->select();
 
+
+        //处理
+        $ret = array();
+        foreach ($attention as $key => $value) {
+            $ret[$key]['collegeid'] = $value['school_id'];
+            $ret[$key]['title'] = $value['school_name'];
+            $ret[$key]['image'] = $value['logo'];
+        }
+
         //返回信息
         $data = [
             'Code'=>'0',
