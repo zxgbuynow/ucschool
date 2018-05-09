@@ -335,7 +335,7 @@ class Index
         $data = [
             'Code'=>'0',
             'Msg'=>'操作成功',
-            'Data'=>$school,
+            'Data'=>$ret,
             'Success'=>true
         ];
 
