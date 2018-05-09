@@ -447,6 +447,7 @@ class Index
         $rs['achimages'] = '';
         $rs['number'] = $ret['school_name'];
         $rs['isfocus'] = 0;
+        $rs['collegeimg'] = $ret['logo'];
 
         $amap['type'] = 2;
         $amap['del'] = 0;
