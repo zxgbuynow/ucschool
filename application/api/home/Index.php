@@ -54,7 +54,6 @@ class Index
      */
     public function login($params)
     {   
-
         //参数手机号，密码
         $phone = trim($params['phone']);
         $password = trim($params['password']);
@@ -100,6 +99,9 @@ class Index
         //todo
         $ret['signture'] = $user['introduce'];
         $ret['coins'] = 10;
+
+        $ret['email'] = $user['email'];
+        $ret['collegeid'] = db('toplearning_school')->where(1)->order('recommended DESC')->column('school_id')[0];
 
                 
         $data = [
