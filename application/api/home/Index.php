@@ -365,6 +365,7 @@ class Index
        
         $map['a.type'] = 2;
         $map['a.del'] = 0;
+        $map['a.user_id'] = $token_uid;
         //关注信息
         $attention = db('toplearning_attention')->alias('a')->join('toplearning_school s','a.source_id = s.school_id')->where($map)->select();
 
@@ -372,9 +373,11 @@ class Index
         //处理
         $ret = array();
         foreach ($attention as $key => $value) {
+
             $ret[$key]['collegeid'] = $value['school_id'];
             $ret[$key]['title'] = $value['school_name'];
             $ret[$key]['image'] = $value['logo'];
+            $ret[$key]['del'] = $value['del'];
         }
 
         //返回信息
@@ -504,7 +507,6 @@ class Index
         $map['source_id'] = $collegeid;
         $map['user_id'] = $token_uid;
         $map['type'] = 2;
-
         //存在关注记录
         if (db('toplearning_attention')->where($map)->find()) {
             //type 1 关注 2取消
