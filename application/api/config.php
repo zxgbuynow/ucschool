@@ -15,6 +15,10 @@ return [
         'changeCollege'=>'find.changeCollege',
         'getCollegeInfo'=>'find.getCollegeInfo',
         'focusCollege'=>'find.focusCollege',
+
+        'getfindIndexCollege'=>'find.getfindIndexCollege',
+        'getCollegeCourse'=>'find.getCollegeCourse',
+        'getCollegeTeachers'=>'find.getCollegeTeachers',
         //课程
         'getTodayCourse'=>'class.getTodayCourse',
         'getMyCourse'=>'class.getMyCourse',

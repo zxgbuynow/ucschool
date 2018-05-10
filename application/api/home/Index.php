@@ -428,7 +428,11 @@ class Index
 
         return json($data);
     }
-
+    /**
+     * [getCollegeInfo description]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
     public function getCollegeInfo($params)
     {
 
@@ -459,7 +463,7 @@ class Index
         $rs['achtitle'] = '';
         $rs['achdesc'] = '';
         $rs['achimages'] = '';
-        $rs['number'] = $ret['school_name'];
+        $rs['number'] = $ret['license_num'];
         $rs['isfocus'] = 0;
         $rs['collegeimg'] = $ret['logo'];
 
@@ -555,7 +559,138 @@ class Index
 
         return json($data);
     }
+    /**
+     * [getfindIndexCollege 发现首页显示的学院]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function getfindIndexCollege($params)
+    {   
 
+        //params
+        $token = trim($params['token']);
+
+        //检查过期时间
+        if (cache($token)&&cache($token)<time()) {
+            return $this->error('token失效，请重新登录');
+        }
+
+
+        //学院 TODO
+        $map['del'] = 0;
+        
+        $school = db('toplearning_school')->where($map)->limit(10)->select();
+        $ret = array();
+        foreach ($school as $key => $value) {
+            $ret[$key]['collegeid'] = $value['school_id'];
+            $ret[$key]['title'] = $value['school_name'];
+            $ret[$key]['introduce'] = $value['school_profile'];
+
+            $ret[$key]['achievement'] = array();
+            $ret[$key]['achtitle'] = '';
+            $ret[$key]['achdesc'] = '';
+            $ret[$key]['achimages'] = '';
+            $ret[$key]['number'] = $value['license_num'];//学院号
+            $ret[$key]['isfocus'] = 0;
+            $ret[$key]['collegeimg'] = $value['logo'];
+            $amap['type'] = 2;
+            $amap['del'] = 0;
+            $amap['source_id'] = $value['school_id'];
+            if (db('toplearning_attention')->where($amap)->find()) {
+                $ret[$key]['isfocus'] = 1;
+            }
+        }
+
+        
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+
+    /**
+     * [getCollegeCourse 学院下的课程]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function getCollegeCourse($params)
+    {
+
+        //params
+        $token = trim($params['token']);
+        $collegeid = trim($params['collegeid']);
+        $page = trim($params['page']);
+        $size = trim($params['size']);
+
+
+        //学院老师
+        $map['del'] = 0;
+        $map['school_id'] = $collegeid;
+        $page = $page ==''?0:$page;
+        $size = $size == ''?10:$size;
+
+        $limit = $page*$size;
+        $teachers = db('toplearning_school_teacher')->where($map)->limit($limit, $size)->select();
+
+        $ret = array();
+
+        foreach ($teachers as $key => $value) {
+            $ret[$key]['teacherid']  = $value['teacher_id'];
+            $ret[$key]['name']  = $value['teacher_name'];
+            $ret[$key]['headimage']  = '';
+            if (db('toplearning_login')->where(['user_id'=>$value['user_id']])->find()) {
+                $ret[$key]['headimage']  = db('toplearning_login')->where(['user_id'=>$value['user_id']])->column('avatar')[0];
+            }
+            $ret[$key]['score']  = 0;
+            if (db('toplearning_teacher')->where(['teacher_id'=>$value['teacher_id']])->find()) {
+                $ret[$key]['score']  = db('toplearning_teacher')->where(['user_id'=>$value['user_id']])->column('rate')[0];
+            }
+
+            $ret[$key]['coursenumber']  = 0;
+            
+        }
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+
+    }
+
+    /**
+     * [getCollegeTeachers  获取学院下的教师]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function getCollegeTeachers($params)
+    {
+        //params
+        $token = trim($params['token']);
+        $collegeid = trim($params['collegeid']);
+        $page = trim($params['page']);
+        $size = trim($params['size']);
+
+
+        $ret = array();
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
     /**
      * [getTodayCourse 今日课程]
      * @param  [type] $params [description]
