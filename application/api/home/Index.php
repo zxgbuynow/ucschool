@@ -420,7 +420,8 @@ class Index
         //更新学院信息
         $umap['user_id'] = $token_uid;
         $save['school_id'] = $collegeid;
-        db('toplearning_login')->where($map)->update($save);
+        
+        db('toplearning_login')->where($umap)->update($save);
 
         //返回信息
         $data = [
