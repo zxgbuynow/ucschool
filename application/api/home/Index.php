@@ -579,32 +579,42 @@ class Index
             return $this->error('token失效，请重新登录');
         }
 
+        //通过token获取 uid
+        $token_uid = $this->decrypt($token);
+        $user = db('toplearning_login')->where(['user_id'=>$token_uid])->column('school_id');
+        //有所属学院
+        if ($user&&$user[0]) {
+            $map['school_id'] = $user[0];
+        }else{
+            $map['school_id'] = db('toplearning_school')->where(1)->order('recommended DESC')->column('school_id')[0];
+        }
 
         //学院 TODO
         $map['del'] = 0;
         
-        $school = db('toplearning_school')->where($map)->limit(10)->select();
-        $ret = array();
-        foreach ($school as $key => $value) {
-            $ret[$key]['collegeid'] = $value['school_id'];
-            $ret[$key]['title'] = $value['school_name'];
-            $ret[$key]['introduce'] = $value['school_profile'];
+        $school = db('toplearning_school')->where($map)->find();
 
-            $ret[$key]['achievement'] = array();
-            $ret[$key]['achtitle'] = '';
-            $ret[$key]['achdesc'] = '';
-            $ret[$key]['achimages'] = '';
-            $ret[$key]['number'] = $value['license_num'];//学院号
-            $ret[$key]['isfocus'] = 0;
-            $ret[$key]['collegeimg'] = $value['logo'];
+        $ret = array();
+        if ($school) {
+            $ret['collegeid'] = $school['school_id'];
+            $ret['title'] = $school['school_name'];
+            $ret['introduce'] = $school['school_profile'];
+
+            $ret['achievement'] = array();
+            $ret['achtitle'] = '';
+            $ret['achdesc'] = '';
+            $ret['achimages'] = '';
+            $ret['number'] = $school['license_num'];//学院号
+            $ret['isfocus'] = 0;
+            $ret['collegeimg'] = $school['logo'];
             $amap['type'] = 2;
             $amap['del'] = 0;
-            $amap['source_id'] = $value['school_id'];
+            $amap['source_id'] = $school['school_id'];
             if (db('toplearning_attention')->where($amap)->find()) {
-                $ret[$key]['isfocus'] = 1;
+                $ret['isfocus'] = 1;
             }
         }
-
+        
         
         //返回信息
         $data = [
