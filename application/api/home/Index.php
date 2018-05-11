@@ -390,7 +390,11 @@ class Index
 
         return json($data);
     }
-
+    /**
+     * [changeCollege 切换学院]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
     public function changeCollege($params)
     {
 
@@ -429,7 +433,7 @@ class Index
         return json($data);
     }
     /**
-     * [getCollegeInfo description]
+     * [getCollegeInfo 获得学院信息]
      * @param  [type] $params [description]
      * @return [type]         [description]
      */
@@ -614,11 +618,11 @@ class Index
     }
 
     /**
-     * [getCollegeCourse 学院下的课程]
+     * [getCollegeTeachers 获取学院下的教师]
      * @param  [type] $params [description]
      * @return [type]         [description]
      */
-    public function getCollegeCourse($params)
+    public function getCollegeTeachers($params)
     {
 
         //params
@@ -667,11 +671,11 @@ class Index
     }
 
     /**
-     * [getCollegeTeachers  获取学院下的教师]
+     * [getCollegeTeachers  学院下的课程]
      * @param  [type] $params [description]
      * @return [type]         [description]
      */
-    public function getCollegeTeachers($params)
+    public function getCollegeCourse($params)
     {
         //params
         $token = trim($params['token']);
@@ -679,8 +683,28 @@ class Index
         $page = trim($params['page']);
         $size = trim($params['size']);
 
+        //学院老师
+        $map['del'] = 0;
+        $map['school_id'] = $collegeid;
+        $page = $page ==''?0:$page;
+        $size = $size == ''?10:$size;
+
+        $limit = $page*$size;
+        $teachers = db('toplearning_net_material')->where($map)->limit($limit, $size)->select();
 
         $ret = array();
+        foreach ($teachers as $key => $value) {
+            $ret[$key]['courseid'] = $value['net_material_id'];
+            $ret[$key]['title'] = $value['title'];
+            $ret[$key]['image'] = $value['picture'];
+            $ret[$key]['price'] = $value['price'];
+            $ret[$key]['buycount'] = $value['order_num'];
+            $ret[$key]['teacher'] = '';
+            if (db('toplearning_teacher')->where(['teacher_id'=>$value['teacher_id']])->find()) {
+                $ret[$key]['teacher']  = db('toplearning_teacher')->where(['teacher_id'=>$value['teacher_id']])->column('teacher_name')[0];
+            }
+        }
+
         //返回信息
         $data = [
             'Code'=>'0',
