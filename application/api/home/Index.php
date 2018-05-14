@@ -753,7 +753,7 @@ class Index
     {
         //params
         $token = trim($params['token']);
-        $userid = trim($params['userid']);
+        $teacherid = trim($params['teacherid']);
 
 
         //user|material
@@ -764,7 +764,8 @@ class Index
 
         //通过token获取 uid
         $token_uid = $this->decrypt($token);
-        $info = db('toplearning_login')->alias('a')->join('toplearning_teacher t','a.user_id = t.user_id')->join('toplearning_net_material m','a.user_id = m.teacher_user_id')->where(['a.user_id'=>$token_uid])->find();
+        
+        $info = db('toplearning_login')->alias('a')->join('toplearning_teacher t','a.user_id = t.user_id')->join('toplearning_net_material m','a.user_id = m.teacher_user_id')->where(['a.user_id'=>$teacherid])->find();
         $ret = array();
         $ret['headurl'] = $info['avatar'];
 
