@@ -420,7 +420,7 @@ class Index
         //更新学院信息
         $umap['user_id'] = $token_uid;
         $save['school_id'] = $collegeid;
-        
+
         db('toplearning_login')->where($umap)->update($save);
 
         //返回信息
@@ -740,6 +740,97 @@ class Index
             'Code'=>'0',
             'Msg'=>'操作成功',
             'Data'=>1,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+    /**
+     * [BusinessCard 3. 个人名片]
+     * @param string $value [description]
+     */
+    public function BusinessCard($params)
+    {
+        //params
+        $token = trim($params['token']);
+        $userid = trim($params['userid']);
+
+
+        //user|material
+        //检查过期时间
+        if (cache($token)&&cache($token)<time()) {
+            return $this->error('token失效，请重新登录');
+        }
+
+        //通过token获取 uid
+        $token_uid = $this->decrypt($token);
+        $info = db('toplearning_login')->alias('a')->join('toplearning_teacher t','a.user_id = t.user_id')->join('toplearning_net_material m','a.user_id = m.teacher_user_id')->where(['a.user_id'=>$token_uid])->find();
+        $ret = array();
+        $ret['headurl'] = $info['avatar'];
+
+        $ret['name'] = $info['nickname'];
+        $ret['score'] = $info['persent'];//TODO
+        $ret['school'] = $info['school_name'];
+        $ret['introduction'] = $info['introduce'];
+        $ret['correlatedCurriculumList'] = array();
+        $ret['courseHeadUrl'] = $info['picture'];
+        $ret['courseName'] = $info['subject_name'];
+        $ret['courseNum'] = $info['student_num'];
+        $ret['purchaseNumber'] = $info['off_num'];
+        $ret['courseType'] = $info['type'];//TODO
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+
+    }
+
+    /**
+     * [getCourse 20.   查询课程详情]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function getCourse($params)
+    {
+        //params
+        $token = trim($params['token']);
+        $courseid = trim($params['courseid']);
+
+        //
+        $info = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->find();
+
+
+        $ret = array();
+        
+        $ret['courseid'] = $info['net_material_id'];
+
+        $ret['image'] = $info['picture'];
+        $ret['title'] = $info['title'];
+        $ret['college'] = $info['create_name'];
+        $ret['type'] = $info['type'];
+        $ret['keyword'] = $info['tags'];
+        $ret['price'] = $info['price'];
+        $ret['paynumber'] = $info['order_num'];
+        $ret['limitpaynumber'] = $info['student_num'];
+        $ret['desc'] = $info['introduce'];
+        $ret['lessonsList'] = array();//TODO
+        $ret['lessonid'] = '';
+        $ret['index'] = '';
+        $ret['name'] = '';
+        $ret['time'] = '';
+        $ret['lessontime'] = '';
+        $ret['lessonWay'] = '';
+        $ret['staus'] = 1;
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
             'Success'=>true
         ];
 
