@@ -733,17 +733,88 @@ class Index
      */
     public function getTodayCourse($params)
     {
+        //params
+        $token = trim($params['token']);
+
+        //今日0点时间戳
+        $todaytime = strtotime(date('Y-m-d',time()));
+
+        //$info = db('toplearning_login')->alias('a')->join('toplearning_teacher t','a.user_id = t.user_id')->join('toplearning_net_material m','a.user_id = m.teacher_user_id')->where(['a.user_id'=>$teacherid])->find();
+        $map['a.del'] = 0;
+        $map['a.release_status'] = 1;
+        $map['a.reviewed_status'] = 1;
+        $info = db('toplearning_net_material')->alias('a')->join('toplearning_class_festival f','a.net_material_id = f.material_id')->where($map)->whereTime('stage_start','today')->select();
+
+        $ret = array();
+        if ($info) {
+            $ret['courseid'] = $info['net_material_id'];
+            $ret['title'] = $info['title'];
+            $ret['desc'] = $info['introduce'];
+            $ret['status'] = strtotime($info['stage_start'])>time()?'1':(strtotime($info['stage_end'])>time()?'2':'0');
+            $ret['number'] = $info['off_num'];
+            $ret['time'] = $info['stage_start'];
+        }
+        
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+
+    /**
+     * [getMyCourse 2.  首页我的课程 TODO]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function getMyCourse($params)
+    {
+        //params
+        $token = trim($params['token']);
 
         $ret = array();
         //返回信息
         $data = [
             'Code'=>'0',
             'Msg'=>'操作成功',
-            'Data'=>1,
+            'Data'=>$ret,
             'Success'=>true
         ];
 
         return json($data);
+    }
+
+    /**
+     * [getCourseCollege 3. 学院列表]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function getCourseCollege($params)
+    {
+        //params
+        $token = trim($params['token']);
+
+        $info = db('toplearning_school')->where(['del'=>0])->select();
+
+        $ret = array();
+        foreach ($info as $key => $value) {
+            $ret[$key]['collegeid'] = $value['school_id'];
+            $ret[$key]['name'] = $value['school_name'];
+        }
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+
     }
     /**
      * [BusinessCard 3. 个人名片]
