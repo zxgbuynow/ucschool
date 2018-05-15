@@ -658,11 +658,11 @@ class Index
             $ret[$key]['teacherid']  = $value['teacher_id'];
             $ret[$key]['name']  = $value['teacher_name'];
             $ret[$key]['headimage']  = '';
-            if (db('toplearning_login')->where(['user_id'=>$value['user_id']])->find()) {
+            if (db('toplearning_login')->where(['user_id'=>$value['user_id']])->column('avatar')) {
                 $ret[$key]['headimage']  = db('toplearning_login')->where(['user_id'=>$value['user_id']])->column('avatar')[0];
             }
             $ret[$key]['score']  = 0;
-            if (db('toplearning_teacher')->where(['teacher_id'=>$value['teacher_id']])->find()) {
+            if (db('toplearning_teacher')->where(['user_id'=>$value['user_id']])->column('rate')) {
                 $ret[$key]['score']  = db('toplearning_teacher')->where(['user_id'=>$value['user_id']])->column('rate')[0];
             }
 
@@ -815,6 +815,480 @@ class Index
 
         return json($data);
 
+    }
+
+    /**
+     * [getCourseType 4.    课程分类列表TODO]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function getCourseType($params)
+    {
+        //params
+        $token = trim($params['token']);
+
+        
+        $ret = array();
+
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+
+    /**
+     * [addlessons 5.   新增课节 TODO]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function addlessons($params)
+    {
+        //params
+        $token = trim($params['token']);
+        $courseid = trim($params['courseid']);
+        $title = trim($params['title']);
+        $way = trim($params['way']);
+        $time = trim($params['time']);
+        $guide = trim($params['guide']);
+        $coursewarename = trim($params['coursewarename']);
+        $courseware = trim($params['courseware']);
+        $video = trim($params['video']);
+
+
+        $ret = array();
+
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>1,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+
+    /**
+     * [getRecordedCourseList 6.    课程列表]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function getRecordedCourseList($params)
+    {
+        //params
+        $token = trim($params['token']);
+
+        $info = db('toplearning_net_material')->where(['del'=>0])->select();
+
+        $ret = array();
+        foreach ($info as $key => $value) {
+            $ret[$key]['courseid'] = $value['net_material_id'];
+            $ret[$key]['name'] = $value['title'];
+            $ret[$key]['image'] = $value['picture'];
+            $ret[$key]['total'] = $value['lession_num'];
+        }
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+
+    /**
+     * [getRecordedLessonsList 7.   所有课节列表TODO]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function getRecordedLessonsList($params)
+    {
+        //params
+        $token = trim($params['token']);
+        $lessonsid = trim($params['lessonsid']);
+
+        $info = db('toplearning_class_festival')->where(['material_id'=>$lessonsid])->select();
+
+        $ret = array();
+        foreach ($info as $key => $value) {
+            $ret[$key]['lessonsid'] = $value['class_id'];
+            $ret[$key]['name'] = $value['class_name'];
+            $ret[$key]['index'] = 1;//TODO
+            $ret[$key]['video'] = '';//TODO
+        }
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+
+    /**
+     * [saveCourse 8.   保存课程 TODO]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function saveCourse($params)
+    {
+        //params
+        $token = trim($params['token']);
+
+        $image = trim($params['image']);//TODO
+        $title = trim($params['title']);
+        $college = trim($params['college']);
+        $type = trim($params['type']);
+        $keyword = trim($params['keyword']);
+        $totallessons = trim($params['totallessons']);
+        $monthlessons = trim($params['monthlessons']);
+        $price = trim($params['price']);
+        $limitnumber = trim($params['limitnumber']);
+        $desc = trim($params['desc']);
+        $way = trim($params['way']);
+
+
+        //通过token获取 uid
+        $token_uid = $this->decrypt($token);
+        //data
+        $data['title'] = $title;
+        $data['picture'] = $image;//TODO
+        $data['create_name'] = $college;
+        // $data['type'] = $type;//TODO
+        $data['tags'] = $keyword;
+        $data['lession_num'] = $totallessons;
+        // $data['lession_num'] = $monthlessons;//TODO
+        $data['price'] = $price;
+        $data['student_num'] = $limitnumber;
+        $data['introduce'] = $desc;
+        $data['lession_status'] = $way;
+        $data['user_id'] = $token_uid;
+        $data['teacher_user_id'] = $token_uid;
+        $data['teacher_id'] = db('toplearning_teacher')->where(['user_id'=>$token_uid])->column('teacher_id')[0];
+        $data['school_id'] = db('toplearning_teacher')->where(['user_id'=>$token_uid])->column('school_id')[0];
+        
+        if (!db('toplearning_net_material')->insert($data)) {
+            return $this->error('保存失败');
+        }
+
+        
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>1,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+
+    /**
+     * [deleteCourse 9. 删除课程]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function deleteCourse($params)
+    {   
+        //params
+        $token = trim($params['token']);
+        $courseid = trim($params['courseid']);
+
+        db('toplearning_net_material')->where(['net_material_id'=>$courseid])->update(['del'=>1]);
+
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>1,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+
+    /**
+     * [publishCourse 10.   发布课程  TODO]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function publishCourse($params)
+    {
+        //params
+        $token = trim($params['token']);
+        $courseid = trim($params['courseid']);
+
+        db('toplearning_net_material')->where(['net_material_id'=>$courseid])->update(['del'=>1]);
+
+        $info = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->find();
+
+        $ret = array();
+        
+        $ret['courseid'] = $info['net_material_id'];
+
+        $ret['image'] = $info['picture'];
+        $ret['title'] = $info['title'];
+        $ret['college'] = $info['create_name'];
+        $ret['type'] = $info['type'];
+        $ret['keyword'] = $info['tags'];
+        $ret['price'] = $info['price'];
+        $ret['paynumber'] = $info['order_num'];
+        $ret['limitpaynumber'] = $info['student_num'];
+        $ret['desc'] = $info['introduce'];
+        $ret['lessonsList'] = array();//TODO
+        $ret['lessonid'] = '';
+        $ret['index'] = '';
+        $ret['name'] = '';
+        $ret['time'] = '';
+        $ret['lessontime'] = '';
+        $ret['lessonWay'] = '';
+        $ret['staus'] = 1;
+
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+
+    /**
+     * [getUploadCoursewareList 获取可上传课件列表 TODO]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function getUploadCoursewareList($params)
+    {
+        //params
+        $token = trim($params['token']);
+
+        
+        $ret = array();
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+
+    /**
+     * [saveWeike 12.   保存微课 TODO]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function saveWeike($params)
+    {
+        //params
+        $token = trim($params['token']);
+
+        
+        $ret = array();
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>1,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+
+    /**
+     * [addweikelessons 13. 新增微课课节TODO]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function addweikelessons($params)
+    {
+        //params
+        $token = trim($params['token']);
+
+        
+        $ret = array();
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>1,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+
+    /**
+     * [getpaynumberlist 14.    购买人数列表]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function getpaynumberlist($params)
+    {
+        //params
+        $token = trim($params['token']);
+        $courseid = trim($params['courseid']);
+
+        $info = db('toplearning_order')->where(['net_material_id'=>$collegeid])->select();
+        
+        $ret = array();
+
+        foreach ($info as $key => $value) {
+            $ret[$key]['userid'] = $value['user_id'];
+            $ret[$key]['name'] = $value['nickname'];
+            $ret[$key]['image'] = db('toplearning_login')->where(['user_id'=>$value['user_id']])->column('avatar')[0];
+        }
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+
+    }
+
+    /**
+     * [getCoursewaredataList 15.   查看课件列表TODO]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function getCoursewaredataList($params)
+    {
+        //params
+        $token = trim($params['token']);
+
+        
+        $ret = array();
+
+        
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+
+    /**
+     * [getExamList 16. 考试列表 TODO]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function getExamList($params)
+    {
+        //params
+        $token = trim($params['token']);
+
+        
+        $ret = array();
+
+        
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+
+    /**
+     * [submitExamList 17.  交作业人列表TODO]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function submitExamList($params)
+    {
+       //params
+        $token = trim($params['token']);
+
+        
+        $ret = array();
+
+        
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>1,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+
+    /**
+     * [getlearningrecord 18.   学习记录]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function getlearningrecord($params)
+    {
+        //params
+        $token = trim($params['token']);
+
+        
+        $ret = array();
+
+        
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+
+    /**
+     * [getCourseEvaluation 19. 学员评价 TODO]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function getCourseEvaluation($params)
+    {
+        //params
+        $token = trim($params['token']);
+        $courseid = trim($params['courseid']);
+
+        
+        $ret = array();
+
+        
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
     }
     /**
      * [BusinessCard 3. 个人名片]
