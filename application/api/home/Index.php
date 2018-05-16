@@ -749,7 +749,7 @@ class Index
         $ret = array();
         foreach ($info as $key => $value) {
             $ret[$key]['courseid'] = $value['net_material_id'];
-            $ret['title'] = $value['title'];
+            $ret[$key]['title'] = $value['title'];
             $ret[$key]['desc'] = $value['introduce'];
             $ret[$key]['status'] = strtotime($value['stage_start'])>time()?'1':(strtotime($value['stage_end'])>time()?'2':'0');
             $ret[$key]['number'] = $value['off_num'];
@@ -787,28 +787,28 @@ class Index
         if ($user&& $user['group_id']==3) {//laoshi
            $info = db('toplearning_net_material')->where(['user_id'=>$token_uid])->select();
            foreach ($info as $key => $value) {
-                $ret['courseid'] = $value['net_material_id'];
-                $ret['image'] = $value['picture'];
-                $ret['title'] = $value['title'];
-                $ret['college'] = $value['create_name'];
-                $ret['total'] = $value['lession_num'];
-                $ret['release'] = db('toplearning_class_festival')->where(['material_id'=>$value['net_material_id']])->count();
+                $ret[$key]['courseid'] = $value['net_material_id'];
+                $ret[$key]['image'] = $value['picture'];
+                $ret[$key]['title'] = $value['title'];
+                $ret[$key]['college'] = $value['create_name'];
+                $ret[$key]['total'] = $value['lession_num'];
+                $ret[$key]['release'] = db('toplearning_class_festival')->where(['material_id'=>$value['net_material_id']])->count();
 
-                $ret['status'] = $value['release_status'];
+                $ret[$key]['status'] = $value['release_status'];
 
 
             }
         }else{
             $info = db('toplearning_net_material')->alias('a')->join('toplearning_student_material s','a.net_material_id = f.material_id')->where(['user_id'=>$token_uid])->select();
             foreach ($info as $key => $value) {
-                $ret['courseid'] = $value['net_material_id'];
-                $ret['image'] = $value['picture'];
-                $ret['title'] = $value['title'];
-                $ret['college'] = $value['create_name'];
-                $ret['total'] = $value['lession_num'];
-                $ret['release'] = db('toplearning_class_festival')->where(['material_id'=>$value['net_material_id']])->count();
+                $ret[$key]['courseid'] = $value['net_material_id'];
+                $ret[$key]['image'] = $value['picture'];
+                $ret[$key]['title'] = $value['title'];
+                $ret[$key]['college'] = $value['create_name'];
+                $ret[$key]['total'] = $value['lession_num'];
+                $ret[$key]['release'] = db('toplearning_class_festival')->where(['material_id'=>$value['net_material_id']])->count();
 
-                $ret['complete'] = 20;
+                $ret[$key]['complete'] = 20;
 
             }
         }
