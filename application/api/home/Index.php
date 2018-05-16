@@ -1455,7 +1455,7 @@ class Index
             $ret['courseName'] = $info['subject_name'];
             $ret['courseNum'] = $info['student_num'];
             $ret['purchaseNumber'] = $info['off_num'];
-            $ret['courseType'] = $info['type'];//TODO
+            $ret['courseType'] = $info['school_name'];
         }
         
 
