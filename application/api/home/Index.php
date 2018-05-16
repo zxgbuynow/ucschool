@@ -1468,7 +1468,7 @@ class Index
         $course = db('toplearning_net_material')->where(['teacher_user_id'=>$teacherid])->select();
         $coursearr = array();
         if ($course) {
-            foreach ($variable as $key => $value) {
+            foreach ($course as $key => $value) {
                 $coursearr[$key]['courseHeadUrl'] = $value['picture'];
                 $coursearr[$key]['courseName'] = $value['title'];
                 $coursearr[$key]['courseNum'] = $value['price'];
