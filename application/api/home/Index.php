@@ -739,7 +739,6 @@ class Index
         //今日0点时间戳
         $todaytime = strtotime(date('Y-m-d',time()));
 
-        //$info = db('toplearning_login')->alias('a')->join('toplearning_teacher t','a.user_id = t.user_id')->join('toplearning_net_material m','a.user_id = m.teacher_user_id')->where(['a.user_id'=>$teacherid])->find();
         $map['a.del'] = 0;
         $map['a.release_status'] = 1;
         $map['a.reviewed_status'] = 1;
@@ -818,7 +817,7 @@ class Index
     }
 
     /**
-     * [getCourseType 4.    课程分类列表TODO]
+     * [getCourseType 4.    课程分类列表]
      * @param  [type] $params [description]
      * @return [type]         [description]
      */
@@ -827,9 +826,14 @@ class Index
         //params
         $token = trim($params['token']);
 
+        $info = db('toplearning_course_type')->where(['del'])->select();
         
         $ret = array();
 
+        foreach ($info as $key => $value) {
+            $ret[$key]['typeid'] = $value['type_id'];
+            $ret[$key]['name'] = $value['type_name'];
+        }
         //返回信息
         $data = [
             'Code'=>'0',
@@ -842,7 +846,7 @@ class Index
     }
 
     /**
-     * [addlessons 5.   新增课节 TODO]
+     * [addlessons 5.   新增课节 ]
      * @param  [type] $params [description]
      * @return [type]         [description]
      */
@@ -860,6 +864,21 @@ class Index
         $video = trim($params['video']);
 
 
+        //通过token获取 uid
+        $token_uid = $this->decrypt($token);
+
+        $data['material_id'] = $courseid;
+        $data['class_name'] = $title;
+        $data['status'] = $way;
+        $data['stage_start'] = strtotime($time);
+        $data['guide'] = $guide;
+        $data['coursewarename'] = $coursewarename;
+        $data['courseware'] = $courseware;
+        $data['video'] = $video;
+
+        if (!db('toplearning_class_festival')->insert($data)) {
+            $this->error('新增失败');
+        }
         $ret = array();
 
         //返回信息
@@ -904,7 +923,7 @@ class Index
     }
 
     /**
-     * [getRecordedLessonsList 7.   所有课节列表TODO]
+     * [getRecordedLessonsList 7.   所有课节列表]
      * @param  [type] $params [description]
      * @return [type]         [description]
      */
@@ -920,8 +939,8 @@ class Index
         foreach ($info as $key => $value) {
             $ret[$key]['lessonsid'] = $value['class_id'];
             $ret[$key]['name'] = $value['class_name'];
-            $ret[$key]['index'] = 1;//TODO
-            $ret[$key]['video'] = '';//TODO
+            $ret[$key]['index'] = $value['index'];//TODO
+            $ret[$key]['video'] = $value['video'];//TODO
         }
         //返回信息
         $data = [
@@ -935,7 +954,7 @@ class Index
     }
 
     /**
-     * [saveCourse 8.   保存课程 TODO]
+     * [saveCourse 8.   保存课程 ]
      * @param  [type] $params [description]
      * @return [type]         [description]
      */
@@ -963,10 +982,10 @@ class Index
         $data['title'] = $title;
         $data['picture'] = $image;//TODO
         $data['create_name'] = $college;
-        // $data['type'] = $type;//TODO
+        $data['course_type'] = $type;
         $data['tags'] = $keyword;
         $data['lession_num'] = $totallessons;
-        // $data['lession_num'] = $monthlessons;//TODO
+        $data['month_lessons'] = $monthlessons;
         $data['price'] = $price;
         $data['student_num'] = $limitnumber;
         $data['introduce'] = $desc;
@@ -1044,14 +1063,20 @@ class Index
         $ret['paynumber'] = $info['order_num'];
         $ret['limitpaynumber'] = $info['student_num'];
         $ret['desc'] = $info['introduce'];
-        $ret['lessonsList'] = array();//TODO
-        $ret['lessonid'] = '';
-        $ret['index'] = '';
-        $ret['name'] = '';
-        $ret['time'] = '';
-        $ret['lessontime'] = '';
-        $ret['lessonWay'] = '';
-        $ret['staus'] = 1;
+
+        //课时 
+        $lesson =  db('toplearning_class_festival')->where(['material_id'=>$courseid])->select();
+        $rs = array();
+        foreach ($lesson as $key => $value) {
+            $rs[$key]['lessonid'] = $value['class_id'];
+            $rs[$key]['index'] = $value['class_id'];
+            $rs[$key]['name'] = $value['class_id'];
+            $rs[$key]['time'] = strtotime($value['stage_start']);
+            $rs[$key]['lessontime'] = $value['lesson_time'];
+            $rs[$key]['lessonWay'] = $value['status'];
+            $rs[$key]['staus'] = strtotime($value['stage_start'])<time()?'2':(strtotime($value['stage_end'])>time()?'2':'1');
+        }
+        $ret['lessonsList'] = $rs;
 
         //返回信息
         $data = [
@@ -1074,8 +1099,21 @@ class Index
         //params
         $token = trim($params['token']);
 
-        
+
+        //通过token获取 uid
+        $token_uid = $this->decrypt($token);
+
+        $info = db('toplearning_teacher_prepare')->where(['user_id'=>$token_uid])->select();
+
         $ret = array();
+        foreach ($info as $key => $value) {
+            $ret[$key]['coursewareid'] = $value['prepare_id'];
+            $ret[$key]['name'] = $value['unit_name'];
+            $ret[$key]['size'] = $value['size'];
+            $ret[$key]['time'] = $value['create_time'];
+            $ret[$key]['address'] = $value['prepare_file'];
+        }
+        
         //返回信息
         $data = [
             'Code'=>'0',
