@@ -782,25 +782,40 @@ class Index
         $token_uid = $this->decrypt($token);
 
         //身份
-        
-        
-        $info = db('toplearning_net_material')->where(['user_id'=>$token_uid])->find();
-
+        $user = db('toplearning_login')->where(['user_id'=>$token_uid])->find();
         $ret = array();
+        if ($user&& $user['group_id']==3) {//laoshi
+           $info = db('toplearning_net_material')->where(['user_id'=>$token_uid])->select();
+           foreach ($info as $key => $value) {
+                $ret['courseid'] = $value['net_material_id'];
+                $ret['image'] = $value['picture'];
+                $ret['title'] = $value['title'];
+                $ret['college'] = $value['create_name'];
+                $ret['total'] = $value['lession_num'];
+                $ret['release'] = db('toplearning_class_festival')->where(['material_id'=>$value['net_material_id']])->count();
+
+                $ret['status'] = $value['release_status'];
+
+
+            }
+        }else{
+            $info = db('toplearning_net_material')->alias('a')->join('toplearning_student_material s','a.net_material_id = f.material_id')->where(['user_id'=>$token_uid])->select();
+            foreach ($info as $key => $value) {
+                $ret['courseid'] = $value['net_material_id'];
+                $ret['image'] = $value['picture'];
+                $ret['title'] = $value['title'];
+                $ret['college'] = $value['create_name'];
+                $ret['total'] = $value['lession_num'];
+                $ret['release'] = db('toplearning_class_festival')->where(['material_id'=>$value['net_material_id']])->count();
+
+                $ret['complete'] = 20;
+
+            }
+        }
         
-        $ret['courseid'] = $info['net_material_id'];
 
-        $ret['image'] = $info['picture'];
-        $ret['title'] = $info['title'];
-        $ret['college'] = $info['create_name'];
-        $ret['type'] = $info['type'];
-        $ret['keyword'] = $info['tags'];
-        $ret['price'] = $info['price'];
-        $ret['paynumber'] = $info['order_num'];
-        $ret['limitpaynumber'] = $info['student_num'];
-        $ret['desc'] = $info['introduce'];
+        
 
-        $ret = array();
         //返回信息
         $data = [
             'Code'=>'0',
