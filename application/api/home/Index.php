@@ -738,11 +738,12 @@ class Index
 
         //今日0点时间戳
         $todaytime = strtotime(date('Y-m-d',time()));
+        $todayetime = strtotime(date('Y-m-d',$cstime))+24 * 60 * 60;
 
         $map['a.del'] = 0;
         $map['a.release_status'] = 1;
         $map['a.reviewed_status'] = 1;
-        $info = db('toplearning_net_material')->alias('a')->join('toplearning_class_festival f','a.net_material_id = f.material_id')->where($map)->whereTime('stage_start','today')->select();
+        $info = db('toplearning_net_material')->alias('a')->join('toplearning_class_festival f','a.net_material_id = f.material_id')->where($map)->whereTime('stage_start', 'between', [$todaytime, $todayetime])->select();
 
         $ret = array();
         if ($info) {
