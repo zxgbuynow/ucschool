@@ -827,7 +827,7 @@ class Index
         //params
         $token = trim($params['token']);
 
-        $info = db('toplearning_course_type')->where(['del'])->select();
+        $info = db('toplearning_course_type')->where(['del'=>0])->select();
         
         $ret = array();
 
