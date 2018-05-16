@@ -490,11 +490,11 @@ class Index
 
         if ($gz) {
             $gzs = explode(',', $gz[0]);
-            if (in_array($collegeid, $school_ids)) {
+            if (in_array($collegeid, $gzs)) {
                 $rs['isfocus'] = 1;
             }
         }
-            
+
         // if (db('toplearning_attention')->where($amap)->find()) {
         //     $rs['isfocus'] = 1;
         // }
@@ -664,7 +664,7 @@ class Index
 
             if ($gz) {
                 $gzs = explode(',', $gz[0]);
-                if (in_array($collegeid, $school_ids)) {
+                if (in_array($collegeid, $gzs)) {
                     $ret['isfocus'] = 1;
                 }
             }
