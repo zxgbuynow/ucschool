@@ -465,9 +465,9 @@ class Index
         $rs['introduce'] = $ret['school_profile'];
 
         $rs['achievement'] = array();
-        $rs['achtitle'] = '';
-        $rs['achdesc'] = '';
-        $rs['achimages'] = '';
+        // $rs['achtitle'] = '';
+        // $rs['achdesc'] = '';
+        // $rs['achimages'] = '';
         $rs['number'] = $ret['license_num'];
         $rs['isfocus'] = 0;
         $rs['collegeimg'] = $ret['logo'];
@@ -477,6 +477,15 @@ class Index
         $amap['source_id'] = $ret['school_id'];
         if (db('toplearning_attention')->where($amap)->find()) {
             $rs['isfocus'] = 1;
+        }
+
+        //成果
+        $sc = db('toplearning_school_extend')->where(['school_id'=>$collegeid])->select();
+        $scarr = array();
+        foreach ($sc as $key => $value) {
+           $scarr[$key]['achtitle']=$value['title'];
+           $scarr[$key]['achdesc']=$value['content'];
+           $scarr[$key]['achimages']= explode(',', $value['achimages']);
         }
         //返回信息
         $data = [
