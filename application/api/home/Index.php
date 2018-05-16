@@ -76,11 +76,11 @@ class Index
         cache($ret['token'], time() + 3600) ;
 
         //用户类型
-        $ret['customerType'] = 1;
-        $customerType = db('toplearning_user_account')->where('user_id',$user['user_id'])->column('type');
-        if ($customerType) {
-           $ret['customerType'] = $customerType[0];
-        }
+        $ret['customerType'] = $user['group_id']==3?'2':'1';
+        // $customerType = db('toplearning_user_account')->where('user_id',$user['user_id'])->column('type');
+        // if ($customerType) {
+        //    $ret['customerType'] = $customerType[0];
+        // }
         
         //组数据  
         $ret['userid'] = $user['user_id'];
@@ -163,7 +163,7 @@ class Index
     public function register($params)
     {
         //参数
-        $data['type'] = trim($params['type']);
+        $data['group_id'] = trim($params['type'])=='1'?'4':'3';
         $data['nickname'] = trim($params['name']);
         $data['code'] = trim($params['code']);
         $data['mobile'] = trim($params['phone']);
