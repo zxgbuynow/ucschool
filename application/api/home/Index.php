@@ -664,7 +664,7 @@ class Index
 
             if ($gz) {
                 $gzs = explode(',', $gz[0]);
-                if (in_array($collegeid, $gzs)) {
+                if (in_array($school['school_id'], $gzs)) {
                     $ret['isfocus'] = 1;
                 }
             }
