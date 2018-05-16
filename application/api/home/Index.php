@@ -738,7 +738,7 @@ class Index
 
         //今日0点时间戳
         $todaytime = strtotime(date('Y-m-d',time()));
-        $todayetime = strtotime(date('Y-m-d',$cstime))+24 * 60 * 60;
+        $todayetime = strtotime(date('Y-m-d',time()))+24 * 60 * 60;
 
         $map['a.del'] = 0;
         $map['a.release_status'] = 1;
