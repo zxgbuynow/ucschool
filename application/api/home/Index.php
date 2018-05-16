@@ -669,7 +669,7 @@ class Index
                 }
             }
             //成果
-            $sc = db('toplearning_school_extend')->where(['school_id'=>$collegeid])->select();
+            $sc = db('toplearning_school_extend')->where(['school_id'=>$school['school_id']])->select();
             $scarr = array();
             foreach ($sc as $key => $value) {
                $scarr[$key]['achtitle']=$value['title'];
