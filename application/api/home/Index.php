@@ -1460,18 +1460,22 @@ class Index
             $ret['school'] = $info['school_name'];
             $ret['introduction'] = $info['introduce'];
             $ret['correlatedCurriculumList'] = array();
-            $ret['courseHeadUrl'] = $info['picture'];
-            $ret['courseName'] = $info['subject_name'];
-            $ret['courseNum'] = $info['student_num'];
-            $ret['purchaseNumber'] = $info['off_num'];
-            $ret['courseType'] = $info['school_name'];
+            
         }
         
 
         //相关课程
         $course = db('toplearning_net_material')->where(['teacher_user_id'=>$teacherid])->select();
+        $coursearr = array();
         if ($course) {
-           $ret['correlatedCurriculumList'] = $course;
+            foreach ($variable as $key => $value) {
+                $coursearr[$key]['courseHeadUrl'] = $value['picture'];
+                $coursearr[$key]['courseName'] = $value['title'];
+                $coursearr[$key]['courseNum'] = $value['price'];
+                $coursearr[$key]['purchaseNumber'] = $value['order_num'];
+                $coursearr[$key]['courseType'] = $value['create_name'];
+            }
+           $ret['correlatedCurriculumList'] = $coursearr;
         }
         //返回信息
         $data = [
