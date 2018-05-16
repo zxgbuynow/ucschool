@@ -1458,6 +1458,12 @@ class Index
             $ret['courseType'] = $info['type'];//TODO
         }
         
+
+        //相关课程
+        $course = db('toplearning_net_material')->where(['teacher_user_id'=>$teacherid])->select();
+        if ($course) {
+           $ret['correlatedCurriculumList'] = $course;
+        }
         //返回信息
         $data = [
             'Code'=>'0',
