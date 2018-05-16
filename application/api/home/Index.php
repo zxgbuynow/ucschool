@@ -1383,7 +1383,7 @@ class Index
         return json($data);
     }
     /**
-     * [BusinessCard 3. 个人名片]
+     * [BusinessCard 3. 个人名片]J9FqNKq0RfqiqBctZrE+PA==
      * @param string $value [description]
      */
     public function BusinessCard($params)
@@ -1400,22 +1400,24 @@ class Index
         }
 
         //通过token获取 uid
-        $token_uid = $this->decrypt($token);
-        
+        // $token_uid = $this->decrypt($token);
+
         $info = db('toplearning_login')->alias('a')->join('toplearning_teacher t','a.user_id = t.user_id')->join('toplearning_net_material m','a.user_id = m.teacher_user_id')->where(['a.user_id'=>$teacherid])->find();
         $ret = array();
-        $ret['headurl'] = $info['avatar'];
-
-        $ret['name'] = $info['nickname'];
-        $ret['score'] = $info['persent'];//TODO
-        $ret['school'] = $info['school_name'];
-        $ret['introduction'] = $info['introduce'];
-        $ret['correlatedCurriculumList'] = array();
-        $ret['courseHeadUrl'] = $info['picture'];
-        $ret['courseName'] = $info['subject_name'];
-        $ret['courseNum'] = $info['student_num'];
-        $ret['purchaseNumber'] = $info['off_num'];
-        $ret['courseType'] = $info['type'];//TODO
+        if ($info) {
+            $ret['headurl'] = $info['avatar'];
+            $ret['name'] = $info['nickname'];
+            $ret['score'] = $info['persent'];//TODO
+            $ret['school'] = $info['school_name'];
+            $ret['introduction'] = $info['introduce'];
+            $ret['correlatedCurriculumList'] = array();
+            $ret['courseHeadUrl'] = $info['picture'];
+            $ret['courseName'] = $info['subject_name'];
+            $ret['courseNum'] = $info['student_num'];
+            $ret['purchaseNumber'] = $info['off_num'];
+            $ret['courseType'] = $info['type'];//TODO
+        }
+        
         //返回信息
         $data = [
             'Code'=>'0',
@@ -1470,7 +1472,7 @@ class Index
             $rs[$key]['staus'] = strtotime($value['stage_start'])<time()?'2':(strtotime($value['stage_end'])>time()?'2':'1');
         }
         $ret['lessonsList'] = $rs;
-        
+
         // $ret['lessonsList'] = array();//TODO
         // $ret['lessonid'] = '';
         // $ret['index'] = '';
