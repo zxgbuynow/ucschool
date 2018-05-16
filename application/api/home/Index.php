@@ -1090,7 +1090,7 @@ class Index
     }
 
     /**
-     * [getUploadCoursewareList 获取可上传课件列表 TODO]
+     * [getUploadCoursewareList 获取可上传课件列表 ]
      * @param  [type] $params [description]
      * @return [type]         [description]
      */
@@ -1126,7 +1126,7 @@ class Index
     }
 
     /**
-     * [saveWeike 12.   保存微课 TODO]
+     * [saveWeike 12.   保存微课 ]
      * @param  [type] $params [description]
      * @return [type]         [description]
      */
@@ -1135,13 +1135,37 @@ class Index
         //params
         $token = trim($params['token']);
 
-        
+        $image = trim($params['image']);//todo
+        $title = trim($params['title']);
+        $type = trim($params['type']);
+        $keyword = trim($params['keyword']);
+        $desc = trim($params['desc']);
+        $share = trim($params['share']);
+
+
+        //通过token获取 uid
+        $token_uid = $this->decrypt($token);
+
+        $data['user_id'] = $token_uid;
+        $data['lession_name'] = $title;
+        $data['lession_img'] = $image;
+        $data['lession_type_id'] = $type;
+        $data['keyword'] = $keyword;
+        $data['lession_desc'] = $desc;
+        $data['share'] = $share;
+        $data['add_time'] = date('Y-m-d H:i:s',time());
+
+        //toplearning_micro_class
+        $courseid = db('toplearning_micro_class')->insert($data);
+        if (!$courseid) {
+            $this->error('保存失败');
+        }
         $ret = array();
         //返回信息
         $data = [
             'Code'=>'0',
             'Msg'=>'操作成功',
-            'Data'=>1,
+            'Data'=>$courseid,
             'Success'=>true
         ];
 
@@ -1149,7 +1173,7 @@ class Index
     }
 
     /**
-     * [addweikelessons 13. 新增微课课节TODO]
+     * [addweikelessons 13. 新增微课课节]
      * @param  [type] $params [description]
      * @return [type]         [description]
      */
@@ -1157,6 +1181,26 @@ class Index
     {
         //params
         $token = trim($params['token']);
+
+        $courseid = trim($params['courseid']);
+        $title = trim($params['title']);
+        $guide = trim($params['guide']);
+        $coursewarename = trim($params['coursewarename']);
+        $courseware = trim($params['courseware']);
+
+
+        //通过token获取 uid
+        $token_uid = $this->decrypt($token);
+
+        $data['material_id'] = $courseid;
+        $data['class_name'] = $title;
+        $data['guide'] = $guide;
+        $data['coursewarename'] = $coursewarename;
+        $data['courseware'] = $courseware;
+
+        if (!db('toplearning_class_festival')->insert($data)) {
+            $this->error('新增失败');
+        }
 
         
         $ret = array();
@@ -1204,7 +1248,7 @@ class Index
     }
 
     /**
-     * [getCoursewaredataList 15.   查看课件列表TODO]
+     * [getCoursewaredataList 15.   查看课件列表]
      * @param  [type] $params [description]
      * @return [type]         [description]
      */
@@ -1212,9 +1256,19 @@ class Index
     {
         //params
         $token = trim($params['token']);
-
+        $courseid = trim($params['courseid']);
         
+
+        $info = db('toplearning_teacher_prepare')->where(['class_id'=>$courseid])->select();
+
         $ret = array();
+        foreach ($info as $key => $value) {
+            $ret[$key]['coursewareid'] = $value['prepare_id'];
+            $ret[$key]['name'] = $value['unit_name'];
+            $ret[$key]['size'] = $value['size'];
+            $ret[$key]['time'] = $value['create_time'];
+            $ret[$key]['address'] = $value['prepare_file'];
+        }
 
         
         //返回信息
@@ -1402,14 +1456,29 @@ class Index
         $ret['paynumber'] = $info['order_num'];
         $ret['limitpaynumber'] = $info['student_num'];
         $ret['desc'] = $info['introduce'];
-        $ret['lessonsList'] = array();//TODO
-        $ret['lessonid'] = '';
-        $ret['index'] = '';
-        $ret['name'] = '';
-        $ret['time'] = '';
-        $ret['lessontime'] = '';
-        $ret['lessonWay'] = '';
-        $ret['staus'] = 1;
+
+        //课时 
+        $lesson =  db('toplearning_class_festival')->where(['material_id'=>$courseid])->select();
+        $rs = array();
+        foreach ($lesson as $key => $value) {
+            $rs[$key]['lessonid'] = $value['class_id'];
+            $rs[$key]['index'] = $value['class_id'];
+            $rs[$key]['name'] = $value['class_id'];
+            $rs[$key]['time'] = strtotime($value['stage_start']);
+            $rs[$key]['lessontime'] = $value['lesson_time'];
+            $rs[$key]['lessonWay'] = $value['status'];
+            $rs[$key]['staus'] = strtotime($value['stage_start'])<time()?'2':(strtotime($value['stage_end'])>time()?'2':'1');
+        }
+        $ret['lessonsList'] = $rs;
+        
+        // $ret['lessonsList'] = array();//TODO
+        // $ret['lessonid'] = '';
+        // $ret['index'] = '';
+        // $ret['name'] = '';
+        // $ret['time'] = '';
+        // $ret['lessontime'] = '';
+        // $ret['lessonWay'] = '';
+        // $ret['staus'] = 1;
         //返回信息
         $data = [
             'Code'=>'0',
