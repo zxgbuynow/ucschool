@@ -372,8 +372,8 @@ class Index
 
         $attention = array();
         if ($school_ids&&$school_ids['school_ids']) {
-            $map['school_id'] = array('in',$school_ids['school_ids']);
-            $attention = db('toplearning_school')->where()->select();
+            $map1['school_id'] = array('in',$school_ids['school_ids']);
+            $attention = db('toplearning_school')->where($map1)->select();
         }
         
         // $attention = db('toplearning_login')->alias('a')->join('toplearning_school s','a.source_id = s.school_id')->where($map)->select();
