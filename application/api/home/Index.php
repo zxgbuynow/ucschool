@@ -743,17 +743,19 @@ class Index
         $map['a.del'] = 0;
         $map['a.release_status'] = 1;
         $map['a.reviewed_status'] = 1;
-        $info = db('toplearning_net_material')->alias('a')->join('toplearning_class_festival f','a.net_material_id = f.material_id')->where($map)->whereTime('stage_start', 'between', [$todaytime, $todayetime])->find();
+        // $info = db('toplearning_net_material')->alias('a')->join('toplearning_class_festival f','a.net_material_id = f.material_id')->where($map)->whereTime('stage_start', 'between', [$todaytime, $todayetime])->select();
+        $info = db('toplearning_net_material')->alias('a')->join('toplearning_class_festival f','a.net_material_id = f.material_id')->where($map)->select();
 
         $ret = array();
-        if ($info) {
-            $ret['courseid'] = $info['net_material_id'];
-            $ret['title'] = $info['title'];
-            $ret['desc'] = $info['introduce'];
-            $ret['status'] = strtotime($info['stage_start'])>time()?'1':(strtotime($info['stage_end'])>time()?'2':'0');
-            $ret['number'] = $info['off_num'];
-            $ret['time'] = $info['stage_start'];
+        foreach ($info as $key => $value) {
+            $ret[$key]['courseid'] = $value['net_material_id'];
+            $ret['title'] = $value['title'];
+            $ret[$key]['desc'] = $value['introduce'];
+            $ret[$key]['status'] = strtotime($value['stage_start'])>time()?'1':(strtotime($value['stage_end'])>time()?'2':'0');
+            $ret[$key]['number'] = $value['off_num'];
+            $ret[$key]['time'] = $value['stage_start'];
         }
+        
         
         //返回信息
         $data = [
@@ -775,6 +777,28 @@ class Index
     {
         //params
         $token = trim($params['token']);
+
+        //通过token获取 uid
+        $token_uid = $this->decrypt($token);
+
+        //身份
+        
+        
+        $info = db('toplearning_net_material')->where(['user_id'=>$token_uid])->find();
+
+        $ret = array();
+        
+        $ret['courseid'] = $info['net_material_id'];
+
+        $ret['image'] = $info['picture'];
+        $ret['title'] = $info['title'];
+        $ret['college'] = $info['create_name'];
+        $ret['type'] = $info['type'];
+        $ret['keyword'] = $info['tags'];
+        $ret['price'] = $info['price'];
+        $ret['paynumber'] = $info['order_num'];
+        $ret['limitpaynumber'] = $info['student_num'];
+        $ret['desc'] = $info['introduce'];
 
         $ret = array();
         //返回信息
