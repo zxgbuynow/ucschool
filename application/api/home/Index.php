@@ -743,7 +743,7 @@ class Index
         $map['a.del'] = 0;
         $map['a.release_status'] = 1;
         $map['a.reviewed_status'] = 1;
-        $info = db('toplearning_net_material')->alias('a')->join('toplearning_class_festival f','a.net_material_id = f.material_id')->where($map)->whereTime('stage_start', 'between', [$todaytime, $todayetime])->select();
+        $info = db('toplearning_net_material')->alias('a')->join('toplearning_class_festival f','a.net_material_id = f.material_id')->where($map)->whereTime('stage_start', 'between', [$todaytime, $todayetime])->find();
 
         $ret = array();
         if ($info) {
