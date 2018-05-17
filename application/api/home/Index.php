@@ -1076,7 +1076,6 @@ class Index
     {
         //params
         $token = trim($params['token']);
-
         $image = trim($params['image']);//TODO
         $title = trim($params['title']);
         $college = trim($params['collegeId']);
@@ -1087,6 +1086,7 @@ class Index
         $price = trim($params['price']);
         $limitnumber = trim($params['limitnumber']);
         $desc = trim($params['desc']);
+        $way = '';
         if (isset($params['way'])) {
            $way = trim($params['way']);
         }
@@ -1097,6 +1097,7 @@ class Index
         //data
         $data['title'] = $title;
         //处理图片
+        
         $data['picture'] =$this->_seve_img($image);
         if (!$data['picture']) {
             // return $this->error('图片上传失败，请稍后重试');
