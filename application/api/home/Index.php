@@ -1553,6 +1553,7 @@ class Index
                 $coursearr[$key]['courseNum'] = $value['price'];
                 $coursearr[$key]['purchaseNumber'] = $value['order_num'];
                 $coursearr[$key]['courseType'] = $value['create_name'];
+                $coursearr[$key]['courseid'] = $value['net_material_id'];
             }
            $ret['correlatedCurriculumList'] = $coursearr;
         }
