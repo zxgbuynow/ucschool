@@ -1079,8 +1079,8 @@ class Index
 
         $image = trim($params['image']);//TODO
         $title = trim($params['title']);
-        $college = trim($params['college']);
-        $type = trim($params['type']);
+        $college = trim($params['collegeId']);
+        $type = trim($params['typeId']);
         $keyword = trim($params['keyword']);
         $totallessons = trim($params['totallessons']);
         $monthlessons = trim($params['monthlessons']);
@@ -1101,7 +1101,7 @@ class Index
         }
 
         // $data['picture'] = $image;//TODO
-        $data['create_name'] = $college;
+        $data['school_id'] = db('toplearning_school')->where(['school_id'=>$college])->column('school_name')[0];
         $data['course_type'] = $type;
         $data['tags'] = $keyword;
         $data['lession_num'] = $totallessons;
@@ -1113,7 +1113,7 @@ class Index
         $data['user_id'] = $token_uid;
         $data['teacher_user_id'] = $token_uid;
         $data['teacher_id'] = db('toplearning_teacher')->where(['user_id'=>$token_uid])->column('teacher_id')[0];
-        $data['school_id'] = db('toplearning_teacher')->where(['user_id'=>$token_uid])->column('school_id')[0];
+        $data['school_id'] = $college;
         
         if (!db('toplearning_net_material')->insert($data)) {
             return $this->error('保存失败');
@@ -1480,7 +1480,7 @@ class Index
     }
 
     /**
-     * [getCourseEvaluation 19. 学员评价 TODO]
+     * [getCourseEvaluation 19. 学员评价 ]
      * @param  [type] $params [description]
      * @return [type]         [description]
      */
