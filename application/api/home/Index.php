@@ -679,7 +679,13 @@ class Index
             foreach ($sc as $key => $value) {
                $scarr[$key]['achtitle']=$value['title'];
                $scarr[$key]['achdesc']=$value['content'];
-               $scarr[$key]['achimages']= $value['achimages'];
+               // $scarr[$key]['achimages']= $value['achimages'];
+               $imgs = explode(',',$value['achimages']);
+               $imgar = array();
+               foreach ($imgs as $k => $v) {
+                 $imgar[$k]['image'] = $v;
+               }
+               $scarr[$key]['achimages'] = $imgar;
             }
             $ret['achievement'] = $scarr;
         }
