@@ -507,7 +507,7 @@ class Index
            $scarr[$key]['achdesc']=$value['content'];
            $scarr[$key]['achimages']= explode(',', $value['achimages']);
         }
-        $rs['achievement'] = $scarr;
+        $rs['achievement'] = json_encode($scarr);
 
         //返回信息
         $data = [
