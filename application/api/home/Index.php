@@ -1094,7 +1094,13 @@ class Index
         $token_uid = $this->decrypt($token);
         //data
         $data['title'] = $title;
-        $data['picture'] = $image;//TODO
+        //处理图片
+        $data['picture'] =$this->_seve_img($image);
+        if (!$data['picture']) {
+            return $this->error('图片上传失败，请稍后重试');
+        }
+
+        // $data['picture'] = $image;//TODO
         $data['create_name'] = $college;
         $data['course_type'] = $type;
         $data['tags'] = $keyword;
@@ -1765,4 +1771,27 @@ class Index
     function passkey(){
         return 'ucschool';
     } 
+
+    /**
+     * [_seve_img 上传头像]
+     * @param  [type] $avar [description]
+     * @return [type]       [description]
+     */
+    public function _seve_img($avar)
+    {
+        $imageName = "25220_".date("His",time())."_".rand(1111,9999).'.png';
+        
+        $path = 'http://'.$_SERVER['HTTP_HOST']."/public/uploads/images/".date("Ymd",time());
+        if (!is_dir($path)){ //判断目录是否存在 不存在就创建
+            mkdir($path,0777,true);
+        }
+        $imageSrc=  $path."/". $imageName;  //图片名字
+
+        $r = file_put_contents(ROOT_PATH ."public/".$imageSrc, base64_decode($avar));//返回的是字节数
+        if (!$r) {
+            return false;
+        }else{
+            return $imageSrc;
+        }
+    }
 }
