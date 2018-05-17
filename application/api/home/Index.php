@@ -505,7 +505,7 @@ class Index
         foreach ($sc as $key => $value) {
            $scarr[$key]['achtitle']=$value['title'];
            $scarr[$key]['achdesc']=$value['content'];
-           $scarr[$key]['achimages']= $value['achimages'];
+           $scarr[$key]['achimages']= explode(',', $value['achimages']);
         }
         $rs['achievement'] = $scarr;
 
@@ -1395,7 +1395,9 @@ class Index
         //params
         $token = trim($params['token']);
 
-        
+
+        // $user = db('toplearning_login')->where($map)->find();
+
         $ret = array();
 
         
@@ -1471,9 +1473,21 @@ class Index
         $token = trim($params['token']);
         $courseid = trim($params['courseid']);
 
-        
-        $ret = array();
+        //
+        $token_uid = $this->encrypt($token);
+        $info = db('toplearning_appraise_dictionary')->where(['user_id'=>$token_uid])->select();
+        $count = db('toplearning_appraise_dictionary')->where(['user_id'=>$token_uid])->count();
+        $totalscore = db('toplearning_appraise_dictionary')->where(['user_id'=>$token_uid])->sum('score');
 
+        $ret = array();
+        foreach ($info as $key => $value) {
+            $ret[$key]['totalscore'] = number_format($totalscore/$count,2);
+            $ret[$key]['userid'] = $value['user_id'];
+            $ret[$key]['username'] = db('toplearning_login')->where(['user_id'=>$value['toplearning_appraise_dictionary']])->column('nickname')[0];
+            $ret[$key]['time'] = $value['create_time'];
+            $ret[$key]['content'] = $value['appraise_name'];
+            $ret[$key]['score'] = $value['score'];
+        }
         
         //返回信息
         $data = [
