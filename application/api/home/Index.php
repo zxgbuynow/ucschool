@@ -1123,12 +1123,12 @@ class Index
             return $this->error('保存失败');
         }
 
-        
+        $ret = array('collegeId'=>$insertid);
         //返回信息
         $data = [
             'Code'=>'0',
             'Msg'=>'操作成功',
-            'Data'=>$insertid,
+            'Data'=>$ret,
             'Success'=>true
         ];
 
