@@ -1087,8 +1087,10 @@ class Index
         $price = trim($params['price']);
         $limitnumber = trim($params['limitnumber']);
         $desc = trim($params['desc']);
-        $way = trim($params['way']);
-
+        if (isset($params['way'])) {
+           $way = trim($params['way']);
+        }
+        
 
         //通过token获取 uid
         $token_uid = $this->decrypt($token);
@@ -1097,7 +1099,7 @@ class Index
         //处理图片
         $data['picture'] =$this->_seve_img($image);
         if (!$data['picture']) {
-            return $this->error('图片上传失败，请稍后重试');
+            // return $this->error('图片上传失败，请稍后重试');
         }
 
         // $data['picture'] = $image;//TODO
@@ -1782,6 +1784,7 @@ class Index
         $imageName = "25220_".date("His",time())."_".rand(1111,9999).'.png';
         
         $path = 'http://'.$_SERVER['HTTP_HOST']."/public/uploads/images/".date("Ymd",time());
+        $path = "public/uploads/images/".date("Ymd",time());
         if (!is_dir($path)){ //判断目录是否存在 不存在就创建
             mkdir($path,0777,true);
         }
