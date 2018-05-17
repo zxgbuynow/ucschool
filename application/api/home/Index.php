@@ -505,7 +505,7 @@ class Index
         foreach ($sc as $key => $value) {
            $scarr[$key]['achtitle']=$value['title'];
            $scarr[$key]['achdesc']=$value['content'];
-           $scarr[$key]['achimages']= explode(',', $value['achimages']);
+           $scarr[$key]['achimages']= json_encode(explode(',', $value['achimages']));
         }
         $rs['achievement'] = $scarr;
 
