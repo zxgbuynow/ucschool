@@ -503,11 +503,11 @@ class Index
         $sc = db('toplearning_school_extend')->where(['school_id'=>$collegeid])->select();
         $scarr = array();
         foreach ($sc as $key => $value) {
-           $scarr[$key]['achtitle']=$value['title'];
-           $scarr[$key]['achdesc']=$value['content'];
-           $scarr[$key]['achimages']= explode(',', $value['achimages']);
+           $scarr[$key]['achtitle'] = $value['title'];
+           $scarr[$key]['achdesc'] = $value['content'];
+           $scarr[$key]['achimages'] = explode(',',$value['achimages']);
         }
-        $rs['achievement'] = json_encode($scarr);
+        $rs['achievement'] = $scarr;
 
         //返回信息
         $data = [
