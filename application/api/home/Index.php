@@ -1118,7 +1118,8 @@ class Index
         $data['teacher_id'] = db('toplearning_teacher')->where(['user_id'=>$token_uid])->column('teacher_id')[0];
         $data['school_id'] = $college;
         
-        if (!db('toplearning_net_material')->insert($data)) {
+        $insertid = db('toplearning_net_material')->insert($data);
+        if (!$insertid) {
             return $this->error('保存失败');
         }
 
@@ -1127,7 +1128,7 @@ class Index
         $data = [
             'Code'=>'0',
             'Msg'=>'操作成功',
-            'Data'=>1,
+            'Data'=>$insertid,
             'Success'=>true
         ];
 
