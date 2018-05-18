@@ -818,8 +818,7 @@ class Index
         $map['a.release_status'] = 1;
         $map['a.reviewed_status'] = 1;
         // $info = db('toplearning_net_material')->alias('a')->join('toplearning_class_festival f','a.net_material_id = f.material_id')->where($map)->whereTime('stage_start', 'between', [$todaytime, $todayetime])->select();
-        $info = db('toplearning_net_material')->alias('a')->join('toplearning_class_festival f','a.net_material_id = f.material_id')->where($map)->select();
-
+        $info = db('toplearning_net_material')->alias('a')->join('toplearning_class_festival f','a.net_material_id = f.material_id','LEFT')->where($map)->select();
         $ret = array();
         foreach ($info as $key => $value) {
             $ret[$key]['courseid'] = $value['net_material_id'];
@@ -1047,14 +1046,18 @@ class Index
         $token = trim($params['token']);
         $lessonsid = trim($params['lessonsid']);
 
-        $info = db('toplearning_class_festival')->where(['material_id'=>$lessonsid])->select();
+        $map['t.type'] =  0;
+        //['material_id'=>$lessonsid]
+        $map['a.material_id'] = $lessonsid;
+        // $info = db('toplearning_exam')->alias('a')->join('toplearning_do_exam_time t','a.exam_id = t.exam_id')->where(['a.exam_id'=>$examid])->select();
+        $info = db('toplearning_class_festival')->alias('a')->join('toplearning_media t','a.material_id = t.type_id','LEFT')->where($map)->select();
 
         $ret = array();
         foreach ($info as $key => $value) {
             $ret[$key]['lessonsid'] = $value['class_id'];
             $ret[$key]['name'] = $value['class_name'];
-            $ret[$key]['index'] = $value['index'];//TODO
-            $ret[$key]['video'] = $value['video'];//TODO
+            $ret[$key]['index'] = $value['index'];
+            $ret[$key]['video'] = $value['video'];
         }
         //返回信息
         $data = [
@@ -1091,6 +1094,8 @@ class Index
            $way = trim($params['way']);
         }
         
+        //classTypeList
+        //
 
         //通过token获取 uid
         $token_uid = $this->decrypt($token);
@@ -1098,12 +1103,12 @@ class Index
         $data['title'] = $title;
         //处理图片
         
-        $data['picture'] =$this->_seve_img($image);
-        if (!$data['picture']) {
-            // return $this->error('图片上传失败，请稍后重试');
-        }
+        // $data['picture'] =$this->_seve_img($image);
+        // if (!$data['picture']) {
+        //     return $this->error('图片上传失败，请稍后重试');
+        // }
 
-        // $data['picture'] = $image;//TODO
+        $data['picture'] = $image;
         $data['school_id'] = db('toplearning_school')->where(['school_id'=>$college])->column('school_name')[0];
         $data['course_type'] = $type;
         $data['tags'] = $keyword;
@@ -1123,6 +1128,32 @@ class Index
             return $this->error('保存失败');
         }
 
+        //课程保存 处理课节
+        $classTypeList = $params['classTypeList'];
+        $save = array();
+        foreach ($classTypeList as $key => $value) {
+            $save['guide'] = $value['guide'];
+            $save['class_name'] = $value['titleKJ'];
+            $save['material_id'] = $insertid;
+            $save['status'] = $value['way'];
+
+            //时间处理
+            $timearr = explode(' ', $value['time']);
+            $save['lesson_time'] = intval($timearr[1]);
+            $srt = str_replace(array('年','月'),'-',$timearr[0]);
+            $str1 = str_replace(array('日'),' ',$srt);
+            $save['add_time'] = date('Y-m-d H:i:s',strtotime($str1));
+            $save['lesson_time'] = substr($timearr[1],0,-2);
+            $save['index'] = $value['index'];
+
+            //视频
+            $save['video'] = serialize($value['videoIdList']);
+            //课件
+            $save['courseware'] = serialize($value['coursewareIdList']);
+
+            db('toplearning_class_festival')->insert($save);
+        }
+        
         $ret = array('collegeId'=>$insertid);
         //返回信息
         $data = [
