@@ -873,7 +873,7 @@ class Index
 
             }
         }else{
-            $info = db('toplearning_net_material')->alias('a')->join('toplearning_student_material s','a.net_material_id = f.material_id')->where(['user_id'=>$token_uid])->select();
+            $info = db('toplearning_net_material')->alias('a')->join('toplearning_student_material s','a.net_material_id = s.material_id')->where(['s.user_id'=>$token_uid])->select();
             foreach ($info as $key => $value) {
                 $ret[$key]['courseid'] = $value['net_material_id'];
                 $ret[$key]['image'] = $value['picture'];
@@ -1170,7 +1170,7 @@ class Index
         $token = trim($params['token']);
         $courseid = trim($params['courseid']);
 
-        db('toplearning_net_material')->where(['net_material_id'=>$courseid])->update(['del'=>1]);
+        db('toplearning_net_material')->where(['net_material_id'=>$courseid])->update(['del'=>1,'release_status'=>1]);
 
         $info = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->find();
 
@@ -1416,11 +1416,30 @@ class Index
         //params
         $token = trim($params['token']);
 
+        //通过token获取 uid
+        $token_uid = $this->decrypt($token);
 
-        // $user = db('toplearning_login')->where($map)->find();
+        //身份
+        $user = db('toplearning_login')->where(['user_id'=>$token_uid])->find();
+        $type = $user['group_id'] == 3?'2':'1';//2老师 1学生
+
+        // $info = db('toplearning_exam')->alias('a')->join('toplearning_do_exam_time t','a.exam_id = t.exam_id')->where(['a.exam_id'=>$examid])->select();
+        
 
         $ret = array();
-
+        if ($type==1) {
+            $info = db('toplearning_exam')->where(['user_id'=>$token_uid,'owner_type'=>1])->select();
+            foreach ($info as $key => $value) {
+                $ret[$key]['examid'] = $value['exam_id'];
+                $ret[$key]['name'] = $value['exam_name'];
+                $ret[$key]['college'] = $value['exam_id'];
+                $ret[$key]['time'] = $value['start_time'];
+                $ret[$key]['examtime'] = ceil((strtotime($value['end_time'])-strtotime($value['start_time']))/(60*24));
+                $ret[$key]['submit'] = db('toplearning_do_exam_time')->where(['exam_id'=>$value['exam_id']])->count();
+                $ret[$key]['total'] = $value['exam_num'];
+            }
+        }
+        
         
         //返回信息
         $data = [
@@ -1440,12 +1459,18 @@ class Index
      */
     public function submitExamList($params)
     {
-       //params
+        //params
         $token = trim($params['token']);
+        $examid = trim($params['examid']);
 
-        
+        $info =  db('toplearning_do_exam_time')->where(['exam_id'=>$value['exam_id']])->select();
         $ret = array();
 
+        foreach ($info as $key => $value) {
+            $ret[$key]['userid']= $value['user_id'];
+            $ret[$key]['name']= db('toplearning_login')->where(['user_id'=>$value['user_id']])->column('nickname')?db('toplearning_login')->where(['exam_id'=>$value['user_id']])->column('nickname')[0]:'';
+            $ret[$key]['image']= db('toplearning_login')->where(['user_id'=>$value['user_id']])->column('avatar')?db('toplearning_login')->where(['exam_id'=>$value['user_id']])->column('avatar')[0]:'';
+        }
         
         //返回信息
         $data = [
@@ -1467,10 +1492,19 @@ class Index
     {
         //params
         $token = trim($params['token']);
+        $courseid = trim($params['courseid']);
 
-        
+
+        $info = db('toplearning_learn_situation')->where(['class_id'=>$courseid])->select();
+
         $ret = array();
-
+        foreach ($ret as $key => $value) {
+            $ret[$key]['userid'] =   $value['user_id'];
+            $ret[$key]['name'] =  db('toplearning_login')->where(['user_id'=>$value['user_id']])->column('nickname')?db('toplearning_login')->where(['user_id'=>$value['user_id']])->column('nickname')[0]:'';
+            $ret[$key]['time'] =  $value['learn_start_time'];
+            $ret[$key]['totaltime'] =  ceil((strtotime($value['learn_end_time'])-strtotime($value['learn_start_time']))/(24*60)) ;
+            $ret[$key]['completion'] =  $value['learn_result'];
+        }
         
         //返回信息
         $data = [
@@ -1639,6 +1673,33 @@ class Index
         ];
 
         return json($data);
+    }
+
+    //-----------U信------
+    /**
+     * [ContactList 通讯录列表]
+     * @param [type] $params [description]
+    */
+    public function ContactList($params)
+    {
+        //params
+        $token = trim($params['token']);
+        $userid = trim($params['userid']);
+
+        //
+        $info = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->find();
+
+
+        $ret = array();
+
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
     }
     //---------- common function-----------
     /**
