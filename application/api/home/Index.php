@@ -1127,14 +1127,14 @@ class Index
         if (!$insertid) {
             return $this->error('保存失败');
         }
-
+        $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
         //课程保存 处理课节
         $classTypeList = $params['classTypeList'];
         $save = array();
         foreach ($classTypeList as $key => $value) {
             $save['guide'] = $value['guide'];
             $save['class_name'] = $value['titleKJ'];
-            $save['material_id'] = $insertid;
+            $save['material_id'] = $net_material_id;
             $save['status'] = $value['way'];
 
             //时间处理
@@ -1153,7 +1153,7 @@ class Index
             db('toplearning_class_festival')->insert($save);
         }
         
-        $ret = array('collegeId'=>$insertid);
+        $ret = array('courseid'=>$net_material_id);
         //返回信息
         $data = [
             'Code'=>'0',
