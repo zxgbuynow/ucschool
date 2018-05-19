@@ -1143,7 +1143,6 @@ class Index
             $srt = str_replace(array('年','月'),'-',$timearr[0]);
             $str1 = str_replace(array('日'),' ',$srt);
             $save['add_time'] = date('Y-m-d H:i:s',strtotime($str1));
-            $save['lesson_time'] = substr($timearr[1],0,-2);
             $save['index'] = $value['index'];
 
             //视频
