@@ -571,7 +571,7 @@ class Index
             }
         }else{
             if ($type == 1) {//关注
-                $save['school_ids'] = $school_ids;
+                $save['school_ids'] = $collegeid;
                 db('toplearning_login')->where(['user_id'=>$token_uid])->update($save);
             }
         }
