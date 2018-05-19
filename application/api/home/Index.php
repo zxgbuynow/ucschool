@@ -554,7 +554,7 @@ class Index
         if ($users['school_ids']) {
             $school_ids = explode(',', $users['school_ids']);
             if (in_array($collegeid, $school_ids)) {
-                if ($type == 2) {//关注
+                if ($type == 2) {//取关
                     foreach ($school_ids as $key => $value) {
                         if ($value == $collegeid) {
                             unset($school_ids[$key]);
@@ -564,8 +564,14 @@ class Index
                     db('toplearning_login')->where(['user_id'=>$token_uid])->update($save);
                 }
             }else{
-
-                $save['school_ids'] = $users['school_ids'].",".$collegeid;
+                if ($type == 1) {//关注
+                    $save['school_ids'] = $users['school_ids'].",".$collegeid;
+                    db('toplearning_login')->where(['user_id'=>$token_uid])->update($save);
+                }
+            }
+        }else{
+            if ($type == 1) {//关注
+                $save['school_ids'] = $school_ids;
                 db('toplearning_login')->where(['user_id'=>$token_uid])->update($save);
             }
         }
