@@ -1113,20 +1113,20 @@ class Index
     {
         //params
         $token = trim($params['token']);
-        $image = trim($params['image']);//TODO
-        $title = trim($params['title']);
-        $college = trim($params['collegeId']);
-        $type = trim($params['typeId']);
-        $keyword = trim($params['keyword']);
-        $totallessons = trim($params['totallessons']);
-        $monthlessons = trim($params['monthlessons']);
-        $price = trim($params['price']);
-        $limitnumber = trim($params['limitnumber']);
-        $desc = trim($params['desc']);
-        $way = '';
-        if (isset($params['way'])) {
-           $way = trim($params['way']);
-        }
+        //json
+        $json = $params['json'];
+        //json下
+        $image = trim($json['image']);//TODO
+        $title = trim($json['title']);
+        $college = trim($json['collegeId']);
+        $type = trim($json['typeId']);
+        $keyword = trim($json['keyword']);
+        $totallessons = trim($json['totallessons']);
+        $monthlessons = trim($json['monthlessons']);
+        $price = trim($json['price']);
+        $limitnumber = trim($json['limitnumber']);
+        $desc = trim($json['desc']);
+        $way = trim($json['way']);
         
         //classTypeList
         //
@@ -1163,7 +1163,7 @@ class Index
         }
         $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
         //课程保存 处理课节
-        $classTypeList = $params['classTypeList'];
+        $classTypeList = $json['classTypeList'];
         $save = array();
         foreach ($classTypeList as $key => $value) {
             $save['guide'] = $value['guide'];
