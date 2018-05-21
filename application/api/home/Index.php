@@ -897,7 +897,7 @@ class Index
                 $ret[$key]['courseid'] = $value['net_material_id'];
                 $ret[$key]['image'] = $value['picture'];
                 $ret[$key]['title'] = $value['title'];
-                $ret[$key]['college'] = db('toplearning_school')->where(['school_id'=>$info['school_id']])->column('school_name')?db('toplearning_school')->where(['school_id'=>$info['school_id']])->column('school_name')[0]:'';
+                $ret[$key]['college'] = db('toplearning_school')->where(['school_id'=>$value['school_id']])->column('school_name')?db('toplearning_school')->where(['school_id'=>$value['school_id']])->column('school_name')[0]:'';
                 $ret[$key]['total'] = $value['lession_num'];
                 $ret[$key]['release'] = db('toplearning_class_festival')->where(['material_id'=>$value['net_material_id']])->count();
 
@@ -911,7 +911,7 @@ class Index
                 $ret[$key]['courseid'] = $value['net_material_id'];
                 $ret[$key]['image'] = $value['picture'];
                 $ret[$key]['title'] = $value['title'];
-                $ret[$key]['college'] = db('toplearning_school')->where(['school_id'=>$info['school_id']])->column('school_name')?db('toplearning_school')->where(['school_id'=>$info['school_id']])->column('school_name')[0]:'';
+                $ret[$key]['college'] = db('toplearning_school')->where(['school_id'=>$value['school_id']])->column('school_name')?db('toplearning_school')->where(['school_id'=>$value['school_id']])->column('school_name')[0]:'';
                 $ret[$key]['total'] = $value['lession_num'];
                 $ret[$key]['release'] = db('toplearning_class_festival')->where(['material_id'=>$value['net_material_id']])->count();
 
