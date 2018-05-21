@@ -1111,11 +1111,12 @@ class Index
      */
     public function saveCourse($params)
     {
+        
         //params
         $token = trim($params['token']);
         //json
-        // $json = json_decode($params['json'],true);
-        $json = $params['json'];
+        $json = json_decode($params['json'],true);
+        // $json = $params['json'];
         //json下
         $image = trim($json['image']);//TODO
         $title = trim($json['title']);
@@ -1700,7 +1701,8 @@ class Index
 
         $ret['image'] = $info['picture'];
         $ret['title'] = $info['title'];
-        $ret['college'] = $info['create_name'];
+        $ret['college'] = db('toplearning_school')->where('school_id'=>$info['school_id'])->column('school_name')?db('toplearning_school')->where('school_id'=>$info['school_id'])->column('school_name')[0]
+        :'';
         $ret['type'] = $info['type'];
         $ret['keyword'] = $info['tags'];
         $ret['price'] = $info['price'];
