@@ -22,6 +22,11 @@ class Index
             //判断是否存在该方法
             $func = $api[$params['method']];
             if (method_exists($this,$func)) {
+                //处理参数
+                $res = $this->getParams($params, $func);
+                if($res!=1){
+                    return $this->error($res);
+                };
                 return $this->$func($params);
             }else{
                 return $this->error($params['method'].'方法不存在');
@@ -30,6 +35,29 @@ class Index
         }else{
             return $this->error('method参数缺失');
         }
+    }
+    /**
+     * [getParams 处理参数]
+     * @param  [type] &$params [description]
+     * @return [type]          [description]
+     */
+    public function getParams(&$params, $func)
+    {
+        if (!isset(config('param')[$func])) {
+            return true;
+        }
+        $s =  config('param')[$func];
+        $p = [];
+        foreach ($s as $key => $value) {
+            
+            if ($value['valid']&&!isset($params[$key])) {//必填
+                return $key.'参数必填';
+                // return $this->error($key.'参数必填');
+            }
+            $p[$key] = isset($params[$key])?$params[$key]:'';
+        }
+        $params = $p;
+        return true;
     }
     /**
      * [error 错误返回]
@@ -1713,20 +1741,31 @@ class Index
 
     //-----------U信------
     /**
-     * [ContactList 通讯录列表]
+     * [ContactList 群聊列表]
      * @param [type] $params [description]
     */
-    public function ContactList($params)
+    public function GroupList($params)
     {
         //params
         $token = trim($params['token']);
         $userid = trim($params['userid']);
 
         //
-        $info = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->find();
+        $token_uid = $this->decrypt($token);
+
+        $info = db('toplearning_chat_group')->alias('a')->join('toplearning_chat_record r','a.group_id = r.group_id')->where(['r.user_id'=>$token_uid])->group('r.group_id')->order('r.id DESC')->select();
 
 
         $ret = array();
+        foreach ($info as $key => $value) {
+            $ret[$key]['groupId'] = $value['group_id'];
+            $ret[$key]['groupName'] = db('toplearning_class_festival')->where(['class_id'=>$value['lesson_id']])->column('class_name')?db('toplearning_class_festival')->where(['class_id'=>$value['lesson_id']])->column('class_name')[0].'交流群':'交流群';
+            $ret[$key]['groupHead'] = '';//todo
+            $ret[$key]['msg'] = $value['content'];
+            $ret[$key]['data'] = $value['create_time'];
+            $ret[$key]['unreadMsgNumber'] = 1;//todo
+
+        }
 
         //返回信息
         $data = [
@@ -1736,6 +1775,32 @@ class Index
             'Success'=>true
         ];
 
+    }
+
+    public function ModifyingPersonalInformation($params)
+    {
+        //params
+        $token = trim($params['token']);
+        $userid = trim($params['userid']);
+        $nickname = trim($params['nickname']);
+        $birthday = trim($params['birthday']);
+        $sex = trim($params['sex']);
+        $city = trim($params['city']);
+        $phone = trim($params['phone']);
+        $wechat = trim($params['wechat']);
+        $qq = trim($params['qq']);
+        $city = trim($params['city']);
+        $email  = trim($params['email']);
+        $IndividualResume = trim($params['IndividualResume']);
+        $head = trim($params['head']);
+
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
     }
     //---------- common function-----------
     /**
@@ -1895,5 +1960,133 @@ class Index
         }else{
             return $imageSrc;
         }
+    }
+
+    /**
+     * [markImg 合成图片]
+     * @param  [type] $picdata [description]
+     * @return [type]          [description]
+     */
+    public function markImg($picdata)
+    {
+        $pic_list       = $picdata;  
+          
+        $pic_list    = array_slice($pic_list, 0, 9); // 只操作前9个图片  
+      
+        $bg_w    = 150; // 背景图片宽度  
+        $bg_h    = 150; // 背景图片高度  
+      
+        $background = imagecreatetruecolor($bg_w,$bg_h); // 背景图片  
+        $color   = imagecolorallocate($background, 202, 201, 201); // 为真彩色画布创建白色背景，再设置为透明  
+        imagefill($background, 0, 0, $color);  
+        imageColorTransparent($background, $color);   
+      
+        $pic_count  = count($pic_list);  
+        $lineArr    = array();  // 需要换行的位置  
+        $space_x    = 3;  
+        $space_y    = 3;  
+        $line_x  = 0;  
+        switch($pic_count) {  
+        case 1: // 正中间  
+            $start_x    = intval($bg_w/4);  // 开始位置X  
+            $start_y    = intval($bg_h/4);  // 开始位置Y  
+            $pic_w   = intval($bg_w/2); // 宽度  
+            $pic_h   = intval($bg_h/2); // 高度  
+            break;  
+        case 2: // 中间位置并排  
+            $start_x    = 2;  
+            $start_y    = intval($bg_h/4) + 3;  
+            $pic_w   = intval($bg_w/2) - 5;  
+            $pic_h   = intval($bg_h/2) - 5;  
+            $space_x    = 5;  
+            break;  
+        case 3:  
+            $start_x    = 40;   // 开始位置X  
+            $start_y    = 5;    // 开始位置Y  
+            $pic_w   = intval($bg_w/2) - 5; // 宽度  
+            $pic_h   = intval($bg_h/2) - 5; // 高度  
+            $lineArr    = array(2);  
+            $line_x  = 4;  
+            break;  
+        case 4:  
+            $start_x    = 4;    // 开始位置X  
+            $start_y    = 5;    // 开始位置Y  
+            $pic_w   = intval($bg_w/2) - 5; // 宽度  
+            $pic_h   = intval($bg_h/2) - 5; // 高度  
+            $lineArr    = array(3);  
+            $line_x  = 4;  
+            break;  
+        case 5:  
+            $start_x    = 30;   // 开始位置X  
+            $start_y    = 30;   // 开始位置Y  
+            $pic_w   = intval($bg_w/3) - 5; // 宽度  
+            $pic_h   = intval($bg_h/3) - 5; // 高度  
+            $lineArr    = array(3);  
+            $line_x  = 5;  
+            break;  
+        case 6:  
+            $start_x    = 5;    // 开始位置X  
+            $start_y    = 30;   // 开始位置Y  
+            $pic_w   = intval($bg_w/3) - 5; // 宽度  
+            $pic_h   = intval($bg_h/3) - 5; // 高度  
+            $lineArr    = array(4);  
+            $line_x  = 5;  
+            break;  
+        case 7:  
+            $start_x    = 53;   // 开始位置X  
+            $start_y    = 5;    // 开始位置Y  
+            $pic_w   = intval($bg_w/3) - 5; // 宽度  
+            $pic_h   = intval($bg_h/3) - 5; // 高度  
+            $lineArr    = array(2,5);  
+            $line_x  = 5;  
+            break;  
+        case 8:  
+            $start_x    = 30;   // 开始位置X  
+            $start_y    = 5;    // 开始位置Y  
+            $pic_w   = intval($bg_w/3) - 5; // 宽度  
+            $pic_h   = intval($bg_h/3) - 5; // 高度  
+            $lineArr    = array(3,6);  
+            $line_x  = 5;  
+            break;  
+        case 9:  
+            $start_x    = 5;    // 开始位置X  
+            $start_y    = 5;    // 开始位置Y  
+            $pic_w   = intval($bg_w/3) - 5; // 宽度  
+            $pic_h   = intval($bg_h/3) - 5; // 高度  
+            $lineArr    = array(4,7);  
+            $line_x  = 5;  
+            break;  
+        }  
+        foreach( $pic_list as $k=>$pic_path ) {  
+            $kk = $k + 1;  
+            if ( in_array($kk, $lineArr) ) {  
+                $start_x    = $line_x;  
+                $start_y    = $start_y + $pic_h + $space_y;  
+            }  
+            $pathInfo    = pathinfo($pic_path);  
+            switch( strtolower($pathInfo['extension']) ) {  
+                case 'jpg':  
+                case 'jpeg':  
+                    $imagecreatefromjpeg    = 'imagecreatefromjpeg';  
+                break;  
+                case 'png':  
+                    $imagecreatefromjpeg    = 'imagecreatefrompng';  
+                break;  
+                case 'gif':  
+                default:  
+                    $imagecreatefromjpeg    = 'imagecreatefromstring';  
+                    $pic_path    = file_get_contents($pic_path);  
+                break;  
+            }  
+            $resource   = $imagecreatefromjpeg($pic_path);  
+            // $start_x,$start_y copy图片在背景中的位置  
+            // 0,0 被copy图片的位置  
+            // $pic_w,$pic_h copy后的高度和宽度  
+            imagecopyresized($background,$resource,$start_x,$start_y,0,0,$pic_w,$pic_h,imagesx($resource),imagesy($resource)); // 最后两个参数为原始图片宽度和高度，倒数两个参数为copy时的图片宽度和高度  
+            $start_x    = $start_x + $pic_w + $space_x;  
+        }  
+      
+        header("Content-type: image/jpg");  
+        return imagejpeg($background);
     }
 }
