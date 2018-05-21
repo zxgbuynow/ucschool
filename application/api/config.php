@@ -65,8 +65,7 @@ return [
     'param'=>[
         'login'=>[
             'phone'=>['valid'=>true],
-            'password'=>['valid'=>true],
-            'type'=>['valid'=>true]
+            'password'=>['valid'=>true]
         ],
     ]
 ];
