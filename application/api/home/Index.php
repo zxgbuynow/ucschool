@@ -1145,7 +1145,7 @@ class Index
         // }
 
         $data['picture'] = $image;
-        $data['school_id'] = db('toplearning_school')->where(['school_id'=>$college])->column('school_name')[0];
+        $data['school_id'] = db('toplearning_school')->where(['school_id'=>$college])->column('school_name')?db('toplearning_school')->where(['school_id'=>$college])->column('school_name')[0]:'';
         $data['course_type'] = $type;
         $data['tags'] = $keyword;
         $data['lession_num'] = $totallessons;
@@ -1156,7 +1156,7 @@ class Index
         $data['lession_status'] = $way;
         $data['user_id'] = $token_uid;
         $data['teacher_user_id'] = $token_uid;
-        $data['teacher_id'] = db('toplearning_teacher')->where(['user_id'=>$token_uid])->column('teacher_id')[0];
+        $data['teacher_id'] = db('toplearning_teacher')->where(['user_id'=>$token_uid])->column('teacher_id')?db('toplearning_teacher')->where(['user_id'=>$token_uid])->column('teacher_id')[0]:'';
         $data['school_id'] = $college;
         
         $insertid = db('toplearning_net_material')->insert($data);
