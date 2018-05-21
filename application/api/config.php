@@ -57,6 +57,16 @@ return [
         'ResourceLibrary'=>'class.ResourceLibrary',
 
         'PaymentDetails'=>'class.PaymentDetails',
-        'surplusDetails'=>'class.surplusDetails'
+        'surplusDetails'=>'class.surplusDetails',
+        'modificationNotification'=>'class.modificationNotification',
+
+        
+    ],
+    'param'=>[
+        'login'=>[
+            'phone'=>['valid'=>true],
+            'password'=>['valid'=>true],
+            'type'=>['valid'=>true]
+        ],
     ]
 ];
