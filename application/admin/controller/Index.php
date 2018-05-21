@@ -8,6 +8,7 @@ use think\helper\Hash;
 use think\Db;
 use app\common\builder\ZBuilder;
 use app\user\model\User as UserModel;
+use app\admin\model\Qustion as QustionModel;
 
 /**
  * 后台默认控制器
@@ -101,6 +102,32 @@ class Index extends Admin
             ->fetch();
     }
 
+    public function question()
+    {
+        // 查询
+        $map = $this->getMap();
+        // 排序
+        $order = $this->getOrder('create_time desc');
+        // 数据列表
+        $data_list = QustionModel::where($map)->order($order)->paginate();
+
+        // 使用ZBuilder快速创建数据表格
+        return ZBuilder::make('table')
+            ->setSearch(['phone' => '手机号']) // 设置搜索框
+            ->addColumns([ // 批量添加数据列
+                ['id', 'ID'],
+                ['shopname', '店铺名称'],
+                ['username', '用户名称'],
+                ['location', '店铺地址'],
+                ['phone', '手机号'],
+                ['create_time', '创建时间', 'datetime']
+            ])
+            ->setTableName('question')
+            ->addOrder('id,create_time')
+            ->setRowList($data_list) // 设置表格数据
+            ->hideCheckbox()
+            ->fetch(); // 渲染模板
+    }
     /**
      * 检查版本更新
      * @author zg
