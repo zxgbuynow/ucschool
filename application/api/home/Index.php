@@ -1114,7 +1114,7 @@ class Index
         //params
         $token = trim($params['token']);
         //json
-        $json = $params['json'];
+        $json = json_decode($params['json'],true);
         //json下
         $image = trim($json['image']);//TODO
         $title = trim($json['title']);
@@ -1126,7 +1126,8 @@ class Index
         $price = trim($json['price']);
         $limitnumber = trim($json['limitnumber']);
         $desc = trim($json['desc']);
-        $way = trim($json['way']);
+
+        $way = isset($json['way'])?trim($json['way']):'';
         
         //classTypeList
         //
