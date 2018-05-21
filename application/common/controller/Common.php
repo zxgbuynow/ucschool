@@ -23,7 +23,6 @@ class Common extends Controller
         }else{
             $this->assign('_admin_base_layout', config('shop_base_layout'));
         }
-        
         // 当前配色方案
         $this->assign('system_color', config('system_color'));
 

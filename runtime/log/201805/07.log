@@ -1288,3 +1288,233 @@
 [ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.028652s ]
 [ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/ucschool/application/api/home/Index.php ]
 [ info ] [ LOG ] INIT File
+---------------------------------------------------------------
+[ 2018-05-07T22:08:43+08:00 ] 10.0.2.2 GET /api.php?method=user.login&phone=18321271831&password=1234567
+[ info ] zg.ucschool.com/api.php?method=user.login&phone=18321271831&password=1234567 [运行时间：0.750031s][吞吐率：1.33req/s] [内存消耗：550.27kb] [文件加载：49]
+[ info ] [ LANG ] /data/httpd/ucschool/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.ucschool.com',
+  'connection' => 'keep-alive',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => 'PHPSESSID=2tkom1rtvcprbs8b0oi2ri7kl7',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'user.login',
+  'phone' => '18321271831',
+  'password' => '1234567',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.064525s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.066715s ]
+[ info ] [ LOG ] INIT File
+[ error ] [4]语法错误: unexpected '->' (T_OBJECT_OPERATOR), expecting identifier (T_STRING) or variable (T_VARIABLE) or '{' or '$'[/data/httpd/ucschool/application/api/home/Index.php:364]
+---------------------------------------------------------------
+[ 2018-05-07T22:09:08+08:00 ] 10.0.2.2 GET /api.php?method=user.login&phone=18321271831&password=1234567
+[ info ] zg.ucschool.com/api.php?method=user.login&phone=18321271831&password=1234567 [运行时间：1.264285s][吞吐率：0.79req/s] [内存消耗：771.01kb] [文件加载：53]
+[ info ] [ LANG ] /data/httpd/ucschool/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.ucschool.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => 'PHPSESSID=2tkom1rtvcprbs8b0oi2ri7kl7',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'user.login',
+  'phone' => '18321271831',
+  'password' => '1234567',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.041961s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.052004s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/ucschool/application/api/home/Index.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.302245s ] mysql:host=139.196.20.81;port=3306;dbname=uxueyuan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `toplearning_login` [ RunTime:0.038146s ]
+[ sql ] [ SQL ] SELECT * FROM `toplearning_login` WHERE  `mobile` = '18321271831' LIMIT 1 [ RunTime:0.436839s ]
+---------------------------------------------------------------
+[ 2018-05-07T22:20:09+08:00 ] 10.0.2.2 GET /api.php?method=find.getFocusCollege&token=J9FqNKq0Rfpcykn978TeJA==
+[ info ] zg.ucschool.com/api.php?method=find.getFocusCollege&token=J9FqNKq0Rfpcykn978TeJA== [运行时间：0.714381s][吞吐率：1.40req/s] [内存消耗：628.68kb] [文件加载：57]
+[ info ] [ LANG ] /data/httpd/ucschool/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.ucschool.com',
+  'connection' => 'keep-alive',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => 'PHPSESSID=2tkom1rtvcprbs8b0oi2ri7kl7',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'find.getFocusCollege',
+  'token' => 'J9FqNKq0Rfpcykn978TeJA==',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.036051s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.046885s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/ucschool/application/api/home/Index.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.052420s ] mysql:host=139.196.20.81;port=3306;dbname=uxueyuan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `toplearning_attention` [ RunTime:0.029854s ]
+[ error ] [10501]SQLSTATE[23000]: Integrity constraint violation: 1052 Column 'del' in where clause is ambiguous[/data/httpd/ucschool/thinkphp/library/think/db/Connection.php:388]
+---------------------------------------------------------------
+[ 2018-05-07T22:20:16+08:00 ] 10.0.2.2 GET /api.php?method=find.getFocusCollege&token=J9FqNKq0Rfpcykn978TeJA==
+[ info ] zg.ucschool.com/api.php?method=find.getFocusCollege&token=J9FqNKq0Rfpcykn978TeJA== [运行时间：0.610711s][吞吐率：1.64req/s] [内存消耗：747.06kb] [文件加载：57]
+[ info ] [ LANG ] /data/httpd/ucschool/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.ucschool.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => 'PHPSESSID=2tkom1rtvcprbs8b0oi2ri7kl7',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'find.getFocusCollege',
+  'token' => 'J9FqNKq0Rfpcykn978TeJA==',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.032637s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.046969s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/ucschool/application/api/home/Index.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.056603s ] mysql:host=139.196.20.81;port=3306;dbname=uxueyuan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `toplearning_attention` [ RunTime:0.061442s ]
+[ error ] [10501]SQLSTATE[23000]: Integrity constraint violation: 1052 Column 'type' in where clause is ambiguous[/data/httpd/ucschool/thinkphp/library/think/db/Connection.php:388]
+---------------------------------------------------------------
+[ 2018-05-07T22:20:35+08:00 ] 10.0.2.2 GET /api.php?method=find.getFocusCollege&token=J9FqNKq0Rfpcykn978TeJA==
+[ info ] zg.ucschool.com/api.php?method=find.getFocusCollege&token=J9FqNKq0Rfpcykn978TeJA== [运行时间：0.824288s][吞吐率：1.21req/s] [内存消耗：761.20kb] [文件加载：53]
+[ info ] [ LANG ] /data/httpd/ucschool/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.ucschool.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => 'PHPSESSID=2tkom1rtvcprbs8b0oi2ri7kl7',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'find.getFocusCollege',
+  'token' => 'J9FqNKq0Rfpcykn978TeJA==',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.039356s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.073184s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/ucschool/application/api/home/Index.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.069280s ] mysql:host=139.196.20.81;port=3306;dbname=uxueyuan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `toplearning_attention` [ RunTime:0.041966s ]
+[ sql ] [ SQL ] SELECT * FROM `toplearning_attention` `a` INNER JOIN `toplearning_school` `s` ON `a`.`source_id`=`s`.`school_id` WHERE  `a`.`type` = 2 [ RunTime:0.229301s ]
+---------------------------------------------------------------
+[ 2018-05-07T22:29:48+08:00 ] 10.0.2.2 GET /api.php?method=find.getFocusCollege&token=J9FqNKq0Rfpcykn978TeJA==
+[ info ] zg.ucschool.com/api.php?method=find.getFocusCollege&token=J9FqNKq0Rfpcykn978TeJA== [运行时间：0.822732s][吞吐率：1.22req/s] [内存消耗：764.85kb] [文件加载：53]
+[ info ] [ LANG ] /data/httpd/ucschool/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'api',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'zg.ucschool.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.9,en;q=0.8',
+  'cookie' => 'PHPSESSID=2tkom1rtvcprbs8b0oi2ri7kl7',
+  'content-type' => '',
+  'content-length' => '',
+)
+[ info ] [ PARAM ] array (
+  'method' => 'find.getFocusCollege',
+  'token' => 'J9FqNKq0Rfpcykn978TeJA==',
+)
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Config @app_begin [ RunTime:0.033981s ]
+[ info ] [ BEHAVIOR ] Run app\common\behavior\Hook @app_begin [ RunTime:0.042106s ]
+[ info ] [ RUN ] app\api\home\Index->index[ /data/httpd/ucschool/application/api/home/Index.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.199967s ] mysql:host=139.196.20.81;port=3306;dbname=uxueyuan;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `toplearning_attention` [ RunTime:0.038157s ]
+[ sql ] [ SQL ] SELECT * FROM `toplearning_attention` `a` INNER JOIN `toplearning_school` `s` ON `a`.`source_id`=`s`.`school_id` WHERE  `a`.`type` = 2 [ RunTime:0.104524s ]
