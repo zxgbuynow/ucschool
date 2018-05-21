@@ -1114,7 +1114,8 @@ class Index
         //params
         $token = trim($params['token']);
         //json
-        $json = json_decode($params['json'],true);
+        // $json = json_decode($params['json'],true);
+        $json = $params['json'];
         //json下
         $image = trim($json['image']);//TODO
         $title = trim($json['title']);
