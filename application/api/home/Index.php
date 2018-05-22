@@ -902,7 +902,7 @@ return json($data);
             $ret[$key]['title'] = $value['title'];
                 // $college = db('toplearning_school')->where(['school_id'=>$value['school_id']])->column('school_name');
             $ret[$key]['college'] = $value['school_name'];
-            $ret[$key]['total'] = $value['lession_num'];
+            $ret[$key]['total'] = $value['total_lessons'];
                 // $ret[$key]['release'] = db('toplearning_class_festival')->where(['material_id'=>$value['net_material_id']])->count();
             $ret[$key]['release'] = $value['release'];
 
@@ -910,7 +910,6 @@ return json($data);
             switch ($value['reviewed_status']) {
                 case '0':
                 $status = "1";
-
                 break;
                 case '1':
                 $status = "3";
@@ -941,7 +940,7 @@ return json($data);
                 // $college = db('toplearning_school')->where(['school_id'=>$value['school_id']])->column('school_name');
                 // $ret[$key]['college'] = $college?$college:'';
             $ret[$key]['college'] = $value['school_name'];
-            $ret[$key]['total'] = $value['lession_num'];
+            $ret[$key]['total'] = $value['total_lessons'];
                 // $ret[$key]['release'] = db('toplearning_class_festival')->where(['material_id'=>$value['net_material_id']])->count();
             $ret[$key]['release'] = $value['release'];
             $status = "0";
@@ -1255,7 +1254,6 @@ return json($data);
 
             db('toplearning_class_festival')->insert($save);
         }
-        db("toplearning_net_material")->where(['net_material_id'=>$net_material_id])->update(['release'=>count($classTypeList)]);
         
         $ret = array('courseid'=>intval($net_material_id));
         //返回信息
