@@ -1122,8 +1122,9 @@ class Index
 
         //params
         $token = trim($params['token']);
-        $courseid = trim($params['courseid']);
-        //json
+        $courseid = !empty($params['courseid'])?trim($params['courseid']):"";
+        
+         //json
         $json = json_decode($params['json'],true);
         // $json = $params['json'];
         //json下
