@@ -1906,8 +1906,8 @@ return json($data);
 
 
         $data=array('tpl_id'=>$type==1?$getback:$regist,'tpl_value'=>('#code#').'='.urlencode($code),'apikey'=>$apikey,'mobile'=>$mobile);
+        // $data = ['mobile'=>$mobile,'code'=>$code,'type'=>($type==1?$getback:$regist)];
         $json_data = $this->tpl_send($ch,$data);
-        // var_dump($json_data);
         $array = json_decode($json_data,true);
      // echo '<pre>';print_r($array);
         
@@ -1965,6 +1965,8 @@ return json($data);
      */
     function tpl_send($ch,$data){
         // var_dump($data);
+
+        // curl_setopt ($ch, CURLOPT_URL, 'http://120.24.215.50/YunPianMobileMessage.php');
         curl_setopt ($ch, CURLOPT_URL, 'https://sms.yunpian.com/v2/sms/tpl_single_send.json');
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
         return curl_exec($ch);
