@@ -1730,8 +1730,8 @@ class Index
             $rs[$key]['lessonWay'] = $value['status'];
             $rs[$key]['staus'] = strtotime($value['stage_start'])<time()?'2':(strtotime($value['stage_end'])>time()?'2':'1');
 
-            $rs[$key]['videoIdList'] = unserialize($value['video']);
-            $rs[$key]['coursewareIdList'] = unserialize($value['courseware']);
+            $rs[$key]['videoIdList'] = $value['video'];
+            $rs[$key]['coursewareIdList'] = $value['courseware'];
         }
         $ret['classTypeList'] = $rs;
 
@@ -2095,5 +2095,14 @@ class Index
       
         header("Content-type: image/jpg");  
         return imagejpeg($background);
+    }
+
+    function mb_unserialize($str) {
+        if(empty($str)){  
+            return '';  
+        }  
+        $str= preg_replace_callback('!s:(\d+):"(.*?)";!se', "'s:'.strlen('$2').':\"$2\";'", $str );  
+        $str= str_replace("\r", "", $str);        
+        return unserialize($str);  
     }
 }
