@@ -898,7 +898,7 @@ return json($data);
          foreach ($info as $key => $value) {
             $ret[$key]['courseid'] = $value['net_material_id'];
             $ret[$key]['image'] = $value['picture'];
-            $ret[$key]['type'] = $value['lession_status'];
+            $ret[$key]['type'] = 1;
             $ret[$key]['title'] = $value['title'];
                 // $college = db('toplearning_school')->where(['school_id'=>$value['school_id']])->column('school_name');
             $ret[$key]['college'] = $value['school_name'];
@@ -935,6 +935,7 @@ return json($data);
         foreach ($info as $key => $value) {
             $ret[$key]['courseid'] = $value['net_material_id'];
             $ret[$key]['image'] = $value['picture'];
+            $ret[$key]['type'] = 1;
             $ret[$key]['title'] = $value['title'];
             $ret[$key]['type'] = $value['lession_status'];
                 // $college = db('toplearning_school')->where(['school_id'=>$value['school_id']])->column('school_name');
@@ -1048,7 +1049,7 @@ return json($data);
      */
     public function addlessons($params)
     {
-        //params
+         //params
         $token = trim($params['token']);
         $courseid = trim($params['courseid']);
         $title = trim($params['title']);
