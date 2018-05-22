@@ -924,7 +924,7 @@ return json($data);
                 break;
             }
             $ret[$key]['status'] = $status;
-            $ret[$key]['type'] = $value['lession_status'];
+            // $ret[$key]['type'] = $value['lession_status'];
         }   
 
 
@@ -965,7 +965,7 @@ return json($data);
 
 
             $ret[$key]['complete'] = 20;
-            $ret[$key]['type'] = $value['lession_status'];
+            // $ret[$key]['type'] = $value['lession_status'];
 
         }
     }
