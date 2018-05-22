@@ -1491,7 +1491,7 @@ return json($data);
         foreach ($info as $key => $value) {
             $ret[$key]['userid'] = $value['user_id'];
             $ret[$key]['name'] = $value['nickname'];
-            $ret[$key]['image'] = db('toplearning_login')->where(['user_id'=>$value['user_id']])->column('avatar')[0];
+            @$ret[$key]['image'] = db('toplearning_login')->where(['user_id'=>$value['user_id']])->column('avatar')[0];
         }
         //返回信息
         $data = [
