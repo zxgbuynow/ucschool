@@ -1705,7 +1705,7 @@ class Index
         $ret['image'] = $info['picture'];
         $ret['title'] = $info['title'];
         $ret['college'] = db('toplearning_school')->where(['school_id'=>$info['school_id']])->column('school_name')?db('toplearning_school')->where(['school_id'=>$info['school_id']])->column('school_name')[0]:'';
-        $ret['type'] = $info['type'];
+        $ret['type'] = db("toplearning_course_type")->where(['type_id'=>$info['type']])->value("type_name");
         $ret['keyword'] = $info['tags'];
         $ret['price'] = $info['price'];
         $ret['paynumber'] = $info['order_num'];
@@ -1721,17 +1721,21 @@ class Index
         //课时 
         $lesson =  db('toplearning_class_festival')->where(['material_id'=>$courseid])->select();
         $rs = array();
+        $i = 1;
         foreach ($lesson as $key => $value) {
             $rs[$key]['lessonid'] = $value['class_id'];
-            $rs[$key]['index'] = $value['class_id'];
-            $rs[$key]['name'] = $value['class_id'];
-            $rs[$key]['time'] = strtotime($value['stage_start']);
+            $rs[$key]['index'] = $i;
+            $rs[$key]['name'] = $value['class_name'];
+            $rs[$key]['time'] = date("Y-m-d",strtotime($value['stage_start']));
+            $rs[$key]['startTime'] = date("H:i",strtotime($value['stage_start']));
+            $rs[$key]['endTime'] =  date("H:i",strtotime($value['stage_end']));
             $rs[$key]['lessontime'] = $value['lesson_time'];
             $rs[$key]['lessonWay'] = $value['status'];
             $rs[$key]['staus'] = strtotime($value['stage_start'])<time()?'2':(strtotime($value['stage_end'])>time()?'2':'1');
 
             $rs[$key]['videoIdList'] = $value['video'];
             $rs[$key]['coursewareIdList'] = $value['courseware'];
+            $i++;
         }
         $ret['classTypeList'] = $rs;
 
