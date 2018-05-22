@@ -1481,8 +1481,8 @@ return json($data);
         //params
         $token = trim($params['token']);
         $courseid = trim($params['courseid']);
-        $page = $params['page']?trim($params['page']):0;
-        $size = $params['size']?trim($params['size']):10;
+        $page = !empty($params['page'])?trim($params['page']):0;
+        $size = !empty($params['size'])?trim($params['size']):10;
 
         $info = db('toplearning_order')->where(['net_material_id'=>$courseid])
         ->limit($page*$size.",".$size)
