@@ -35,7 +35,7 @@ return [
         'getUploadCoursewareList'=>'class.getUploadCoursewareList',
         'saveWeike'=>'class.saveWeike',
         'addweikelessons'=>'class.addweikelessons',
-        'getpaynumberlist'=>'class.getpaynumberlist',
+        'getPayNumberList'=>'class.getPayNumberList',
         'getCoursewaredataList'=>'class.getCoursewaredataList',
 
         'getExamList'=>'class.getExamList',
