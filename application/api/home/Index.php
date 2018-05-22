@@ -1115,8 +1115,12 @@ class Index
     public function saveCourse($params)
     {
         
+
+
+
         //params
         $token = trim($params['token']);
+        $courseid = trim($params['courseid']);
         //json
         $json = json_decode($params['json'],true);
         // $json = $params['json'];
@@ -1148,6 +1152,9 @@ class Index
         //     return $this->error('图片上传失败，请稍后重试');
         // }
 
+
+
+
         $data['picture'] = $image;
         $data['school_id'] = db('toplearning_school')->where(['school_id'=>$college])->column('school_name')?db('toplearning_school')->where(['school_id'=>$college])->column('school_name')[0]:'';
         $data['course_type'] = $type;
@@ -1163,14 +1170,22 @@ class Index
         $data['teacher_id'] = db('toplearning_teacher')->where(['user_id'=>$token_uid])->column('teacher_id')?db('toplearning_teacher')->where(['user_id'=>$token_uid])->column('teacher_id')[0]:'';
         $data['school_id'] = $college;
         
+        if(!empty($courseid)){
+        $insertid = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->udpate($data);
+        }else{
         $insertid = db('toplearning_net_material')->insert($data);
+        }
+
         if (!$insertid) {
             return $this->error('保存失败');
         }
-        $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
+        $net_material_id = !empty($courseid)?$courseid:Db::name('toplearning_net_material')->getLastInsID();
         //课程保存 处理课节
         $classTypeList = $json['classTypeList'];
         $save = array();
+
+            db('toplearning_class_festival')->where(['material_id'=>$net_material_id])->delete();
+
         foreach ($classTypeList as $key => $value) {
             $save['guide'] = $value['guide'];
             $save['class_name'] = $value['titleKJ'];
