@@ -60,6 +60,10 @@ return [
         'surplusDetails'=>'class.surplusDetails',
         'modificationNotification'=>'class.modificationNotification',
 
+        'publishedAddClassFestival'=>'class.publishedAddClassFestival',
+        'deleteFestival'=>'class.deleteFestival',
+        'updataFestival'=>'class.updataFestival',
+
         
     ],
     'param'=>[

@@ -1817,6 +1817,131 @@ return json($data);
         return json($data);
     }
 
+    /**
+     * [publishedAddClassFestival 新增课节]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function publishedAddClassFestival($params)
+    {   
+        //params
+        $token = trim($params['token']);
+        $courseid = trim($params['courseid']);
+        $lessonid = trim($params['lessonid']);
+        $json = $params['json']?json_decode($params['json'],true):[];
+
+        //处理课节
+        foreach ($json as $key => $value) {
+            $save['guide'] = $value['guide'];
+            $save['class_name'] = $value['titleKJ'];
+            $save['material_id'] = $courseid;
+            $save['status'] = $value['way'];
+
+            //时间处理
+            if ($value['time']) {
+                $timearr = explode(' ', $value['time']);
+                @$save['lesson_time'] = intval($timearr[1]);
+                $srt = str_replace(array('年','月'),'-',$timearr[0]);
+                $str1 = str_replace(array('日'),' ',$srt);
+                $save['add_time'] = date('Y-m-d H:i:s',strtotime($str1));
+            }
+            
+            // $save['index'] = $value['index'];
+
+            //视频
+            $save['video'] = serialize($value['videoIdList']);
+            //课件
+            $save['courseware'] = serialize($value['coursewareIdList']);
+
+            db('toplearning_class_festival')->insert($save);
+        }
+        $ret = array('courseid'=>intval($courseid));
+
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+    /**
+     * [deleteFestival 删除课节]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function deleteFestival($params)
+    {
+        //params
+        $token = trim($params['token']);
+        $courseid = trim($params['courseid']);
+        $lessonid = trim($params['lessonid']);
+
+        db('toplearning_class_festival')->where(['material_id'=>$courseid,'class_id'=>$lessonid])->update(['del'=>1]);
+
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+    /**
+     * [updataFestival 修改课节]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function updataFestival($params)
+    {
+
+        //params
+        $token = trim($params['token']);
+        $courseid = trim($params['courseid']);
+        $lessonid = trim($params['lessonid']);
+        $json = $params['json']?json_decode($params['json'],true):[];
+
+        //处理课节
+        foreach ($json as $key => $value) {
+            $save['guide'] = $value['guide'];
+            $save['class_name'] = $value['titleKJ'];
+            $save['material_id'] = $courseid;
+            $save['status'] = $value['way'];
+
+            //时间处理
+            if ($value['time']) {
+                $timearr = explode(' ', $value['time']);
+                @$save['lesson_time'] = intval($timearr[1]);
+                $srt = str_replace(array('年','月'),'-',$timearr[0]);
+                $str1 = str_replace(array('日'),' ',$srt);
+                $save['add_time'] = date('Y-m-d H:i:s',strtotime($str1));
+            }
+            
+            // $save['index'] = $value['index'];
+
+            //视频
+            $save['video'] = serialize($value['videoIdList']);
+            //课件
+            $save['courseware'] = serialize($value['coursewareIdList']);
+
+            db('toplearning_class_festival')->where(['material_id'=>$courseid,'class_id'=>$lessonid])->update($save);
+        }
+        $ret = array('courseid'=>intval($courseid));
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+
     //-----------U信------
     /**
      * [ContactList 群聊列表]
