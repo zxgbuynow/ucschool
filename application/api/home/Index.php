@@ -861,6 +861,7 @@ class Index
             $ret[$key]['status'] = strtotime($value['stage_start'])>time()?'1':(strtotime($value['stage_end'])>time()?'2':'0');
             $ret[$key]['number'] = $value['off_num'];
             $ret[$key]['time'] = $value['stage_start'];
+            $ret[$key]['type'] = $value['status'];
         }
         
         
@@ -902,6 +903,7 @@ class Index
                 $ret[$key]['release'] = db('toplearning_class_festival')->where(['material_id'=>$value['net_material_id']])->count();
 
                 $ret[$key]['status'] = $value['release_status'];
+                $ret[$key]['type'] = $value['lession_status'];
 
 
             }
@@ -916,6 +918,7 @@ class Index
                 $ret[$key]['release'] = db('toplearning_class_festival')->where(['material_id'=>$value['net_material_id']])->count();
 
                 $ret[$key]['complete'] = 20;
+                $ret[$key]['type'] = $value['lession_status'];
 
             }
         }
@@ -1709,6 +1712,12 @@ class Index
         $ret['limitpaynumber'] = $info['student_num'];
         $ret['desc'] = $info['introduce'];
 
+        //新加
+        $ret['collegeId'] = $info['school_id'];
+        $ret['typeId'] = $info['course_type'];
+        $ret['monthlyPitchNumber'] = $info['month_lessons'];
+        $ret['commonPitchNumber'] = $info['total_lessons'];
+
         //课时 
         $lesson =  db('toplearning_class_festival')->where(['material_id'=>$courseid])->select();
         $rs = array();
@@ -1720,17 +1729,12 @@ class Index
             $rs[$key]['lessontime'] = $value['lesson_time'];
             $rs[$key]['lessonWay'] = $value['status'];
             $rs[$key]['staus'] = strtotime($value['stage_start'])<time()?'2':(strtotime($value['stage_end'])>time()?'2':'1');
-        }
-        $ret['lessonsList'] = $rs;
 
-        // $ret['lessonsList'] = array();//TODO
-        // $ret['lessonid'] = '';
-        // $ret['index'] = '';
-        // $ret['name'] = '';
-        // $ret['time'] = '';
-        // $ret['lessontime'] = '';
-        // $ret['lessonWay'] = '';
-        // $ret['staus'] = 1;
+            $rs[$key]['videoIdList'] = unserialize($value['video']);
+            $rs[$key]['coursewareIdList'] = unserialize($value['courseware']);
+        }
+        $ret['classTypeList'] = $rs;
+
         //返回信息
         $data = [
             'Code'=>'0',
