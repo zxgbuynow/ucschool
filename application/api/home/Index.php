@@ -1150,7 +1150,7 @@ class Index
         $data['title'] = $title;
         //处理图片
         
-        // $data['picture'] =$this->_seve_img($image);
+        @$data['picture'] =$this->_seve_img($image);
         // if (!$data['picture']) {
         //     return $this->error('图片上传失败，请稍后重试');
         // }
@@ -1158,7 +1158,7 @@ class Index
 
 
 
-        $data['picture'] = $image;
+        // $data['picture'] = $image;
         $data['school_id'] = db('toplearning_school')->where(['school_id'=>$college])->column('school_name')?db('toplearning_school')->where(['school_id'=>$college])->column('school_name')[0]:'';
         $data['course_type'] = $type;
         $data['tags'] = $keyword;
