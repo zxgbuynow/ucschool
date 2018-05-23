@@ -1864,27 +1864,27 @@ return json($data);
         $json = $params['json']?json_decode($params['json'],true):[];
 
         //处理课节
-        foreach ($json as $key => $value) {
-            $save['guide'] = $value['guide'];
-            $save['class_name'] = $value['titleKJ'];
+        if ($json) {
+            $save['guide'] = $json['guide'];
+            $save['class_name'] = $json['titleKJ'];
             $save['material_id'] = $courseid;
-            $save['status'] = $value['way'];
+            $save['status'] = $json['way'];
 
             //时间处理
-            if ($value['time']) {
-                $timearr = explode(' ', $value['time']);
+            if ($json['time']) {
+                $timearr = explode(' ', $json['time']);
                 @$save['lesson_time'] = intval($timearr[1]);
                 $srt = str_replace(array('年','月'),'-',$timearr[0]);
                 $str1 = str_replace(array('日'),' ',$srt);
                 $save['add_time'] = date('Y-m-d H:i:s',strtotime($str1));
             }
             
-            // $save['index'] = $value['index'];
+            $save['index'] = $json['index'];
 
             //视频
-            $save['video'] = serialize($value['videoIdList']);
+            $save['video'] = serialize($json['videoIdList']);
             //课件
-            $save['courseware'] = serialize($value['coursewareIdList']);
+            $save['courseware'] = serialize($json['coursewareIdList']);
 
             db('toplearning_class_festival')->insert($save);
         }
@@ -1939,27 +1939,27 @@ return json($data);
         $json = $params['json']?json_decode($params['json'],true):[];
 
         //处理课节
-        foreach ($json as $key => $value) {
-            $save['guide'] = $value['guide'];
-            $save['class_name'] = $value['titleKJ'];
+        if ($json) {
+            $save['guide'] = $json['guide'];
+            $save['class_name'] = $json['titleKJ'];
             $save['material_id'] = $courseid;
-            $save['status'] = $value['way'];
+            $save['status'] = $json['way'];
 
             //时间处理
-            if ($value['time']) {
-                $timearr = explode(' ', $value['time']);
+            if ($json['time']) {
+                $timearr = explode(' ', $json['time']);
                 @$save['lesson_time'] = intval($timearr[1]);
                 $srt = str_replace(array('年','月'),'-',$timearr[0]);
                 $str1 = str_replace(array('日'),' ',$srt);
                 $save['add_time'] = date('Y-m-d H:i:s',strtotime($str1));
             }
             
-            // $save['index'] = $value['index'];
+            $save['index'] = $json['index'];
 
             //视频
-            $save['video'] = serialize($value['videoIdList']);
+            $save['video'] = serialize($json['videoIdList']);
             //课件
-            $save['courseware'] = serialize($value['coursewareIdList']);
+            $save['courseware'] = serialize($json['coursewareIdList']);
 
             db('toplearning_class_festival')->where(['material_id'=>$courseid,'class_id'=>$lessonid])->update($save);
         }
