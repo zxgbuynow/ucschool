@@ -1412,16 +1412,49 @@ return json($data);
         $data['add_time'] = date('Y-m-d H:i:s',time());
 
         //toplearning_micro_class
-        $courseid = db('toplearning_micro_class')->insert($data);
-        if (!$courseid) {
-            $this->error('保存失败');
+        $insertid = db('toplearning_net_material')->insert($data);
+
+        if ($insertid === false) {
+            return $this->error('保存失败');
         }
-        $ret = array();
+        $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
+        //课程保存 处理课节
+        $classTypeList = $json['classTypeList'];
+        $save = array();
+        db('toplearning_class_festival')->where(['material_id'=>$net_material_id])->delete();
+        foreach ($classTypeList as $key => $value) {
+            $save['guide'] = $value['guide'];
+            $save['class_name'] = $value['title'];
+            $save['material_id'] = $net_material_id;
+            $save['status'] = $value['way'];
+
+            //时间处理
+            if ($value['time']) {
+               $timearr = explode(' ', $value['time']);
+                @$save['lesson_time'] = intval($timearr[1]);
+                $srt = str_replace(array('年','月'),'-',$timearr[0]);
+                $str1 = str_replace(array('日'),' ',$srt);
+                $save['add_time'] = date('Y-m-d H:i:s',strtotime($str1));
+            }
+            
+            $save['index'] = $value['index'];
+
+            //视频
+            $save['video'] = serialize($value['videoIdList']);
+            //课件
+            $save['courseware'] = serialize($value['coursewareIdList']);
+
+            db('toplearning_class_festival')->insert($save);
+            // db('toplearning_micro_class')->insert($data);
+        }
+        
+        $ret = array('courseid'=>intval($net_material_id));
+        
         //返回信息
         $data = [
             'Code'=>'0',
             'Msg'=>'操作成功',
-            'Data'=>$courseid,
+            'Data'=>$ret,
             'Success'=>true
         ];
 
