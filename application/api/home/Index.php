@@ -1818,7 +1818,7 @@ return json($data);
         $ret['commonPitchNumber'] = $info['total_lessons'];
 
         //课时 
-        $lesson =  db('toplearning_class_festival')->where(['material_id'=>$courseid])->select();
+        $lesson =  db('toplearning_class_festival')->where(['del'=>0,'material_id'=>$courseid])->select();
         $rs = array();
         $i = 1;
         foreach ($lesson as $key => $value) {
@@ -1918,7 +1918,7 @@ return json($data);
         $data = [
             'Code'=>'0',
             'Msg'=>'操作成功',
-            'Data'=>$ret,
+            // 'Data'=>{},
             'Success'=>true
         ];
 
