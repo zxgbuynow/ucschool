@@ -129,7 +129,7 @@ class Index
      $ret['coins'] = 10;
 
      $ret['email'] = $user['email'];
-     $ret['collegeid'] = db('toplearning_school')->where(1)->order('recommended DESC')->column('school_id')[0];
+     $ret['collegeid'] = $user['school_id'];
 
 
      $data = [
