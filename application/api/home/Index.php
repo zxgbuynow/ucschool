@@ -1824,6 +1824,7 @@ return json($data);
         foreach ($lesson as $key => $value) {
             $rs[$key]['lessonid'] = $value['class_id'];
             $rs[$key]['index'] = $i;
+            $rs[$key]['guide'] = $value['guide'];
             $rs[$key]['name'] = $value['class_name'];
             $rs[$key]['time'] = date("Y-m-d",strtotime($value['stage_start']));
             $rs[$key]['startTime'] = date("H:i",strtotime($value['stage_start']));
@@ -1858,15 +1859,20 @@ return json($data);
     public function publishedAddClassFestival($params)
     {   
         //params
+       
         $token = trim($params['token']);
-        $courseid = trim($params['courseid']);
-        $lessonid = trim($params['lessonid']);
-        $json = $params['json']?json_decode($params['json'],true):[];
+ $courseid = trim($params['courseid']);
+        $json_arr = $params['json']?json_decode($params['json'],true):[];
+        if(empty($json_arr)){
+            return json(['code'=>1,"Msg"=>"课节不能为空"]);
+        }
+        foreach($json_arr as $json){
+
 
         //处理课节
         if ($json) {
             $save['guide'] = $json['guide'];
-            $save['class_name'] = $json['titleKJ'];
+            $save['class_name'] = $json['name'];
             $save['material_id'] = $courseid;
             $save['status'] = $json['way'];
 
@@ -1888,13 +1894,14 @@ return json($data);
 
             db('toplearning_class_festival')->insert($save);
         }
-        $ret = array('courseid'=>intval($courseid));
+        }
+        // $ret = array('courseid'=>intval($courseid));
 
         //返回信息
         $data = [
             'Code'=>'0',
             'Msg'=>'操作成功',
-            'Data'=>$ret,
+            // 'Data'=>$ret,
             'Success'=>true
         ];
 
@@ -1933,15 +1940,19 @@ return json($data);
     {
 
         //params
+              
         $token = trim($params['token']);
-        $courseid = trim($params['courseid']);
+ $courseid = trim($params['courseid']);
         $lessonid = trim($params['lessonid']);
         $json = $params['json']?json_decode($params['json'],true):[];
 
-        //处理课节
+
+
+
+         //处理课节
         if ($json) {
             $save['guide'] = $json['guide'];
-            $save['class_name'] = $json['titleKJ'];
+            $save['class_name'] = $json['name'];
             $save['material_id'] = $courseid;
             $save['status'] = $json['way'];
 
