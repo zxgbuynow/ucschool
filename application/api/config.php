@@ -69,6 +69,9 @@ return [
         'vdeoUploading'=>'class.vdeoUploading',
         'btainWeikeo'=>'class.btainWeikeo',
         'deleteWeiKe'=>'class.deleteWeiKe',
+        'upDataWeike'=>'class.upDataWeike',
+        'classFestivalDownCoursewareList'=>'class.classFestivalDownCoursewareList',
+        'learningSituationList'=>'class.learningSituationList',
         //考试
         'evaluateLesson'=>'exam.evaluateLesson',
         'classTimeRecord'=>'exam.classTimeRecord',

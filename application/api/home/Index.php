@@ -1141,6 +1141,7 @@ return json($data);
             $ret[$key]['name'] = $value['class_name'];
             $ret[$key]['index'] = $value['index'];
             $ret[$key]['video'] = $value['video'];
+            $ret[$key]['coursewareIdList'] = unserialize($value['courseware']);
         }
         //返回信息
         $data = [
@@ -1244,7 +1245,7 @@ return json($data);
             @$save['lesson_time'] = intval($timearr[1]);
             $srt = str_replace(array('年','月'),'-',$timearr[0]);
             $str1 = str_replace(array('日'),' ',$srt);
-            $save['add_time'] = date('Y-m-d H:i:s',strtotime($str1));
+            $save['stage_end'] = date('Y-m-d H:i:s',strtotime($str1));
             $save['index'] = $value['index'];
 
             //视频
@@ -1833,6 +1834,12 @@ return json($data);
             $rs[$key]['lessonWay'] = $value['status'];
             $rs[$key]['staus'] = strtotime($value['stage_start'])<time()?'2':(strtotime($value['stage_end'])>time()?'2':'1');
 
+            //liveAddress |videoBroadcastAddress TODO
+            if ($value['status']==1) {
+                $rs[$key]['liveAddress'] = unserialize($value['video'])?unserialize($value['video'])[0]['video']:'';
+            }else{
+               $rs[$key]['videoBroadcastAddress'] = unserialize($value['video'])?unserialize($value['video'])[0]['video']:'';
+            }
             $rs[$key]['videoIdList'] = unserialize($value['video']);
             $rs[$key]['coursewareIdList'] = unserialize($value['courseware']);
 
@@ -1861,7 +1868,7 @@ return json($data);
         //params
        
         $token = trim($params['token']);
- $courseid = trim($params['courseid']);
+        $courseid = trim($params['courseid']);
         $json_arr = $params['json']?json_decode($params['json'],true):[];
         if(empty($json_arr)){
             return json(['code'=>1,"Msg"=>"课节不能为空"]);
@@ -1942,7 +1949,7 @@ return json($data);
         //params
               
         $token = trim($params['token']);
- $courseid = trim($params['courseid']);
+    $courseid = trim($params['courseid']);
         $lessonid = trim($params['lessonid']);
         $json = $params['json']?json_decode($params['json'],true):[];
 
@@ -2026,9 +2033,18 @@ return json($data);
 
         //处理课节
         if ($json) {
-            $save['guide'] = $json['Guide'];
+            $save['guide'] = $json['guide'];
             $save['class_name'] = $json['name'];
             $save['material_id'] = $courseid;
+
+            //时间处理
+            if ($value['time']) {
+                $srt = str_replace(array('年','月'),'-',$value['time']);
+                $str1 = str_replace(array('日'),' ',$srt);
+                $save['stage_end'] = date('Y-m-d H:i:s',strtotime($str1));
+            }
+            
+            $save['lesson_time'] = isset($json['lessontime'])?$json['lessontime']:'';
 
             //视频
             $save['video'] = serialize($json['videoUrl']);
@@ -2107,7 +2123,7 @@ return json($data);
             $rs[$key]['lessonid'] = $value['class_id'];
             $rs[$key]['index'] = $i;
             $rs[$key]['name'] = $value['class_name'];
-            $rs[$key]['Guide'] = $value['guide'];
+            $rs[$key]['guide'] = $value['guide'];
 
             $rs[$key]['time'] = date("Y年-m月-d日 H:i",strtotime($value['stage_start']));
             $rs[$key]['vdeoDuration'] = date("H:i",strtotime($value['stage_start']));
@@ -2161,6 +2177,124 @@ return json($data);
      */
     public function evaluateLesson($params)
     {
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+    /**
+     * [upDataWeike 更新微课]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function upDataWeike($params)
+    {   
+        //params
+        $token = trim($params['token']);
+        $courseid = trim($params['courseid']);
+
+        $image = isset($params['image'])?$params['image']:'';
+        $title = isset($params['title'])?$params['title']:'';
+        $typeid = isset($params['typeid'])?$params['typeid']:'';
+        $keyword = isset($params['keyword'])?$params['keyword']:'';
+        $desc = isset($params['desc'])?$params['desc']:'';
+        $share = isset($params['share'])?$params['share']:'';
+
+        if(!empty($image)){
+            @$data['picture'] =$this->_seve_img($image);
+        }
+        $data['title'] = $title;
+        $data['course_type'] = $typeid;
+        $data['tags'] = $keyword;
+        $data['introduce'] = $desc;
+        $data['title'] = $share;
+
+        if (!db('toplearning_net_material')->where(['net_material_id'=>$courseid])->update($data)) {
+            return $this->error('更新失败');
+        }
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            // 'Data'=>{},
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+    /**
+     * [classFestivalDownCoursewareList 课节下课件列表]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function classFestivalDownCoursewareList($params)
+    {
+        //params
+        $lessonid = trim($params['lessonid']);
+        $courseid = trim($params['courseid']);
+        $size = trim($params['size']);
+        $page = trim($params['page']);
+
+        $page = $page ==''?0:$page;
+        $size = $size == ''?10:$size;
+
+        $limit = $page*$size;
+        $info = db('toplearning_teacher_prepare')->where(['class_id'=>$lessonid])->limit($limit, $size)->select();
+
+
+        $ret = array();
+        foreach ($info as $key => $value) {
+            $ret[$key]['coursewareid'] = $value['prepare_id'];
+            $ret[$key]['name'] = $value['unit_name'];
+            $ret[$key]['size'] = $value['size'];
+            $ret[$key]['time'] = $value['create_time'];
+            $ret[$key]['address'] = $value['prepare_file'];
+        }
+
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+    /**
+     * [learningSituationList 学习情况]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function learningSituationList($params)
+    {
+        //params
+        $lessonid = trim($params['lessonid']);
+        $courseid = trim($params['courseid']);
+        $size = trim($params['size']);
+        $page = trim($params['page']);
+
+        $page = $page ==''?0:$page;
+        $size = $size == ''?10:$size;
+
+        $limit = $page*$size;
+        $info = db('toplearning_learn_situation')->where(['class_id'=>$courseid])->limit($limit, $size)->select();
+
+
+        $ret = array();
+        foreach ($ret as $key => $value) {
+            $ret[$key]['userid'] =   $value['user_id'];
+            $ret[$key]['name'] =  db('toplearning_login')->where(['user_id'=>$value['user_id']])->column('nickname')?db('toplearning_login')->where(['user_id'=>$value['user_id']])->column('nickname')[0]:'';
+            $ret[$key]['time'] =  $value['learn_start_time'];
+            $ret[$key]['totaltime'] =  ceil((strtotime($value['learn_end_time'])-strtotime($value['learn_start_time']))/(24*60)) ;
+            $ret[$key]['completion'] =  $value['learn_result'];
+        }
+
         //返回信息
         $data = [
             'Code'=>'0',
