@@ -1437,7 +1437,7 @@ return json($data);
                 $save['add_time'] = date('Y-m-d H:i:s',strtotime($str1));
             }
             
-            $save['index'] = $value['index'];
+            // $save['index'] = $value['index'];
 
             //视频
             $save['video'] = serialize($value['videoIdList']);
