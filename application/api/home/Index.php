@@ -1698,9 +1698,18 @@ return json($data);
         $token = trim($params['token']);
         $courseid = trim($params['courseid']);
 
+        $lessonid = trim($params['lessonid']);
+
+        $size = trim($params['size']);
+        $page = trim($params['page']);
+
+        $page = $page ==''?0:$page;
+        $size = $size == ''?10:$size;
+
+        $limit = $page*$size;
         //
         $token_uid = $this->encrypt($token);
-        $info = db('toplearning_appraise_dictionary')->where(['user_id'=>$token_uid])->select();
+        $info = db('toplearning_appraise_dictionary')->where(['class_id'=>$courseid])->limit($limit, $size)->select();
         $count = db('toplearning_appraise_dictionary')->where(['user_id'=>$token_uid])->count();
         $totalscore = db('toplearning_appraise_dictionary')->where(['user_id'=>$token_uid])->sum('score');
 
