@@ -1975,6 +1975,224 @@ return json($data);
         return json($data);
     }
 
+    /**
+     * [deleteWeikeLessons 25.  删除微课课节]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function deleteWeikeLessons($params)
+    {
+        //params
+        $token = trim($params['token']);
+        $courseid = trim($params['courseid']);
+        $lessonid = trim($params['lessonid']);
+
+        db('toplearning_class_festival')->where(['material_id'=>$courseid,'class_id'=>$lessonid])->update(['del'=>1]);
+
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            // 'Data'=>{},
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+
+    /**
+     * [updataWeikeLessons 26.  修改微课课节]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function updataWeikeLessons($params)
+    {
+        //params
+        $token = trim($params['token']);
+        $courseid = trim($params['courseid']);
+        $lessonid = trim($params['lessonid']);
+        $json = $params['json']?json_decode($params['json'],true):[];
+
+        //处理课节
+        if ($json) {
+            $save['guide'] = $json['Guide'];
+            $save['class_name'] = $json['name'];
+            $save['material_id'] = $courseid;
+
+            //视频
+            $save['video'] = serialize($json['videoUrl']);
+            //课件
+            $save['courseware'] = serialize($json['coursewareList']);
+
+            db('toplearning_class_festival')->where(['material_id'=>$courseid,'class_id'=>$lessonid])->update($save);
+        }
+        $ret = array('courseid'=>intval($courseid));
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+    /**
+     * [vdeoUploading 27.   录制视频上传]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function vdeoUploading($params)
+    {   
+        //params
+        $token = trim($params['token']);
+        $courseid = trim($params['courseid']);
+
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+    /**
+     * [btainWeikeo 28. 获取微课详]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function btainWeikeo($params)
+    {   
+        //params
+        $token = trim($params['token']);
+        $courseid = trim($params['courseid']);
+
+        $info = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->find();
+
+
+        $ret = array();
+        
+        $ret['courseid'] = $info['net_material_id'];
+
+        $ret['image'] = $info['picture'];
+        $ret['title'] = $info['title'];
+        $ret['college'] = db('toplearning_school')->where(['school_id'=>$info['school_id']])->column('school_name')?db('toplearning_school')->where(['school_id'=>$info['school_id']])->column('school_name')[0]:'';
+        $ret['type'] = db("toplearning_course_type")->where(['type_id'=>$info['course_type']])->value("type_name");
+        $ret['keyword'] = $info['tags'];
+
+        $ret['share'] = $info['share'];
+        $ret['desc'] = $info['introduce'];
+
+        //新加
+        $ret['typeId'] = $info['course_type'];
+
+        //课时 
+        $lesson =  db('toplearning_class_festival')->where(['del'=>0,'material_id'=>$courseid])->select();
+        $rs = array();
+        $i = 1;
+        foreach ($lesson as $key => $value) {
+            $rs[$key]['lessonid'] = $value['class_id'];
+            $rs[$key]['index'] = $i;
+            $rs[$key]['name'] = $value['class_name'];
+            $rs[$key]['Guide'] = $value['guide'];
+
+            $rs[$key]['time'] = date("Y年-m月-d日 H:i",strtotime($value['stage_start']));
+            $rs[$key]['vdeoDuration'] = date("H:i",strtotime($value['stage_start']));
+            $rs[$key]['lessontime'] = $value['lesson_time'];
+
+
+            $rs[$key]['videoUrl'] = unserialize($value['video']);
+            $rs[$key]['coursewareList'] = unserialize($value['courseware']);
+
+            $i++;
+        }
+        $ret['classFestivalList'] = $rs;
+
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+    /**
+     * [deleteWeiKe 29. 删除微课]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function deleteWeiKe($params)
+    {
+        //params
+        $token = trim($params['token']);
+        $courseid = trim($params['courseid']);
+
+        db('toplearning_net_material')->where(['net_material_id'=>$courseid])->update(['del'=>1]);
+
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            // 'Data'=>{},
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+    /**
+     * [evaluateLesson 1.   评价课节]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function evaluateLesson($params)
+    {
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+    /**
+     * [classTimeRecord 2.  上课时间记录]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function classTimeRecord($params)
+    {
+        //params
+        $token = trim($params['token']);
+        $courseid = trim($params['courseid']);
+
+
+        $info = db('toplearning_learn_situation')->where(['class_id'=>$courseid])->select();
+
+        $ret = array();
+        foreach ($ret as $key => $value) {
+            $ret[$key]['userid'] =   $value['user_id'];
+            $ret[$key]['name'] =  db('toplearning_login')->where(['user_id'=>$value['user_id']])->column('nickname')?db('toplearning_login')->where(['user_id'=>$value['user_id']])->column('nickname')[0]:'';
+            $ret[$key]['time'] =  $value['learn_start_time'];
+            $ret[$key]['totaltime'] =  ceil((strtotime($value['learn_end_time'])-strtotime($value['learn_start_time']))/(24*60)) ;
+            $ret[$key]['completion'] =  $value['learn_result'];
+        }
+        
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
     //-----------U信------
     /**
      * [ContactList 群聊列表]

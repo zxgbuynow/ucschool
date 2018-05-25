@@ -64,6 +64,20 @@ return [
         'deleteFestival'=>'class.deleteFestival',
         'updataFestival'=>'class.updataFestival',
 
+        'deleteWeikeLessons'=>'class.deleteWeikeLessons',
+        'updataWeikeLessons'=>'class.updataWeikeLessons',
+        'vdeoUploading'=>'class.vdeoUploading',
+        'btainWeikeo'=>'class.btainWeikeo',
+        'deleteWeiKe'=>'class.deleteWeiKe',
+        //考试
+        'evaluateLesson'=>'exam.evaluateLesson',
+        'classTimeRecord'=>'exam.classTimeRecord',
+        'lecturerExaminationTeacherList'=>'exam.lecturerExaminationTeacherList',
+        'yesPaperList'=>'exam.yesPaperList',
+        'lecturerExaminationStudentList'=>'exam.lecturerExaminationStudentList',
+        'lecturerCourse'=>'exam.lecturerCourse',
+
+
         
     ],
     'param'=>[
