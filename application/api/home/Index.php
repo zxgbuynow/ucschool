@@ -863,6 +863,17 @@ return json($data);
             $ret[$key]['number'] = $value['off_num'];
             $ret[$key]['time'] = $value['stage_start'];
             $ret[$key]['type'] = $value['status'];
+
+            //liveAddress |videoBroadcastAddress TODO
+            if ($value['status']==1) {
+                @$rs[$key]['liveAddress'] = $this->is_serialized($value['video'])?unserialize($value['video'])[0]['video']:$value['video'];
+            }else{
+               @$rs[$key]['videoBroadcastAddress'] = $this->is_serialized($value['courseware'])?unserialize($value['courseware'])[0]['address']:$value['courseware'];
+            }
+
+            $ret[$key]['lessontime'] = $value['lesson_time'];
+            $ret[$key]['startTime'] = $value['stage_start'];
+            $ret[$key]['endTime'] = $value['stage_end'];
         }
         
         
@@ -1246,7 +1257,8 @@ return json($data);
             @$save['lesson_time'] = intval($timearr[1]);
             $srt = str_replace(array('年','月'),'-',$timearr[0]);
             $str1 = str_replace(array('日'),' ',$srt);
-            $save['stage_end'] = date('Y-m-d H:i:s',strtotime($str1));
+            $save['stage_start'] = date('Y-m-d H:i:s',strtotime($str1));
+            $save['stage_end'] = date('Y-m-d H:i:s',strtotime($str1)+intval($timearr[1])*60));
             $save['index'] = $value['index'];
 
             //视频
