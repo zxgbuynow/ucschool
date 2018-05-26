@@ -1698,7 +1698,7 @@ return json($data);
         $token = trim($params['token']);
         $courseid = trim($params['courseid']);
 
-        $lessonid = trim($params['lessonid']);
+        $lessonid = isset($params['lessonid'])?$params['lessonid']:'';
 
         $size = trim($params['size']);
         $page = trim($params['page']);
@@ -1709,9 +1709,18 @@ return json($data);
         $limit = $page*$size;
         //
         $token_uid = $this->encrypt($token);
-        $info = db('toplearning_appraise_dictionary')->where(['class_id'=>$courseid])->limit($limit, $size)->select();
-        $count = db('toplearning_appraise_dictionary')->where(['user_id'=>$token_uid])->count();
-        $totalscore = db('toplearning_appraise_dictionary')->where(['user_id'=>$token_uid])->sum('score');
+
+        //处理评价
+        if (empty($lessonid)) {
+            $info = db('toplearning_appraise_dictionary')->alias('a')->join('toplearning_net_material n','a.class_id = n.net_material_id')->join('toplearning_class_festival f','n.net_material_id = f.material_id')->where(['a.class_id'=>$lessonid])->limit($limit, $size)->select();
+            $count = db('toplearning_appraise_dictionary')->alias('a')->join('toplearning_net_material n','a.class_id = n.net_material_id')->join('toplearning_class_festival f','n.net_material_id = f.material_id')->where(['a.class_id'=>$lessonid])->limit($limit, $size)->count();
+            $totalscore = db('toplearning_appraise_dictionary')->alias('a')->join('toplearning_net_material n','a.class_id = n.net_material_id')->join('toplearning_class_festival f','n.net_material_id = f.material_id')->where(['a.class_id'=>$lessonid])->limit($limit, $size)->sum('score');
+        }else{
+            $info = db('toplearning_appraise_dictionary')->where(['class_id'=>$lessonid])->limit($limit, $size)->select();
+            $count = db('toplearning_appraise_dictionary')->where(['class_id'=>$lessonid])->count();
+            $totalscore = db('toplearning_appraise_dictionary')->where(['class_id'=>$lessonid])->sum('score');
+        }
+        
 
         $ret = array();
         foreach ($info as $key => $value) {
