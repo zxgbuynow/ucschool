@@ -1141,7 +1141,7 @@ return json($data);
             $ret[$key]['name'] = $value['class_name'];
             $ret[$key]['index'] = $value['index'];
             $ret[$key]['video'] = $value['video'];
-            @$ret[$key]['coursewareIdList'] = isset($value['courseware'])?unserialize($value['courseware']):'';
+            $ret[$key]['coursewareIdList'] = $this->is_serialized($value['courseware'])?unserialize($value['courseware']):$value['courseware'];
         }
         //返回信息
         $data = [
@@ -1854,12 +1854,12 @@ return json($data);
 
             //liveAddress |videoBroadcastAddress TODO
             if ($value['status']==1) {
-                $rs[$key]['liveAddress'] = unserialize($value['video'])?unserialize($value['video'])[0]['video']:'';
+                $rs[$key]['liveAddress'] = $this->is_serialized($value['video'])?unserialize($value['video'])[0]['video']:$value['video'];
             }else{
-               $rs[$key]['videoBroadcastAddress'] = unserialize($value['video'])?unserialize($value['video'])[0]['video']:'';
+               $rs[$key]['videoBroadcastAddress'] = $this->is_serialized($value['video'])?unserialize($value['video'])[0]['video']:$value['video'];
             }
-            $rs[$key]['videoIdList'] = unserialize($value['video']);
-            $rs[$key]['coursewareIdList'] = unserialize($value['courseware']);
+            $rs[$key]['videoIdList'] = $this->is_serialized($value['video'])?unserialize($value['video']):$value['video'];
+            $rs[$key]['coursewareIdList'] = $this->is_serialized($value['courseware'])?unserialize($value['courseware']):$value['courseware'];
 
             $i++;
         }
@@ -2148,8 +2148,8 @@ return json($data);
             $rs[$key]['lessontime'] = $value['lesson_time'];
 
 
-            $rs[$key]['videoUrl'] = unserialize($value['video']);
-            $rs[$key]['coursewareList'] = unserialize($value['courseware']);
+            $rs[$key]['videoUrl'] = $this->is_serialized($value['video'])?unserialize($value['video']):$value['video'];
+            $rs[$key]['coursewareList'] = $this->is_serialized($value['courseware'])?unserialize($value['courseware']):$value['courseware'];
 
             $i++;
         }
@@ -2711,12 +2711,34 @@ function passkey(){
         return imagejpeg($background);
     }
 
-    function mb_unserialize($str) {
-        if(empty($str)){  
-            return '';  
-        }  
-        $str= preg_replace_callback('!s:(\d+):"(.*?)";!se', "'s:'.strlen('$2').':\"$2\";'", $str );  
-        $str= str_replace("\r", "", $str);        
-        return unserialize($str);  
-    }
+    // function mb_unserialize($str) {
+    //     if(empty($str)){  
+    //         return '';  
+    //     }  
+    //     $str= preg_replace_callback('!s:(\d+):"(.*?)";!se', "'s:'.strlen('$2').':\"$2\";'", $str );  
+    //     $str= str_replace("\r", "", $str);        
+    //     return unserialize($str);  
+    // }
+    function is_serialized( $data ) {
+         $data = trim( $data );
+         if ( 'N;' == $data )
+             return true;
+         if ( !preg_match( '/^([adObis]):/', $data, $badions ) )
+             return false;
+         switch ( $badions[1] ) {
+             case 'a' :
+             case 'O' :
+             case 's' :
+                 if ( preg_match( "/^{$badions[1]}:[0-9]+:.*[;}]\$/s", $data ) )
+                     return true;
+                 break;
+             case 'b' :
+             case 'i' :
+             case 'd' :
+                 if ( preg_match( "/^{$badions[1]}:[0-9.E-]+;\$/", $data ) )
+                     return true;
+                 break;
+         }
+         return false;
+     }
 }
