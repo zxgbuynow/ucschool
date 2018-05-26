@@ -1258,7 +1258,7 @@ return json($data);
             $srt = str_replace(array('年','月'),'-',$timearr[0]);
             $str1 = str_replace(array('日'),' ',$srt);
             $save['stage_start'] = date('Y-m-d H:i:s',strtotime($str1));
-            $save['stage_end'] = date('Y-m-d H:i:s',strtotime($str1)+intval($timearr[1])*60));
+            $save['stage_end'] = date('Y-m-d H:i:s',strtotime($str1)+intval($timearr[1])*60);
             $save['index'] = $value['index'];
 
             //视频
