@@ -1141,7 +1141,7 @@ return json($data);
             $ret[$key]['name'] = $value['class_name'];
             $ret[$key]['index'] = $value['index'];
             $ret[$key]['video'] = $value['video'];
-            $ret[$key]['coursewareIdList'] = isset($value['courseware'])?unserialize($value['courseware']):'';
+            @$ret[$key]['coursewareIdList'] = isset($value['courseware'])?unserialize($value['courseware']):'';
         }
         //返回信息
         $data = [
