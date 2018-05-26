@@ -1854,9 +1854,9 @@ return json($data);
 
             //liveAddress |videoBroadcastAddress TODO
             if ($value['status']==1) {
-                $rs[$key]['liveAddress'] = $this->is_serialized($value['video'])?unserialize($value['video'])[0]['video']:$value['video'];
+                @$rs[$key]['liveAddress'] = $this->is_serialized($value['video'])?unserialize($value['video'])[0]['video']:$value['video'];
             }else{
-               $rs[$key]['videoBroadcastAddress'] = $this->is_serialized($value['video'])?unserialize($value['video'])[0]['video']:$value['video'];
+               @$rs[$key]['videoBroadcastAddress'] = $this->is_serialized($value['video'])?unserialize($value['video'])[0]['video']:$value['video'];
             }
             $rs[$key]['videoIdList'] = $this->is_serialized($value['video'])?unserialize($value['video']):$value['video'];
             $rs[$key]['coursewareIdList'] = $this->is_serialized($value['courseware'])?unserialize($value['courseware']):$value['courseware'];
