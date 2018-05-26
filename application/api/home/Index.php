@@ -857,19 +857,19 @@ return json($data);
         $ret = array();
         foreach ($info as $key => $value) {
             $ret[$key]['courseid'] = $value['net_material_id'];
-            $ret[$key]['title'] = $value['title'];
-            $ret[$key]['desc'] = $value['introduce'];
+            // $ret[$key]['title'] = $value['title'];
+            // $ret[$key]['desc'] = $value['introduce'];
             $ret[$key]['status'] = strtotime($value['stage_start'])>time()?'1':(strtotime($value['stage_end'])>time()?'2':'0');
             $ret[$key]['number'] = $value['off_num'];
             $ret[$key]['time'] = $value['stage_start'];
             $ret[$key]['type'] = $value['status'];
 
             //liveAddress |videoBroadcastAddress TODO
-            if ($value['status']==1) {
+            // if ($value['status']==1) {
                 @$rs[$key]['liveAddress'] = $this->is_serialized($value['video'])?unserialize($value['video'])[0]['video']:$value['video'];
-            }else{
+            // }else{
                @$rs[$key]['videoBroadcastAddress'] = $this->is_serialized($value['courseware'])?unserialize($value['courseware'])[0]['address']:$value['courseware'];
-            }
+            // }
 
             $ret[$key]['lessontime'] = $value['lesson_time'];
             $ret[$key]['startTime'] = $value['stage_start'];
