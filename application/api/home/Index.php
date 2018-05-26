@@ -856,9 +856,10 @@ return json($data);
         $info = db('toplearning_net_material')->alias('a')->join('toplearning_class_festival f','a.net_material_id = f.material_id','LEFT')->where($map)->select();
         $ret = array();
         foreach ($info as $key => $value) {
-            $ret[$key]['courseid'] = $value['net_material_id'];
-            // $ret[$key]['title'] = $value['title'];
-            // $ret[$key]['desc'] = $value['introduce'];
+            $ret[$key]['courseid'] = $value['material_id'];
+            $ret[$key]['courseName'] = $value['title'];
+            $ret[$key]['lessonsId'] = $value['class_id'];
+            $ret[$key]['lessonsName'] = $value['class_name'];
             $ret[$key]['status'] = strtotime($value['stage_start'])>time()?'2':(strtotime($value['stage_end'])<time()?'3':'1');
             $ret[$key]['number'] = $value['off_num'];
             $ret[$key]['time'] = $value['stage_start'];
