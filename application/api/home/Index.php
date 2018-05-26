@@ -1851,10 +1851,10 @@ return json($data);
             $rs[$key]['endTime'] =  date("H:i",strtotime($value['stage_end']));
             $rs[$key]['lessontime'] = $value['lesson_time'];
             $rs[$key]['lessonWay'] = $value['status'];
-            $rs[$key]['staus'] = strtotime($value['stage_start'])<time()?'2':(strtotime($value['stage_end'])>time()?'2':'1');
+            $rs[$key]['status'] = strtotime($value['stage_start'])<time()?'2':(strtotime($value['stage_end'])>time()?'2':'1');
 
             //liveAddress |videoBroadcastAddress TODO
-            if ($value['status']==1) {
+            if ($rs[$key]['status']==1) {
                 @$rs[$key]['liveAddress'] = $this->is_serialized($value['video'])?unserialize($value['video'])[0]['video']:$value['video'];
             }else{
                @$rs[$key]['videoBroadcastAddress'] = $this->is_serialized($value['video'])?unserialize($value['video'])[0]['video']:$value['video'];
