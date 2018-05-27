@@ -1737,7 +1737,7 @@ return json($data);
         
 
         $ret = array();
-        $rs['totalscore'] = number_format($totalscore/$count,1);
+        $rs['totalscore'] = @number_format($totalscore/$count,1);
         foreach ($info as $key => $value) {
             $ret[$key]['userid'] = $value['user_Id'];
             @$ret[$key]['username'] = db('toplearning_login')->where(['user_id'=>$value['user_Id']])->column('nickname')[0];
