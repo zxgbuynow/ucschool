@@ -1744,6 +1744,7 @@ return json($data);
             $ret[$key]['time'] = $value['create_time'];
             $ret[$key]['content'] = $value['appraise_name'];
             $ret[$key]['score'] = $value['score'];
+            $ret[$key]['hade'] = db('toplearning_login')->where(['user_id'=>$value['user_Id']])->column('avatar')[0];
         }
         
         //返回信息
@@ -2267,8 +2268,8 @@ return json($data);
         //params
         $lessonid = trim($params['lessonid']);
         $courseid = trim($params['courseid']);
-        $size = trim($params['size']);
-        $page = trim($params['page']);
+        @$size = trim($params['size']);
+        @$page = trim($params['page']);
 
         $page = $page ==''?0:$page;
         $size = $size == ''?10:$size;
