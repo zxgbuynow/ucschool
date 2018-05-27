@@ -1865,8 +1865,9 @@ return json($data);
             $rs[$key]['endTime'] =  date("H:i",strtotime($value['stage_end']));
             $rs[$key]['lessontime'] = $value['lesson_time'];
             $rs[$key]['lessonWay'] = $value['status'];
-            $rs[$key]['status'] = strtotime($value['stage_start'])<time()?'2':(strtotime($value['stage_end'])>time()?'2':'1');
 
+            $rs[$key]['status'] = (strtotime($value['stage_start'])>time())?'2':(strtotime($value['stage_end'])<time()?'3':'1');
+            
             //liveAddress |videoBroadcastAddress 
             @$rs[$key]['liveAddress'] = $this->is_serialized($value['video'])?unserialize($value['video'])[0]['video']:$value['video'];
             @$rs[$key]['videoBroadcastAddress'] = $this->is_serialized($value['courseware'])?unserialize($value['courseware'])[0]['address']:$value['courseware'];
