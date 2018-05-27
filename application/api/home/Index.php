@@ -1743,7 +1743,7 @@ return json($data);
             @$ret[$key]['username'] = db('toplearning_login')->where(['user_id'=>$value['user_Id']])->column('nickname')[0];
             $ret[$key]['time'] = $value['create_time'];
             $ret[$key]['content'] = $value['appraise_name'];
-            $ret[$key]['score'] = $value['score'];
+            $ret[$key]['score'] = number_format($value['score'],1);
             $ret[$key]['hade'] = db('toplearning_login')->where(['user_id'=>$value['user_Id']])->column('avatar')[0];
         }
         
