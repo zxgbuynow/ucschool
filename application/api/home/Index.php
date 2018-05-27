@@ -860,7 +860,7 @@ return json($data);
             $ret[$key]['courseName'] = $value['title'];
             $ret[$key]['lessonsId'] = $value['class_id'];
             $ret[$key]['lessonsName'] = $value['class_name'];
-            $ret[$key]['status'] = strtotime($value['stage_start'])>time()?'2':(strtotime($value['stage_end'])<time()?'3':'1');
+            $ret[$key]['status'] = (strtotime($value['stage_start'])>time())?'2':(strtotime($value['stage_end'])<time()?'3':'1');
             $ret[$key]['number'] = $value['off_num'];
             $ret[$key]['time'] = $value['stage_start'];
             $ret[$key]['type'] = $value['status'];
@@ -876,7 +876,6 @@ return json($data);
             $ret[$key]['startTime'] = date('H:i',strtotime($value['stage_start']));
             $ret[$key]['endTime'] = date('H:i',strtotime($value['stage_end']));
         }
-        
         
         $data = [        //返回信息
 
