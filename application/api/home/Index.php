@@ -75,6 +75,21 @@ class Index
         return json($data);
     }
 
+    /**
+     * [wrong token失效提醒]
+     * @param  [type] $msg [description]
+     * @return [type]      [description]
+     */
+    public function wrong($msg)
+    {
+        $data = [
+            'Success'=>false,
+            'Code'=>'9',
+            'Msg'=>$msg,
+            'Data'=>null
+        ];
+        return json($data);
+    }
     
     /**
      * login 用户端
@@ -243,7 +258,7 @@ class Index
 
         //检查过期时间
         if (cache($token)&&cache($token)<time()) {
-            return $this->error('token失效，请重新登录');
+            return $this->wrong('token失效，请重新登录');
         }
 
 
@@ -346,7 +361,7 @@ class Index
 
         //检查过期时间
         if (cache($token)&&cache($token)<time()) {
-            return $this->error('token失效，请重新登录');
+            return $this->wrong('token失效，请重新登录');
         }
 
 
@@ -387,7 +402,7 @@ class Index
 
         //检查过期时间
         if (cache($token)&&cache($token)<time()) {
-            return $this->error('token失效，请重新登录');
+            return $this->wrong('token失效，请重新登录');
         }
 
 
@@ -441,7 +456,7 @@ class Index
 
         //检查过期时间
         if (cache($token)&&cache($token)<time()) {
-            return $this->error('token失效，请重新登录');
+            return $this->wrong('token失效，请重新登录');
         }
 
 
@@ -484,7 +499,7 @@ class Index
 
         //检查过期时间
         if (cache($token)&&cache($token)<time()) {
-            return $this->error('token失效，请重新登录');
+            return $this->wrong('token失效，请重新登录');
         }
 
         //是否有该学院
@@ -566,7 +581,7 @@ return json($data);
 
         //检查过期时间
         if (cache($token)&&cache($token)<time()) {
-            return $this->error('token失效，请重新登录');
+            return $this->wrong('token失效，请重新登录');
         }
 
 
@@ -667,7 +682,7 @@ return json($data);
 
         //检查过期时间
         if (cache($token)&&cache($token)<time()) {
-            return $this->error('token失效，请重新登录');
+            return $this->wrong('token失效，请重新登录');
         }
 
         //通过token获取 uid
@@ -1772,7 +1787,7 @@ return json($data);
         //user|material
         //检查过期时间
         if (cache($token)&&cache($token)<time()) {
-            return $this->error('token失效，请重新登录');
+            return $this->wrong('token失效，请重新登录');
         }
 
         //通过token获取 uid
@@ -2309,14 +2324,14 @@ return json($data);
         //params
         $lessonid = trim($params['lessonid']);
         $courseid = trim($params['courseid']);
-        $size = trim($params['size']);
-        $page = trim($params['page']);
+        @$size = trim($params['size']);
+        @$page = trim($params['page']);
 
         $page = $page ==''?0:$page;
         $size = $size == ''?10:$size;
 
         $limit = $page*$size;
-        $info = db('toplearning_learn_situation')->where(['class_id'=>$courseid])->limit($limit, $size)->select();
+        $info = db('toplearning_learn_situation')->where(['class_id'=>$lessonid])->limit($limit, $size)->select();
 
 
         $ret = array();
