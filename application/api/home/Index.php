@@ -1714,8 +1714,8 @@ return json($data);
 
         $lessonid = isset($params['lessonid'])?$params['lessonid']:'';
 
-        $size = trim($params['size']);
-        $page = trim($params['page']);
+        @$size = trim($params['size']);
+        @$page = trim($params['page']);
 
         $page = $page ==''?0:$page;
         $size = $size == ''?10:$size;
@@ -1726,9 +1726,9 @@ return json($data);
 
         //处理评价
         if (empty($lessonid)) {
-            $info = db('toplearning_appraise_dictionary')->alias('a')->join('toplearning_net_material n','a.class_id = n.net_material_id')->join('toplearning_class_festival f','n.net_material_id = f.material_id')->where(['a.class_id'=>$lessonid])->limit($limit, $size)->select();
-            $count = db('toplearning_appraise_dictionary')->alias('a')->join('toplearning_net_material n','a.class_id = n.net_material_id')->join('toplearning_class_festival f','n.net_material_id = f.material_id')->where(['a.class_id'=>$lessonid])->limit($limit, $size)->count();
-            $totalscore = db('toplearning_appraise_dictionary')->alias('a')->join('toplearning_net_material n','a.class_id = n.net_material_id')->join('toplearning_class_festival f','n.net_material_id = f.material_id')->where(['a.class_id'=>$lessonid])->limit($limit, $size)->sum('score');
+            $info = db('toplearning_appraise_dictionary')->alias('a')->join('toplearning_class_festival f','a.class_id = f.class_id')->join('toplearning_net_material n','n.net_material_id = f.material_id')->where(['n.net_material_id'=>$courseid])->limit($limit, $size)->select();
+            $count = db('toplearning_appraise_dictionary')->alias('a')->join('toplearning_class_festival f','a.class_id = f.class_id')->join('toplearning_net_material n','n.net_material_id = f.material_id')->where(['n.net_material_id'=>$courseid])->count();
+            $totalscore = db('toplearning_appraise_dictionary')->alias('a')->join('toplearning_class_festival f','a.class_id = f.class_id')->join('toplearning_net_material n','n.net_material_id = f.material_id')->where(['n.net_material_id'=>$courseid])->sum('score');
         }else{
             $info = db('toplearning_appraise_dictionary')->where(['class_id'=>$lessonid])->limit($limit, $size)->select();
             $count = db('toplearning_appraise_dictionary')->where(['class_id'=>$lessonid])->count();
@@ -1740,7 +1740,7 @@ return json($data);
         foreach ($info as $key => $value) {
             $ret[$key]['totalscore'] = number_format($totalscore/$count,2);
             $ret[$key]['userid'] = $value['user_id'];
-            $ret[$key]['username'] = db('toplearning_login')->where(['user_id'=>$value['toplearning_appraise_dictionary']])->column('nickname')[0];
+            @$ret[$key]['username'] = db('toplearning_login')->where(['user_id'=>$value['user_id']])->column('nickname')[0];
             $ret[$key]['time'] = $value['create_time'];
             $ret[$key]['content'] = $value['appraise_name'];
             $ret[$key]['score'] = $value['score'];
