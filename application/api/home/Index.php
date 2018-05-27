@@ -1737,8 +1737,8 @@ return json($data);
         
 
         $ret = array();
+        $rs['totalscore'] = number_format($totalscore/$count,1);
         foreach ($info as $key => $value) {
-            $ret[$key]['totalscore'] = number_format($totalscore/$count,2);
             $ret[$key]['userid'] = $value['user_Id'];
             @$ret[$key]['username'] = db('toplearning_login')->where(['user_id'=>$value['user_Id']])->column('nickname')[0];
             $ret[$key]['time'] = $value['create_time'];
@@ -1747,11 +1747,12 @@ return json($data);
             $ret[$key]['hade'] = db('toplearning_login')->where(['user_id'=>$value['user_Id']])->column('avatar')[0];
         }
         
+        $rs['courseEvaluationlist'] = $ret;
         //返回信息
         $data = [
             'Code'=>'0',
             'Msg'=>'操作成功',
-            'Data'=>$ret,
+            'Data'=>$rs,
             'Success'=>true
         ];
 
@@ -1867,7 +1868,7 @@ return json($data);
             $rs[$key]['lessonWay'] = $value['status'];
 
             $rs[$key]['status'] = (strtotime($value['stage_start'])>time())?'2':(strtotime($value['stage_end'])<time()?'3':'1');
-            
+
             //liveAddress |videoBroadcastAddress 
             @$rs[$key]['liveAddress'] = $this->is_serialized($value['video'])?unserialize($value['video'])[0]['video']:$value['video'];
             @$rs[$key]['videoBroadcastAddress'] = $this->is_serialized($value['courseware'])?unserialize($value['courseware'])[0]['address']:$value['courseware'];
