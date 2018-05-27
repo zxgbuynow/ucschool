@@ -1141,18 +1141,19 @@ return json($data);
         $token = trim($params['token']);
         $lessonsid = trim($params['lessonsid']);
 
-        $map['t.type'] =  0;
+        // $map['t.type'] =  0;
         //['material_id'=>$lessonsid]
-        $map['a.material_id'] = $lessonsid;
+        $map['material_id'] = $lessonsid;
         // $info = db('toplearning_exam')->alias('a')->join('toplearning_do_exam_time t','a.exam_id = t.exam_id')->where(['a.exam_id'=>$examid])->select();
-        $info = db('toplearning_class_festival')->alias('a')->join('toplearning_media t','a.material_id = t.type_id','LEFT')->where($map)->select();
+        // $info = db('toplearning_class_festival')->alias('a')->join('toplearning_media t','a.material_id = t.type_id','LEFT')->where($map)->select();
+        $info = db('toplearning_class_festival')->where($map)->select();
 
         $ret = array();
         foreach ($info as $key => $value) {
             $ret[$key]['lessonsid'] = $value['class_id'];
             $ret[$key]['name'] = $value['class_name'];
             $ret[$key]['index'] = $value['index'];
-            $ret[$key]['video'] = $value['video'];
+            $ret[$key]['video'] = $this->is_serialized($value['video'])?unserialize($value['video']):$value['video'];
             $ret[$key]['coursewareIdList'] = $this->is_serialized($value['courseware'])?unserialize($value['courseware']):$value['courseware'];
         }
         //返回信息
@@ -1835,7 +1836,7 @@ return json($data);
 
         $ret['image'] = $info['picture'];
         $ret['title'] = $info['title'];
-        $ret['college'] = db('toplearning_school')->where(['school_id'=>$info['school_id']])->column('school_name')?db('toplearning_school')->where(['school_id'=>$info['school_id']])->column('school_name')[0]:'';
+        @$ret['college'] = db('toplearning_school')->where(['school_id'=>$info['school_id']])->column('school_name')?db('toplearning_school')->where(['school_id'=>$info['school_id']])->column('school_name')[0]:'';
         $ret['type'] = db("toplearning_course_type")->where(['type_id'=>$info['course_type']])->value("type_name");
         $ret['keyword'] = $info['tags'];
         $ret['price'] = $info['price'];
@@ -1858,19 +1859,17 @@ return json($data);
             $rs[$key]['index'] = $i;
             $rs[$key]['guide'] = $value['guide'];
             $rs[$key]['name'] = $value['class_name'];
-            $rs[$key]['time'] = date("Y-m-d",strtotime($value['stage_start']));
+            $rs[$key]['time'] = date("Y-m-d H:i",strtotime($value['stage_start']));
             $rs[$key]['startTime'] = date("H:i",strtotime($value['stage_start']));
             $rs[$key]['endTime'] =  date("H:i",strtotime($value['stage_end']));
             $rs[$key]['lessontime'] = $value['lesson_time'];
             $rs[$key]['lessonWay'] = $value['status'];
             $rs[$key]['status'] = strtotime($value['stage_start'])<time()?'2':(strtotime($value['stage_end'])>time()?'2':'1');
 
-            //liveAddress |videoBroadcastAddress TODO
-            if ($rs[$key]['status']==1) {
-                @$rs[$key]['liveAddress'] = $this->is_serialized($value['video'])?unserialize($value['video'])[0]['video']:$value['video'];
-            }else{
-               @$rs[$key]['videoBroadcastAddress'] = $this->is_serialized($value['video'])?unserialize($value['video'])[0]['video']:$value['video'];
-            }
+            //liveAddress |videoBroadcastAddress 
+            @$rs[$key]['liveAddress'] = $this->is_serialized($value['video'])?unserialize($value['video'])[0]['video']:$value['video'];
+            @$rs[$key]['videoBroadcastAddress'] = $this->is_serialized($value['courseware'])?unserialize($value['courseware'])[0]['address']:$value['courseware'];
+
             $rs[$key]['videoIdList'] = $this->is_serialized($value['video'])?unserialize($value['video']):$value['video'];
             $rs[$key]['coursewareIdList'] = $this->is_serialized($value['courseware'])?unserialize($value['courseware']):$value['courseware'];
 
