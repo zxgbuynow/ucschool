@@ -1282,7 +1282,23 @@ return json($data);
             //课件
             $save['courseware'] = serialize($value['coursewareIdList']);
 
+
             db('toplearning_class_festival')->insert($save);
+
+            //保存课件
+            $f = Db::name('toplearning_class_festival')->getLastInsID();
+            foreach ($value['coursewareIdList'] as $k => $v) {
+                $cid = $v['coursewareid'];
+                $in = Db::name('toplearning_teacher_prepare')->where(['prepare_id'=>$cid])->find();
+                $s = $in;
+                unset($s['prepare_id']);
+                unset($s['class_id']);
+                unset($s['create_time']);
+                $s['class_id'] = $f;
+                $s['create_time'] = time();
+                @db('toplearning_teacher_prepare')->insert($s);
+
+            }
         }
         
         $ret = array('courseid'=>intval($net_material_id));
