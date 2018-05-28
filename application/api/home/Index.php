@@ -1452,12 +1452,14 @@ return json($data);
         $data['user_id'] = $token_uid;
         $data['lession_name'] = $title;
         // $data['lession_img'] = $image;
+        $data['lession_status'] = 2;
         $data['lession_type_id'] = $type;
         $data['keyword'] = $keyword;
         $data['lession_desc'] = $desc;
         $data['share'] = $share;
         $data['add_time'] = date('Y-m-d H:i:s',time());
-
+        $data['release_status'] = "1";
+        $data['reviewed_status'] = "1";
         //toplearning_micro_class
 
         if(!empty($json['courseid'])){
@@ -1479,9 +1481,9 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
         db('toplearning_class_festival')->where(['material_id'=>$net_material_id])->delete();
         foreach ($classTypeList as $key => $value) {
             $save['guide'] = $value['guide'];
-            $save['class_name'] = $value['title'];
+            $save['class_name'] = $value['name'];
             $save['material_id'] = $net_material_id;
-            $save['status'] = $value['way'];
+            $save['status'] = 2;
 
             //时间处理
             if ($value['time']) {
@@ -1495,9 +1497,14 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
             // $save['index'] = $value['index'];
 
             //视频
-            $save['video'] = serialize($value['videoIdList']);
+            $save['video'] = serialize([[
+              'index'=>0,
+              'lessonsid'=>$net_material_id,
+              'name'=>$value['name'],
+              'video'=>$value['videoUrl']
+            ]]);
             //课件
-            $save['courseware'] = serialize($value['coursewareIdList']);
+            $save['courseware'] = serialize($value['coursewareList']);
 
             db('toplearning_class_festival')->insert($save);
             // db('toplearning_micro_class')->insert($data);
@@ -2150,11 +2157,11 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
 
 
 
-         $file = dirname($_FILES['vdeoUrl']['tmp_name']) . "/tmp.mp4";
-        move_uploaded_file($_FILES['vdeoUrl']['tmp_name'], $file);
+         // $file = dirname($_FILES['vdeoUrl']['tmp_name']) . "/tmp.mp4";
+        // move_uploaded_file($_FILES['vdeoUrl']['tmp_name'], $file);
 
-
-
+        $file = $_FILES['vdeoUrl']['tmp_name'];
+        $data['ext'] = "mp4";
          if (version_compare(PHP_VERSION, '5.6.0') >= 0) {
             $data['file'] = new \CURLFile($file);
         } else {
