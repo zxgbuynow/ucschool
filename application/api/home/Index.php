@@ -36,6 +36,44 @@ class Index
             return $this->error('method参数缺失');
         }
     }
+
+
+
+
+    public function uploadFile($file,$ext = ""){
+         $data['ext'] = $ext;
+         if (version_compare(PHP_VERSION, '5.6.0') >= 0) {
+            $data['file'] = new \CURLFile($file);
+        } else {
+            $data['file'] = "@" . $file;
+        }
+
+
+
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, "http://139.196.20.81:8077/?mod=public&app=public&action=upload");
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 120);//设置curl执行超时时间最大是多少
+
+        if (!empty($data)) {
+            curl_setopt($curl, CURLOPT_POST, 1);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+        }
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $output = curl_exec($curl);
+        curl_close($curl);
+        return json_decode($output,true);
+
+
+
+
+
+
+
+
+    }
     /**
      * [getParams 处理参数]
      * @param  [type] &$params [description]
@@ -864,6 +902,7 @@ return json($data);
         $todayetime = strtotime(date('Y-m-d',time()))+24 * 60 * 60;
 
         $map['a.del'] = 0;
+        $map['a.lession_status'] = 1;
         $map['a.release_status'] = 1;
         $map['a.reviewed_status'] = 1;
         $map['a.user_id'] = $this->decrypt($token);
@@ -924,8 +963,8 @@ return json($data);
          $info = db('toplearning_net_material')->where(['del'=>0,'user_id'=>$token_uid])->select();
          foreach ($info as $key => $value) {
             $ret[$key]['courseid'] = $value['net_material_id'];
-            $ret[$key]['image'] = $value['picture'];
-            $ret[$key]['type'] = 1;
+            @$ret[$key]['image'] = json_decode($value['picture'],true)['m'];
+            $ret[$key]['type'] = $value['lession_status'];
             $ret[$key]['title'] = $value['title'];
                 // $college = db('toplearning_school')->where(['school_id'=>$value['school_id']])->column('school_name');
             $ret[$key]['college'] = $value['school_name'];
@@ -933,21 +972,21 @@ return json($data);
                 // $ret[$key]['release'] = db('toplearning_class_festival')->where(['material_id'=>$value['net_material_id']])->count();
             $ret[$key]['release'] = $value['release'];
 
-            $status = "0";
+            $status = 0;
             switch ($value['reviewed_status']) {
                 case '0':
-                $status = "1";
+                $status = 1;
                 break;
                 case '1':
-                $status = "3";
+                $status = 3;
 
                 break;
                 case '2':
-                $status = "2";
+                $status = 2;
 
                 break;
                 default:
-                $status = "0";
+                $status = 0;
                 break;
             }
             $ret[$key]['status'] = $status;
@@ -961,7 +1000,7 @@ return json($data);
         foreach ($info as $key => $value) {
             $ret[$key]['courseid'] = $value['net_material_id'];
             $ret[$key]['image'] = $value['picture'];
-            $ret[$key]['type'] = 1;
+            $ret[$key]['type'] = $value['lession_status'];
             $ret[$key]['title'] = $value['title'];
             $ret[$key]['type'] = $value['lession_status'];
                 // $college = db('toplearning_school')->where(['school_id'=>$value['school_id']])->column('school_name');
@@ -970,22 +1009,22 @@ return json($data);
             $ret[$key]['total'] = $value['total_lessons'];
                 // $ret[$key]['release'] = db('toplearning_class_festival')->where(['material_id'=>$value['net_material_id']])->count();
             $ret[$key]['release'] = $value['release'];
-            $status = "0";
+            $status = 0;
             switch ($value['reviewed_status']) {
                 case '0':
-                $status = "1";
+                $status = 1;
 
                 break;
                 case '1':
-                $status = "3";
+                $status = 3;
 
                 break;
                 case '2':
-                $status = "2";
+                $status = 2;
 
                 break;
                 default:
-                $status = "0";
+                $status = 0;
                 break;
             }
             $ret[$key]['status'] = $status;
@@ -1131,7 +1170,7 @@ return json($data);
         foreach ($info as $key => $value) {
             $ret[$key]['courseid'] = $value['net_material_id'];
             $ret[$key]['name'] = $value['title'];
-            $ret[$key]['image'] = $value['picture'];
+            @$ret[$key]['image'] = json_decode($value['picture'],true)['m'];
             $ret[$key]['total'] = $value['lession_num'];
         }
         //返回信息
@@ -1225,6 +1264,7 @@ return json($data);
         //处理图片
         
         if(!empty($json['head'])){
+
             @$data['picture'] =$this->_seve_img($json['head']);
         }
 
@@ -1241,7 +1281,7 @@ return json($data);
         $data['price'] = $price;
         $data['student_num'] = $limitnumber;
         $data['introduce'] = $desc;
-        $data['lession_status'] = $way;
+        $data['lession_status'] = 1;
         $data['user_id'] = $token_uid;
         $data['teacher_user_id'] = $token_uid;
         $data['teacher_id'] = db('toplearning_teacher')->where(['user_id'=>$token_uid])->column('teacher_id')?db('toplearning_teacher')->where(['user_id'=>$token_uid])->column('teacher_id')[0]:'';
@@ -1260,8 +1300,7 @@ return json($data);
         $classTypeList = $json['classTypeList'];
         $save = array();
 
-        db('toplearning_class_festival')->where(['material_id'=>$net_material_id])->delete();
-
+        $class_ids = db('toplearning_class_festival')->where(['material_id'=>$net_material_id])->column("class_id");
         foreach ($classTypeList as $key => $value) {
             $save['guide'] = $value['guide'];
             $save['class_name'] = $value['name'];
@@ -1274,7 +1313,7 @@ return json($data);
             $srt = str_replace(array('年','月'),'-',$timearr[0]);
             $str1 = str_replace(array('日'),' ',$srt);
             $save['stage_start'] = date('Y-m-d H:i:s',strtotime($str1));
-            $save['stage_end'] = date('Y-m-d H:i:s',strtotime($str1)+intval($timearr[1])*60);
+            @$save['stage_end'] = date('Y-m-d H:i:s',strtotime($str1)+intval($timearr[1])*60);
             $save['index'] = $value['index'];
 
             //视频
@@ -1283,10 +1322,24 @@ return json($data);
             $save['courseware'] = serialize($value['coursewareIdList']);
 
 
-            db('toplearning_class_festival')->insert($save);
 
-            //保存课件
+            if(!empty($value['lessonid'])){
+
+            $f = $value['lessonid'];
+             db('toplearning_class_festival')->where(['class_id'=>$f])->update($save);
+            $kkk=array_search($f ,$class_ids);
+            if($kkk !== false){
+                array_splice($class_ids,$kkk,1);
+            }
+
+
+
+            }else{
+                db('toplearning_class_festival')->insert($save);
             $f = Db::name('toplearning_class_festival')->getLastInsID();
+            }
+
+            db("toplearning_teacher_prepare")->where(['class_id'=>$f])->delete();
             foreach ($value['coursewareIdList'] as $k => $v) {
                 $cid = $v['coursewareid'];
                 $in = Db::name('toplearning_teacher_prepare')->where(['prepare_id'=>$cid])->find();
@@ -1300,7 +1353,9 @@ return json($data);
 
             }
         }
-        
+        if(!empty($class_ids)){
+            db("toplearning_class_festival")->where("class_id in (".implode(",",$class_ids).")")->delete();
+        }
         $ret = array('courseid'=>intval($net_material_id));
         //返回信息
         $data = [
@@ -1440,8 +1495,7 @@ return json($data);
         $json = json_decode($json,true);
         // $image = trim($json['image']);//todo
         $title = trim($json['title']);
-        $type = trim($json['type']);
-        $keyword = trim($json['keyword']);
+         $keyword = trim($json['keyword']);
         $desc = trim($json['desc']);
         $share = trim($json['share']);
 
@@ -1449,19 +1503,44 @@ return json($data);
         //通过token获取 uid
         $token_uid = $this->decrypt($token);
 
+
+
+
+
+        
+ 
+
+                 if(!empty($params['head'])){
+            $file = "/tmp/".time().rand(0,10000).".png";
+            $r = file_put_contents($file, base64_decode($params['head']));//返回的是字节数
+            if(!$r){
+                return $this->error('图片格式错误');
+            }
+            $res = $this->uploadFile($file,"png");
+            if($res['code'] != 0){
+                                return $this->error('更新图片失败');
+            }
+            $data['picture'] = json_encode(['l'=>$res['path'],'m'=>$res['path'],'s'=>$res['path']]);
+        }
+
+
+
+
         $data['user_id'] = $token_uid;
-        $data['lession_name'] = $title;
+        $data['title'] = $title;
         // $data['lession_img'] = $image;
+                        $data['course_type']  = trim($json['typeid']);
+        $data['lesson_type'] = 2;
         $data['lession_status'] = 2;
-        $data['lession_type_id'] = $type;
-        $data['keyword'] = $keyword;
-        $data['lession_desc'] = $desc;
+         $data['keyword'] = $keyword;
+        $data['introduce'] = $desc;
         $data['share'] = $share;
         $data['add_time'] = date('Y-m-d H:i:s',time());
         $data['release_status'] = "1";
         $data['reviewed_status'] = "1";
         //toplearning_micro_class
-
+        $data['total_lessons'] = count($json['classFestivalList']);
+        $data['release'] = count($json['classFestivalList']);
         if(!empty($json['courseid'])){
             $net_material_id = $json['courseid'];
              $res =    db('toplearning_net_material')->where(['net_material_id'=>$net_material_id])->update($data);
@@ -1478,37 +1557,67 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
         //课程保存 处理课节
         $classTypeList = $json['classFestivalList'];
         $save = array();
-        db('toplearning_class_festival')->where(['material_id'=>$net_material_id])->delete();
+        // db('toplearning_class_festival')->where(['material_id'=>$net_material_id])->delete();
+                $class_ids = db('toplearning_class_festival')->where(['material_id'=>$net_material_id])->column("class_id");
+
         foreach ($classTypeList as $key => $value) {
             $save['guide'] = $value['guide'];
             $save['class_name'] = $value['name'];
             $save['material_id'] = $net_material_id;
             $save['status'] = 2;
+ 
+                $save['stage_start'] = date('Y-m-d H:i:s',strtotime(strtr($value['time'],['年'=>'-','月'=>'-','日'=>""])));
+            $save['lesson_time'] = $value['lessontime'];
+                $save['add_time'] = date('Y-m-d H:i:s',time());
 
-            //时间处理
-            if ($value['time']) {
-               $timearr = explode(' ', $value['time']);
-                @$save['lesson_time'] = intval($timearr[1]);
-                $srt = str_replace(array('年','月'),'-',$timearr[0]);
-                $str1 = str_replace(array('日'),' ',$srt);
-                $save['add_time'] = date('Y-m-d H:i:s',strtotime($str1));
-            }
-            
             // $save['index'] = $value['index'];
 
             //视频
-            $save['video'] = serialize([[
-              'index'=>0,
-              'lessonsid'=>$net_material_id,
-              'name'=>$value['name'],
-              'video'=>$value['videoUrl']
-            ]]);
+            $save['video'] = serialize([
+              'vdeoId'=>$value['vdeoId'],
+              'vdeoDuration'=>$value['vdeoDuration'],
+              'lessontime'=>$value['lessontime'],
+              'videoUrl'=>$value['videoUrl'],
+              
+            ]);
             //课件
             $save['courseware'] = serialize($value['coursewareList']);
 
-            db('toplearning_class_festival')->insert($save);
+
+
+
+                   if(!empty($value['lessonid'])){
+
+            $f = $value['lessonid'];
+             db('toplearning_class_festival')->where(['class_id'=>$f])->update($save);
+            $kkk=array_search($f ,$class_ids);
+            if($kkk !== false){
+                array_splice($class_ids,$kkk,1);
+            }
+
+
+
+            }else{
+                db('toplearning_class_festival')->insert($save);
+            $f = Db::name('toplearning_class_festival')->getLastInsID();
+            }
+
+
+
+
+
+
+
             // db('toplearning_micro_class')->insert($data);
         }
+
+        if(!empty($class_ids)){
+            
+            db("toplearning_class_festival")->where("class_id in (".implode(",",$class_ids).")")->delete();
+        }
+
+
+
         
         $ret = array('courseid'=>intval($net_material_id));
         
@@ -1883,7 +1992,7 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
         
         $ret['courseid'] = $info['net_material_id'];
 
-        $ret['image'] = $info['picture'];
+        @$ret['image'] = json_decode($info['picture'],true)['l'];
         $ret['title'] = $info['title'];
         @$ret['college'] = db('toplearning_school')->where(['school_id'=>$info['school_id']])->column('school_name')?db('toplearning_school')->where(['school_id'=>$info['school_id']])->column('school_name')[0]:'';
         $ret['type'] = db("toplearning_course_type")->where(['type_id'=>$info['course_type']])->value("type_name");
@@ -2111,26 +2220,36 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
         $lessonid = trim($params['lessonid']);
         $json = $params['json']?json_decode($params['json'],true):[];
 
+
         //处理课节
         if ($json) {
+            $save['guide'] = $json['guide'];
             $save['guide'] = $json['guide'];
             $save['class_name'] = $json['name'];
             $save['material_id'] = $courseid;
 
-            //时间处理
-            if ($value['time']) {
-                $srt = str_replace(array('年','月'),'-',$value['time']);
-                $str1 = str_replace(array('日'),' ',$srt);
-                $save['stage_end'] = date('Y-m-d H:i:s',strtotime($str1));
-            }
+            // //时间处理
+            // if ($json['time']) {
+            //     $srt = str_replace(array('年','月'),'-',$json['time']);
+            //     $str1 = str_replace(array('日'),' ',$srt);
+            //     $save['stage_start'] = date('Y-m-d H:i:s',strtotime($str1));
+            // }
             
             $save['lesson_time'] = isset($json['lessontime'])?$json['lessontime']:'';
 
-            //视频
-            $save['video'] = serialize($json['videoUrl']);
-            //课件
-            $save['courseware'] = serialize($json['coursewareList']);
 
+
+
+                  $save['video'] = serialize([
+              'vdeoId'=>$json['vdeoId'],
+              'vdeoDuration'=>$json['vdeoDuration'],
+              'lessontime'=>$json['lessontime'],
+              'videoUrl'=>$json['videoUrl'],
+              
+            ]);
+            //视频
+             //课件
+            $save['courseware'] = serialize($json['coursewareList']);
             db('toplearning_class_festival')->where(['material_id'=>$courseid,'class_id'=>$lessonid])->update($save);
         }
         $ret = array('courseid'=>intval($courseid));
@@ -2161,30 +2280,9 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
         // move_uploaded_file($_FILES['vdeoUrl']['tmp_name'], $file);
 
         $file = $_FILES['vdeoUrl']['tmp_name'];
-        $data['ext'] = "mp4";
-         if (version_compare(PHP_VERSION, '5.6.0') >= 0) {
-            $data['file'] = new \CURLFile($file);
-        } else {
-            $data['file'] = "@" . $file;
-        }
 
-
-
-
- $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, "http://139.196.20.81:8077/?mod=public&app=public&action=upload");
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 120);//设置curl执行超时时间最大是多少
-
-        if (!empty($data)) {
-            curl_setopt($curl, CURLOPT_POST, 1);
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-        }
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        $output = curl_exec($curl);
-        curl_close($curl);
-        var_dump($output);
+        $res = $this->uploadFile($file,"mp4");
+ 
 
 
 
@@ -2197,9 +2295,9 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
 
         //返回信息
         $data = [
-            'Code'=>'0',
+            'Code'=>$res['code'],
             'Msg'=>'操作成功',
-            'Data'=>$ret,
+            'Data'=>null,
             'Success'=>true
         ];
 
@@ -2223,17 +2321,18 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
         
         $ret['courseid'] = $info['net_material_id'];
 
-        $ret['image'] = $info['picture'];
+        @$ret['image'] =    json_decode($info['picture'],true)['l'];
+;
         $ret['title'] = $info['title'];
         $ret['college'] = db('toplearning_school')->where(['school_id'=>$info['school_id']])->column('school_name')?db('toplearning_school')->where(['school_id'=>$info['school_id']])->column('school_name')[0]:'';
         $ret['type'] = db("toplearning_course_type")->where(['type_id'=>$info['course_type']])->value("type_name");
-        $ret['keyword'] = $info['tags'];
+        $ret['keyword'] = $info['keyword'];
 
         $ret['share'] = $info['share'];
         $ret['desc'] = $info['introduce'];
 
         //新加
-        $ret['typeId'] = $info['course_type'];
+        $ret['typeid'] = $info['course_type'];
 
         //课时 
         $lesson =  db('toplearning_class_festival')->where(['del'=>0,'material_id'=>$courseid])->select();
@@ -2249,9 +2348,12 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
             $rs[$key]['vdeoDuration'] = date("H:i",strtotime($value['stage_start']));
             $rs[$key]['lessontime'] = $value['lesson_time'];
 
+// var_dump($value['courseware']);
+             $rs[$key]['coursewareList'] = unserialize($value['courseware']);
 
-            $rs[$key]['videoUrl'] = $this->is_serialized($value['video'])?unserialize($value['video']):$value['video'];
-            $rs[$key]['coursewareList'] = $this->is_serialized($value['courseware'])?unserialize($value['courseware']):$value['courseware'];
+            $rs[$key] = array_merge($rs[$key],unserialize($value['video']));
+
+
 
             $i++;
         }
@@ -2314,38 +2416,62 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
      */
     public function upDataWeike($params)
     {   
-        //params
         $token = trim($params['token']);
-        $courseid = trim($params['courseid']);
+          $courseid = $params['courseid'];
+        // $image = trim($json['image']);//todo
+     
 
-        $image = isset($params['image'])?$params['image']:'';
-        $title = isset($params['title'])?$params['title']:'';
-        $typeid = isset($params['typeid'])?$params['typeid']:'';
-        $keyword = isset($params['keyword'])?$params['keyword']:'';
-        $desc = isset($params['desc'])?$params['desc']:'';
-        $share = isset($params['share'])?$params['share']:'';
 
-        if(!empty($image)){
-            @$data['picture'] =$this->_seve_img($image);
+        //通过token获取 uid
+        $token_uid = $this->decrypt($token);
+
+
+
+        if(!empty($params['image'])){
+            $file = "/tmp/".time().rand(0,10000).".png";
+            $r = file_put_contents($file, base64_decode($params['image']));//返回的是字节数
+            if(!$r){
+                                return $this->error('图片格式错误');
+
+            }
+
+
+            $res = $this->uploadFile($file,"png");
+            if($res['code'] != 0){
+                                return $this->error('更新图片失败');
+
+            }
+            $data['picture'] = json_encode(['l'=>$res['path'],'m'=>$res['path'],'s'=>$res['path']]);
         }
-        $data['title'] = $title;
-        $data['course_type'] = $typeid;
-        $data['tags'] = $keyword;
-        $data['introduce'] = $desc;
-        $data['title'] = $share;
 
-        if (!db('toplearning_net_material')->where(['net_material_id'=>$courseid])->update($data)) {
+        $data['user_id'] = $token_uid;
+          if(!empty($params['title'])){
+        $data['title'] = $params['title'];            
+        }
+          if(!empty($params['typeid'])){
+        $data['course_type'] = $params['typeid'];            
+        }
+          if(!empty($params['keyword'])){
+        $data['keyword'] = $params['keyword'];            
+        }
+              if(!empty($params['desc'])){
+        $data['introduce'] = $params['desc'];            
+        }
+              if(!empty($params['share'])){
+        $data['share'] = $params['share'];            
+        }
+  
+
+
+
+
+$res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->update($data);
+        if ($res === false) {
             return $this->error('更新失败');
         }
-        //返回信息
-        $data = [
-            'Code'=>'0',
-            'Msg'=>'操作成功',
-            // 'Data'=>{},
-            'Success'=>true
-        ];
 
-        return json($data);
+
+        return $this->btainWeikeo(['token'=>$params['token'],'courseid'=>$params['courseid']]);
     }
     /**
      * [classFestivalDownCoursewareList 课节下课件列表]
