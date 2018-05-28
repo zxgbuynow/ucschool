@@ -1436,13 +1436,14 @@ return json($data);
     {
         //params
         $token = trim($params['token']);
-
-        $image = trim($params['image']);//todo
-        $title = trim($params['title']);
-        $type = trim($params['type']);
-        $keyword = trim($params['keyword']);
-        $desc = trim($params['desc']);
-        $share = trim($params['share']);
+        $json = trim($params['json']);
+        $json = json_decode($json,true);
+        // $image = trim($json['image']);//todo
+        $title = trim($json['title']);
+        $type = trim($json['type']);
+        $keyword = trim($json['keyword']);
+        $desc = trim($json['desc']);
+        $share = trim($json['share']);
 
 
         //通过token获取 uid
@@ -1450,7 +1451,7 @@ return json($data);
 
         $data['user_id'] = $token_uid;
         $data['lession_name'] = $title;
-        $data['lession_img'] = $image;
+        // $data['lession_img'] = $image;
         $data['lession_type_id'] = $type;
         $data['keyword'] = $keyword;
         $data['lession_desc'] = $desc;
@@ -1458,14 +1459,22 @@ return json($data);
         $data['add_time'] = date('Y-m-d H:i:s',time());
 
         //toplearning_micro_class
-        $insertid = db('toplearning_net_material')->insert($data);
 
-        if ($insertid === false) {
+        if(!empty($json['courseid'])){
+            $net_material_id = $json['courseid'];
+             $res =    db('toplearning_net_material')->where(['net_material_id'=>$net_material_id])->update($data);
+               
+        }else{            
+        $res = db('toplearning_net_material')->insert($data);
+        
+$net_material_id = Db::name('toplearning_net_material')->getLastInsID();
+         }
+
+         if ($res === false) {
             return $this->error('保存失败');
         }
-        $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
         //课程保存 处理课节
-        $classTypeList = $json['classTypeList'];
+        $classTypeList = $json['classFestivalList'];
         $save = array();
         db('toplearning_class_festival')->where(['material_id'=>$net_material_id])->delete();
         foreach ($classTypeList as $key => $value) {
@@ -2138,6 +2147,46 @@ return json($data);
         //params
         $token = trim($params['token']);
         $courseid = trim($params['courseid']);
+
+
+
+         $file = dirname($_FILES['vdeoUrl']['tmp_name']) . "/tmp.mp4";
+        move_uploaded_file($_FILES['vdeoUrl']['tmp_name'], $file);
+
+
+
+         if (version_compare(PHP_VERSION, '5.6.0') >= 0) {
+            $data['file'] = new \CURLFile($file);
+        } else {
+            $data['file'] = "@" . $file;
+        }
+
+
+
+
+ $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, "http://139.196.20.81:8077/?mod=public&app=public&action=upload");
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 120);//设置curl执行超时时间最大是多少
+
+        if (!empty($data)) {
+            curl_setopt($curl, CURLOPT_POST, 1);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+        }
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $output = curl_exec($curl);
+        curl_close($curl);
+        var_dump($output);
+
+
+
+
+
+
+
+
+
 
         //返回信息
         $data = [
