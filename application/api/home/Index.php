@@ -2740,7 +2740,7 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         foreach ($exam as $key => $value) {
             $ret[$key]['name'] = $value['nickname'];
             $ret[$key]['head'] = $value['avatar'];
-            $ret[$key]['rollUp'] = false;
+            $ret[$key]['rollUp'] = db('toplearning_exam_submit')->where(['exam_id'=>$value['exam_id']])->count()?true:false;
         }
         //返回信息
         $data = [
