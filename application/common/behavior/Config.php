@@ -126,21 +126,21 @@ class Config
         config('public_static_path', PUBLIC_PATH. 'static/');
 
         // 读取系统配置
-        $system_config = cache('system_config');
-        if (!$system_config) {
-            $ConfigModel   = new ConfigModel();
-            $system_config = $ConfigModel->getConfig();
-            // 所有模型配置
-            $module_config = ModuleModel::where('config', 'neq', '')->column('config', 'name');
-            foreach ($module_config as $module_name => $config) {
-                $system_config[strtolower($module_name).'_config'] = json_decode($config, true);
-            }
-            // 非开发模式，缓存系统配置
-            if ($system_config['develop_mode'] == 0) {
-                cache('system_config', $system_config);
-            }
-        }
+        // $system_config = cache('system_config');
+        // if (!$system_config) {
+        //     $ConfigModel   = new ConfigModel();
+        //     $system_config = $ConfigModel->getConfig();
+        //     // 所有模型配置
+        //     $module_config = ModuleModel::where('config', 'neq', '')->column('config', 'name');
+        //     foreach ($module_config as $module_name => $config) {
+        //         $system_config[strtolower($module_name).'_config'] = json_decode($config, true);
+        //     }
+        //     // 非开发模式，缓存系统配置
+        //     if ($system_config['develop_mode'] == 0) {
+        //         cache('system_config', $system_config);
+        //     }
+        // }
         // 设置配置信息
-        config($system_config);
+        // config($system_config);
     }
 }
