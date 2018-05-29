@@ -2762,6 +2762,66 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
      */
     public function lecturerExaminationStudentList($params)
     {
+        //param
+        $token = trim($params['token']);
+        $typeId = isset($params['typeId']);
+        if (!$typeId) {
+            $info = db('toplearning_net_material')->where(['course_type'=>$typeId])->select();
+            $ret = array();
+            foreach ($info as $key => $value) {
+                $ret[$key]['courseid'] =$value['net_material_id'];
+                $ret[$key]['title'] =$value['title'];
+                $ret[$key]['image'] =$value['picture'];
+                $ret[$key]['price'] =$value['price'];
+                $ret[$key]['buycount'] =$value['order_num'];
+                $ret[$key]['teacher'] = db('toplearning_login')->where(['user_id'=>$value['teacher_user_id']])->column('nickname')[0]; ;
+            }
+            
+            //返回信息
+            $data = [
+                'Code'=>'0',
+                'Msg'=>'操作成功',
+                'Data'=>$ret,
+                'Success'=>true
+            ];
+
+            return json($data); 
+        }
+
+        $page = trim($params['page']);
+        $size = trim($params['size']);
+        
+        
+
+        // $map['del'] = 0;
+        // $map['exam_type'] = 1;
+        // $page = $page ==''?0:$page;
+        // $size = $size == ''?10:$size;
+
+        // $limit = $page*$size;
+        // $exam = db('toplearning_exam')->where($map)->limit($limit, $size)->select();
+
+        // $ret = array();
+
+        // foreach ($exam as $key => $value) {
+        //     $ret[$key]['examinationId'] = $value['exam_id'];
+        //     $ret[$key]['name'] = $value['exam_name'];
+        //     $ret[$key]['schoolName'] = $value['create_name'];
+        //     $ret[$key]['propositionalPerson'] = $value['user_name'];
+        //     $ret[$key]['time'] = $value['start_time'].'  '.date('H:i',strtotime($value['end_time']));
+        //     $ret[$key]['duration'] = ceil((strtotime($value['end_time'])-strtotime($value['start_time']))/60) ;
+        //     $ret[$key]['num'] = db('toplearning_exam_submit')->where(['exam_id'=>$value['exam_id']])->count();
+        //     $ret[$key]['numAll'] = $value['exam_num'];
+        //     $ret[$key]['offTheStocks'] = false;
+        //     if (strtotime($value['end_time'])<time()) {
+        //         $ret[$key]['offTheStocks'] = true;
+        //     }
+        //     $ret[$key]['yesToday'] = false;
+        //     if (date('Y-m-d',strtotime($value['start_time'])) == date('Y-m-d',time()) ) {
+        //         $ret[$key]['yesToday'] = true;
+        //     }
+            
+        // }
         //返回信息
         $data = [
             'Code'=>'0',
