@@ -989,7 +989,7 @@ return json($data);
                 $status = 0;
                 break;
             }
-            $ret[$key]['status'] = $value['reviewed_status'];
+            $ret[$key]['status'] = $status;
             // $ret[$key]['type'] = $value['lession_status'];
         }   
 
@@ -1027,7 +1027,7 @@ return json($data);
                 $status = 0;
                 break;
             }
-            // $ret[$key]['status'] = $status;
+            $ret[$key]['status'] = $status;
 
 
             $ret[$key]['complete'] = 20;
@@ -1271,10 +1271,28 @@ return json($data);
         $data['title'] = $title;
         //处理图片
         
-        if(!empty($json['head'])){
+        // if(!empty($json['head'])){
 
-            @$data['picture'] =$this->_seve_img($json['head']);
+        //     @$data['picture'] =$this->_seve_img($json['head']);
+        // }
+
+
+                  if(!empty($params['head'])){
+            $file = "/tmp/".time().rand(0,10000).".png";
+            $r = file_put_contents($file, base64_decode($params['head']));//返回的是字节数
+            if(!$r){
+                return $this->error('图片格式错误');
+            }
+            $res = $this->uploadFile($file,"png");
+            if($res['code'] != 0){
+                                return $this->error('更新图片失败');
+            }
+            $data['picture'] = json_encode(['l'=>$res['path'],'m'=>$res['path'],'s'=>$res['path']]);
         }
+
+
+
+        
 
 
 
