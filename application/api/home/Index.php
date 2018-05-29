@@ -1164,7 +1164,9 @@ return json($data);
         //params
         $token = trim($params['token']);
 
-        $info = db('toplearning_net_material')->where(['del'=>0])->select();
+        $token_uid = $this->decrypt($token);
+
+        $info = db('toplearning_net_material')->where(['del'=>0,'teacher_user_id'=>$token_uid])->select();
 
         $ret = array();
         foreach ($info as $key => $value) {
