@@ -1206,8 +1206,9 @@ return json($data);
 
         $ret = array();
         foreach ($info as $key => $value) {
-            if (!$value['video']) {
+            if (!$value['video']||($this->is_serialized($value['video'])&&empty(unserialize($value['video']))) ) {
                 unset($info[$key]);
+                continue;
             }
             $ret[$key]['lessonsid'] = $value['class_id'];
             $ret[$key]['name'] = $value['class_name'];
