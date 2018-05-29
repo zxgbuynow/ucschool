@@ -1214,8 +1214,9 @@ return json($data);
             $ret[$key]['lessonsid'] = $value['class_id'];
             $ret[$key]['name'] = $value['class_name'];
             $ret[$key]['index'] = $i;
-            
-            $ret[$key]['videoIdList'] = $this->is_serialized($value['video'])?unserialize($value['video']):$value['video'];
+            // $video = unserialize($value['video']);
+
+            $ret[$key]['video'] = $this->is_serialized($value['video'])?unserialize($value['video']):$value['video'];
             $ret[$key]['coursewareIdList'] = $this->is_serialized($value['courseware'])?unserialize($value['courseware']):$value['courseware'];
             $i++;
         }
@@ -1346,7 +1347,7 @@ return json($data);
             $save['index'] = $value['index'];
 
             //视频
-            $save['video'] = serialize($value['videoIdList']);
+            $save['video'] = serialize($value['video']);
             //课件
             $save['courseware'] = serialize($value['coursewareIdList']);
 
@@ -2058,7 +2059,7 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
             @$rs[$key]['liveAddress'] = $this->is_serialized($value['video'])?unserialize($value['video'])[0]['video']:$value['video'];
             @$rs[$key]['videoBroadcastAddress'] = $this->is_serialized($value['courseware'])?unserialize($value['courseware'])[0]['address']:$value['courseware'];
 
-            $rs[$key]['videoIdList'] = $this->is_serialized($value['video'])?unserialize($value['video']):$value['video'];
+            $rs[$key]['video'] = $this->is_serialized($value['video'])?unserialize($value['video']):$value['video'];
             $rs[$key]['coursewareIdList'] = $this->is_serialized($value['courseware'])?unserialize($value['courseware']):$value['courseware'];
 
             $i++;
@@ -2113,7 +2114,7 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
             $save['index'] = $json['index'];
 
             //视频
-            $save['video'] = serialize($json['videoIdList']);
+            $save['video'] = serialize($json['video']);
             //课件
             $save['courseware'] = serialize($json['coursewareIdList']);
 
@@ -2193,7 +2194,7 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
             $save['index'] = $json['index'];
 
             //视频
-            $save['video'] = serialize($json['videoIdList']);
+            $save['video'] = serialize($json['video']);
             //课件
             $save['courseware'] = serialize($json['coursewareIdList']);
 
