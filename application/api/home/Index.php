@@ -1209,7 +1209,7 @@ return json($data);
             $ret[$key]['lessonsid'] = $value['class_id'];
             $ret[$key]['name'] = $value['class_name'];
             $ret[$key]['index'] = $value['index'];
-            $ret[$key]['video'] = $this->is_serialized($value['video'])?unserialize($value['video']):$value['video'];
+            $ret[$key]['videoIdList'] = $this->is_serialized($value['video'])?unserialize($value['video']):$value['video'];
             $ret[$key]['coursewareIdList'] = $this->is_serialized($value['courseware'])?unserialize($value['courseware']):$value['courseware'];
 
         }
