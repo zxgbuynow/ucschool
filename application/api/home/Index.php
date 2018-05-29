@@ -2427,12 +2427,26 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
      * @return [type]         [description]
      */
     public function evaluateLesson($params)
-    {
+    {   
+        $token = trim($params['token']);
+        $courseid = $params['courseid'];
+        $lessonid = trim($params['lessonid']);
+        $evaluateNum = $params['evaluateNum'];
+        $msg = trim($params['msg']);
+
+        $data['appraise_name'] = $msg?$msg:'讲得非常好';
+        $data['create_time']  = time();
+        $data['class_id'] = $lessonid;
+        $data['score'] = $evaluateNum;
+        $data['user_Id'] = $this->decrypt($token);
+
+        db('toplearning_appraise_dictionary')->insert($data);
+
         //返回信息
         $data = [
             'Code'=>'0',
             'Msg'=>'操作成功',
-            'Data'=>$ret,
+            // 'Data'=>1,
             'Success'=>true
         ];
 
@@ -2597,18 +2611,41 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         //params
         $token = trim($params['token']);
         $courseid = trim($params['courseid']);
+        $lessonid = trim($params['lessonid']);
+        $endTime = trim($params['endTime']);
 
+        //计算出开结时间
+        $now = time();
+        $data['learn_start_time'] = date('Y-m-d H:i',strtotime(ceil($now-$endTime)));
+        $data['learn_end_time'] = date('Y-m-d H:i',strtotime(ceil($now+$endTime)));
+        //取出该课节时长 计算完成度
+        $lessiontime = 0;
+        @$lessiontime = db('toplearning_class_festival')->where(['class_id'=>$lessonid])->column('lesson_time')[0];
 
-        $info = db('toplearning_learn_situation')->where(['class_id'=>$courseid])->select();
+        $data['learn_result'] = ceil(($endTime/$lessiontime*10)*100);
 
-        $ret = array();
-        foreach ($ret as $key => $value) {
-            $ret[$key]['userid'] =   $value['user_id'];
-            $ret[$key]['name'] =  db('toplearning_login')->where(['user_id'=>$value['user_id']])->column('nickname')?db('toplearning_login')->where(['user_id'=>$value['user_id']])->column('nickname')[0]:'';
-            $ret[$key]['time'] =  $value['learn_start_time'];
-            $ret[$key]['totaltime'] =  ceil((strtotime($value['learn_end_time'])-strtotime($value['learn_start_time']))/(24*60)) ;
-            $ret[$key]['completion'] =  $value['learn_result'];
+        $token_uid = $this->decrypt($token);
+        $data['user_id'] = $token_uid;
+
+        //是否有该课节学习记录 有更新
+        if (db('toplearning_learn_situation')->where(['class_id'=>$lessonid])->find) {
+
+            db('toplearning_learn_situation')->where(['class_id'=>$lessonid])->update($data);
+        }else{
+            $data['class_id'] = $lessonid;
+            db('toplearning_learn_situation')->insert($data);
         }
+        
+        // $info = db('toplearning_learn_situation')->where(['class_id'=>$courseid])->select();
+
+        // $ret = array();
+        // foreach ($ret as $key => $value) {
+        //     $ret[$key]['userid'] =   $value['user_id'];
+        //     $ret[$key]['name'] =  db('toplearning_login')->where(['user_id'=>$value['user_id']])->column('nickname')?db('toplearning_login')->where(['user_id'=>$value['user_id']])->column('nickname')[0]:'';
+        //     $ret[$key]['time'] =  $value['learn_start_time'];
+        //     $ret[$key]['totaltime'] =  ceil((strtotime($value['learn_end_time'])-strtotime($value['learn_start_time']))/(24*60)) ;
+        //     $ret[$key]['completion'] =  $value['learn_result'];
+        // }
         
         //返回信息
         $data = [
@@ -2627,7 +2664,43 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
      * @return [type]         [description]
      */
     public function lecturerExaminationTeacherList($params)
-    {
+    {   
+        //param
+        $token = trim($params['token']);
+        $page = trim($params['page']);
+        $size = trim($params['size']);
+
+
+        //学院老师
+        $map['del'] = 0;
+        $map['exam_type'] = 1;
+        $page = $page ==''?0:$page;
+        $size = $size == ''?10:$size;
+
+        $limit = $page*$size;
+        $exam = db('toplearning_exam')->where($map)->limit($limit, $size)->select();
+
+        $ret = array();
+
+        foreach ($exam as $key => $value) {
+            $ret[$key]['examinationId'] = $value['exam_id'];
+            $ret[$key]['name'] = $value['exam_name'];
+            $ret[$key]['schoolName'] = $value['create_name'];
+            $ret[$key]['propositionalPerson'] = $value['user_name'];
+            $ret[$key]['time'] = $value['start_time'].'  '.date('H:i',strtotime($value['end_time']));
+            $ret[$key]['duration'] = ceil((strtotime($value['end_time'])-strtotime($value['start_time']))/60) ;
+            $ret[$key]['num'] = db('toplearning_exam_submit')->where(['exam_id'=>$value['exam_id']])->count();
+            $ret[$key]['numAll'] = $value['exam_num'];
+            $ret[$key]['offTheStocks'] = false;
+            if (strtotime($value['end_time'])<time()) {
+                $ret[$key]['offTheStocks'] = true;
+            }
+            $ret[$key]['yesToday'] = false;
+            if (date('Y-m-d',strtotime($value['start_time'])) == date('Y-m-d',time()) ) {
+                $ret[$key]['yesToday'] = true;
+            }
+            
+        }
         //返回信息
         $data = [
             'Code'=>'0',
@@ -2646,6 +2719,30 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
      */
     public function yesPaperList($params)
     {
+        //param
+        $token = trim($params['token']);
+        $page = trim($params['page']);
+        $size = trim($params['size']);
+        $examinationId = trim($params['examinationId']);
+
+
+        //学院老师
+        
+        $page = $page ==''?0:$page;
+        $size = $size == ''?10:$size;
+
+        // db('toplearning_chat_group')->alias('a')->join('toplearning_chat_record r','a.group_id = r.group_id')->where(['r.user_id'=>$token_uid])->group('r.group_id')->order('r.id DESC')->select();
+        $map['a.owner_type'] = 1;
+        $limit = $page*$size;
+        $exam = db('toplearning_exam')->alias('a')->join('toplearning_net_material n','a.user_id = n.teacher_user_id')->join('toplearning_order o','o.net_material_id = n.net_material_id')->join('toplearning_login l','l.user_id = o.user_id')->where($map)->limit($limit, $size)->select();
+
+        $ret = array();
+
+        foreach ($exam as $key => $value) {
+            $ret[$key]['name'] = $value['nickname'];
+            $ret[$key]['head'] = $value['avatar'];
+            $ret[$key]['rollUp'] = false;
+        }
         //返回信息
         $data = [
             'Code'=>'0',
