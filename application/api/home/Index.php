@@ -2765,9 +2765,10 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         //param
         $token = trim($params['token']);
         $typeId = isset($params['typeId']);
+        $ret = array();
         if (!$typeId) {
             $info = db('toplearning_net_material')->where(['course_type'=>$typeId])->select();
-            $ret = array();
+            
             foreach ($info as $key => $value) {
                 $ret[$key]['courseid'] =$value['net_material_id'];
                 $ret[$key]['title'] =$value['title'];
@@ -2787,8 +2788,8 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
 
             return json($data); 
         }else{
-            $page = trim($params['page']);
-            $size = trim($params['size']);
+            @$page = trim($params['page']);
+            @$size = trim($params['size']);
         }
 
         
