@@ -1209,6 +1209,7 @@ return json($data);
             $ret[$key]['index'] = $value['index'];
             $ret[$key]['video'] = $this->is_serialized($value['video'])?unserialize($value['video']):$value['video'];
             $ret[$key]['coursewareIdList'] = $this->is_serialized($value['courseware'])?unserialize($value['courseware']):$value['courseware'];
+
         }
         //返回信息
         $data = [
@@ -2529,16 +2530,22 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         $size = $size == ''?10:$size;
 
         $limit = $page*$size;
+
         $info = db('toplearning_learn_situation')->where(['class_id'=>$lessonid])->limit($limit, $size)->select();
 
 
         $ret = array();
-        foreach ($ret as $key => $value) {
-            $ret[$key]['userid'] =   $value['user_id'];
-            $ret[$key]['name'] =  db('toplearning_login')->where(['user_id'=>$value['user_id']])->column('nickname')?db('toplearning_login')->where(['user_id'=>$value['user_id']])->column('nickname')[0]:'';
-            $ret[$key]['time'] =  $value['learn_start_time'];
-            $ret[$key]['totaltime'] =  ceil((strtotime($value['learn_end_time'])-strtotime($value['learn_start_time']))/(24*60)) ;
-            $ret[$key]['completion'] =  $value['learn_result'];
+        // foreach ($ret as $key => $value) {
+        //     $ret[$key]['userid'] =   $value['user_id'];
+        //     $ret[$key]['name'] =  db('toplearning_login')->where(['user_id'=>$value['user_id']])->column('nickname')?db('toplearning_login')->where(['user_id'=>$value['user_id']])->column('nickname')[0]:'';
+        //     $ret[$key]['time'] =  $value['learn_start_time'];
+        //     $ret[$key]['totaltime'] =  ceil((strtotime($value['learn_end_time'])-strtotime($value['learn_start_time']))/(24*60)) ;
+        //     $ret[$key]['completion'] =  $value['learn_result'];
+        // }
+
+        foreach ($info as $key => $value) {
+            $ret[$key]['time'] = date('Y-m-d H:i',strtotime($value['learn_start_time']));
+            $ret[$key]['lengthTime'] =  ceil((strtotime($value['learn_end_time'])-strtotime($value['learn_start_time']))/(24*60)) ;
         }
 
         //返回信息
