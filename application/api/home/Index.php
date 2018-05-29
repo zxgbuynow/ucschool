@@ -1312,6 +1312,7 @@ return json($data);
         $data['teacher_user_id'] = $token_uid;
         $data['teacher_id'] = db('toplearning_teacher')->where(['user_id'=>$token_uid])->column('teacher_id')?db('toplearning_teacher')->where(['user_id'=>$token_uid])->column('teacher_id')[0]:'';
         $data['school_id'] = $college;
+        $data['reviewed_status'] = null;
         
         if(!empty($courseid)){
             $insertid = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->update($data);
