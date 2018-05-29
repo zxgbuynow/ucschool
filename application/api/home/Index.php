@@ -2859,7 +2859,8 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         $map['title'] = array('like','%'.$msg.'%');
 
         $info = db('toplearning_net_material')->where($map)->select();
-            
+        
+        $ret = array();
         foreach ($info as $key => $value) {
             $ret[$key]['courseid'] =$value['net_material_id'];
             $ret[$key]['title'] =$value['title'];
@@ -2869,16 +2870,6 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
             @$ret[$key]['teacher'] = db('toplearning_login')->where(['user_id'=>$value['teacher_user_id']])->column('nickname')[0]; ;
         }
         
-        //返回信息
-        $data = [
-            'Code'=>'0',
-            'Msg'=>'操作成功',
-            'Data'=>$ret,
-            'Success'=>true
-        ];
-
-        return json($data);
-
         //返回信息
         $data = [
             'Code'=>'0',
