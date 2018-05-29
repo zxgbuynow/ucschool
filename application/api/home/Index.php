@@ -2852,14 +2852,13 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
     public function seacherCourse($params)
     {   
         $token = trim($params['token']);
-        $typeId = isset($params['typeId']);
-        $msg = isset($params['msg']);
+        $typeId = $params['typeId'];
+        $msg = trim($params['msg']);
 
         $map['course_type'] = $typeId;
         $map['title'] = array('like','%'.$msg.'%');
 
         $info = db('toplearning_net_material')->where($map)->select();
-        
         $ret = array();
         foreach ($info as $key => $value) {
             $ret[$key]['courseid'] =$value['net_material_id'];
