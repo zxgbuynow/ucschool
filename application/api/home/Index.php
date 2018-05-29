@@ -2786,10 +2786,12 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
             ];
 
             return json($data); 
+        }else{
+            $page = trim($params['page']);
+            $size = trim($params['size']);
         }
 
-        $page = trim($params['page']);
-        $size = trim($params['size']);
+        
         
         
 
