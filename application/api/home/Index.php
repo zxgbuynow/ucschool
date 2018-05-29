@@ -2766,7 +2766,7 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         $token = trim($params['token']);
         $typeId = isset($params['typeId']);
         $ret = array();
-        if (!$typeId) {
+        if ($typeId) {
             $info = db('toplearning_net_material')->where(['course_type'=>$typeId])->select();
             
             foreach ($info as $key => $value) {
@@ -2775,7 +2775,7 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
                 $ret[$key]['image'] =$value['picture'];
                 $ret[$key]['price'] =$value['price'];
                 $ret[$key]['buycount'] =$value['order_num'];
-                $ret[$key]['teacher'] = db('toplearning_login')->where(['user_id'=>$value['teacher_user_id']])->column('nickname')[0]; ;
+                @$ret[$key]['teacher'] = db('toplearning_login')->where(['user_id'=>$value['teacher_user_id']])->column('nickname')[0]; ;
             }
             
             //返回信息
