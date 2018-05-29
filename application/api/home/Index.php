@@ -2591,6 +2591,78 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
 
         return json($data);
     }
+
+    /**
+     * [lecturerExaminationTeacherList 讲师端试卷列表]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function lecturerExaminationTeacherList($params)
+    {
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+
+    /**
+     * [yesPaperList 讲师端考卷下考试的人]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function yesPaperList($params)
+    {
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+
+    /**
+     * [lecturerExaminationStudentList 学生端考试列表]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function lecturerExaminationStudentList($params)
+    {
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+
+    }
+    /**
+     * [lecturerCourse 搜索课程]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function lecturerCourse($params)
+    {
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
     //-----------U信------
     /**
      * [ContactList 群聊列表]
