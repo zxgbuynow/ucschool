@@ -1173,7 +1173,7 @@ return json($data);
             $ret[$key]['courseid'] = $value['net_material_id'];
             $ret[$key]['name'] = $value['title'];
             @$ret[$key]['image'] = json_decode($value['picture'],true)['m'];
-            $ret[$key]['total'] = $value['lession_num'];
+            $ret[$key]['total'] = $value['total_lessons'];
         }
         //返回信息
         $data = [
