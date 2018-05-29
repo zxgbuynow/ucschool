@@ -2553,6 +2553,7 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         foreach ($info as $key => $value) {
             $ret[$key]['time'] = date('Y-m-d H:i',strtotime($value['learn_start_time']));
             $ret[$key]['lengthTime'] =  ceil((strtotime($value['learn_end_time'])-strtotime($value['learn_start_time']))/(24*60)) ;
+            $ret[$key]['totalCompletionRate'] = $value['learn_result'].'%';
         }
 
         //返回信息
