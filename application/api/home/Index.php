@@ -147,7 +147,9 @@ class Index
             return $this->error('用户不存在或被禁用！');
         }
         //密码是否正确
-        if (!Hash::check((string)$password, $user['password'])) {
+
+        // if (!Hash::check((string)$password, $user['password'])) {
+        if (md5($password) != $user['password']) {
          return $this->error( '密码错误！');
      }
 
@@ -2630,7 +2632,7 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         $data['user_id'] = $token_uid;
 
         //是否有该课节学习记录 有更新
-        if (db('toplearning_learn_situation')->where(['class_id'=>$lessonid])->find) {
+        if (db('toplearning_learn_situation')->where(['class_id'=>$lessonid])->find()) {
 
             db('toplearning_learn_situation')->where(['class_id'=>$lessonid])->update($data);
         }else{
@@ -2672,10 +2674,12 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         $page = trim($params['page']);
         $size = trim($params['size']);
 
+            $token_uid = $this->decrypt($token);
 
         //学院老师
         $map['del'] = 0;
         $map['exam_type'] = 1;
+        $map['user_id'] = $token_uid;
         $page = $page ==''?0:$page;
         $size = $size == ''?10:$size;
 
@@ -2690,7 +2694,9 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
             $ret[$key]['schoolName'] = $value['create_name'];
             $ret[$key]['propositionalPerson'] = $value['user_name'];
             $ret[$key]['time'] = date("Y.m.d H:i",strtotime($value['start_time'])).' - '.date('H:i',strtotime($value['end_time']));
-            $ret[$key]['duration'] = ceil((strtotime($value['end_time'])-strtotime($value['start_time']))/60) ;
+            $duration = ceil((strtotime($value['end_time'])-strtotime($value['start_time']))/60) ;
+            $ret[$key]['time'] .= " ".floor($duration/60)."分钟";
+            $ret[$key]['duration'] = $duration;
             $ret[$key]['num'] = db('toplearning_exam_submit')->where(['exam_id'=>$value['exam_id']])->count();
             $ret[$key]['numAll'] = $value['exam_num'];
             $ret[$key]['offTheStocks'] = false;
@@ -2736,14 +2742,19 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         // db('toplearning_chat_group')->alias('a')->join('toplearning_chat_record r','a.group_id = r.group_id')->where(['r.user_id'=>$token_uid])->group('r.group_id')->order('r.id DESC')->select();
         $map['a.owner_type'] = 1;
         $limit = $page*$size;
-        $exam = db('toplearning_exam')->alias('a')->join('toplearning_net_material n','a.user_id = n.teacher_user_id')->join('toplearning_order o','o.net_material_id = n.net_material_id')->join('toplearning_login l','l.user_id = o.user_id')->where($map)->limit($limit, $size)->select();
+        $exam = db('toplearning_exam_detail')
+        ->where(['exam_id'=>$examinationId,'del'=>0])
+        ->order("is_submit desc")
+        ->limit($page*$size,$size)
+        ->select();
 
         $ret = array();
 
         foreach ($exam as $key => $value) {
-            $ret[$key]['name'] = $value['nickname'];
-            $ret[$key]['head'] = $value['avatar'];
-            $ret[$key]['rollUp'] = db('toplearning_exam_submit')->where(['exam_id'=>$value['exam_id']])->count()?true:false;
+            $user = db("toplearning_login")->field("realname,avatar")->where(['user_id'=>$value['user_id']])->find();
+            $ret[$key]['name'] = $user['realname'];
+            $ret[$key]['head'] = json_decode($user['avatar'],true)['m'];
+            $ret[$key]['rollUp'] = $value['is_submit'] == 1?true:false;
         }
         //返回信息
         $data = [
@@ -2853,18 +2864,18 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
     public function seacherCourse($params)
     {   
         $token = trim($params['token']);
-        @$typeId = $params['typeId'];
-        @$msg = trim($params['msg']);
-
+          $page = !empty($params['page'])?$params['page']:0;
+        $size = !empty($params['size'])?$params['size']:10;
         $map = [];
-        if (isset($typeId)) {
-            $map['course_type'] = $typeId;
+        if (isset($params['typeId'])) {
+            $map['course_type'] = $params['typeId'];
         }
-        if (isset($msg)) {
-            $map['title'] = array('like','%'.$msg.'%');
+        if (isset($params['msg'])) {
+            $map['title'] = array('like','%'.$params['msg'].'%');
         }
-        
-        $info = db('toplearning_net_material')->where($map)->select();
+        $info = db('toplearning_net_material')->where($map)
+        ->limit($page*$size,$size)
+        ->select();
         $ret = array();
         foreach ($info as $key => $value) {
             $ret[$key]['courseid'] =$value['net_material_id'];
