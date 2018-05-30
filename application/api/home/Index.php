@@ -2685,10 +2685,10 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
 
         foreach ($exam as $key => $value) {
             $ret[$key]['examinationId'] = $value['exam_id'];
-            $ret[$key]['name'] = $value['exam_name'];
+            $ret[$key]['name'] = $value['title'];
             $ret[$key]['schoolName'] = $value['create_name'];
             $ret[$key]['propositionalPerson'] = $value['user_name'];
-            $ret[$key]['time'] = $value['start_time'].'  '.date('H:i',strtotime($value['end_time']));
+            $ret[$key]['time'] = date("Y.m.d H:i",strtotime($value['start_time'])).' - '.date('H:i',strtotime($value['end_time']));
             $ret[$key]['duration'] = ceil((strtotime($value['end_time'])-strtotime($value['start_time']))/60) ;
             $ret[$key]['num'] = db('toplearning_exam_submit')->where(['exam_id'=>$value['exam_id']])->count();
             $ret[$key]['numAll'] = $value['exam_num'];
