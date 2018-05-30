@@ -218,7 +218,7 @@ class Index
         }
 
         //生成密码
-        $data['password'] =  Hash::make((string)trim($params['password']));
+        $data['password'] =  md5((string)trim($params['password']));
 
         //更新
         if(!db('toplearning_login')->where(['mobile'=>$phone])->update($data)){
@@ -259,8 +259,9 @@ class Index
             return $this->error('验证码不正确');
         }
 
-        //生成密码
-        $data['password'] =  Hash::make((string)trim($params['password']));
+        //生成密码 md5
+        // $data['password'] =  Hash::make((string)trim($params['password']));
+        $data['password'] =  md5((string)trim($params['password']));
 
         //插入数据
         $me = db('toplearning_login')->insert($data);
@@ -2852,12 +2853,17 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
     public function seacherCourse($params)
     {   
         $token = trim($params['token']);
-        $typeId = $params['typeId'];
-        $msg = trim($params['msg']);
+        @$typeId = $params['typeId'];
+        @$msg = trim($params['msg']);
 
-        $map['course_type'] = $typeId;
-        $map['title'] = array('like','%'.$msg.'%');
-
+        $map = [];
+        if (isset($typeId)) {
+            $map['course_type'] = $typeId;
+        }
+        if (isset($msg)) {
+            $map['title'] = array('like','%'.$msg.'%');
+        }
+        
         $info = db('toplearning_net_material')->where($map)->select();
         $ret = array();
         foreach ($info as $key => $value) {
@@ -2874,6 +2880,67 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
             'Code'=>'0',
             'Msg'=>'操作成功',
             'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+    /**
+     * [buyNowCourse 7. 立即购买]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function buyNowCourse($params)
+    {
+        $token = trim($params['token']);
+        $courseid = trim($params['courseid']);
+        $schoolId = trim($params['schoolId']);
+
+        $token_uid = $this->decrypt($token);
+
+        //取数据
+        $user = db('toplearning_login')->where(['user_id'=>$token_uid])->find();//用户
+
+        $nt = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->find();//课程
+
+        $sc = db('toplearning_school')->where(['school_id'=>$schoolId])->find();//学校
+
+        //组数据
+        $data['user_id'] = $token_uid;
+
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            // 'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+
+    /**
+     * [CourseCollection 8. 收藏课程]
+     * @param [type] $params [description]
+     */
+    public function CourseCollection($params)
+    {
+        $token = trim($params['token']);
+        $courseid = trim($params['courseid']);
+
+        $token_uid = $this->decrypt($token);
+
+        $data['source_id'] = $courseid;
+        $data['user_id'] = $token_uid;
+        $data['create_time'] = time();
+
+        db('toplearning_favorite')->insert();
+
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            // 'Data'=>$ret,
             'Success'=>true
         ];
 
