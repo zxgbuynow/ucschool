@@ -844,6 +844,92 @@ return json($data);
         return json($data);
 
     }
+    /**
+     * [getFindCourse 课程详情]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function getFindCourse($params)
+    {
+        //params
+        $token = trim($params['token']);
+        $courseid = trim($params['courseid']);
+
+        $token_uid = $this->decrypt($token);
+
+        $value = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->find();
+
+        $user = db('toplearning_login')->where(['user_id'=>$token_uid])->find();
+        
+        $ret = [];
+        if ($value) {
+            $ret['courseid'] = $value['net_material_id'];
+            $ret['image'] = $value['picture'];
+            $ret['title'] = $value['title'];
+            $ret['college'] = $value['school_name'];
+            $ret['MonthlyPitchNumber'] = $value['month_lessons'];
+            $ret['CommonPitchNumber'] = $value['total_lessons'];
+            $ret['type'] = $value['course_type'];
+            $ret['keyword'] = $value['tags'];
+            $ret['price'] = $value['price'];
+            $ret['paynumber'] = $value['order_num'];
+            $ret['limitpaynumber'] = $value['student_num'];
+            $ret['isOwnCourse'] = $value['user_id'] == $token_uid ?true:false ;
+            if ($user&& $user['group_id']==5) {
+                $ret['isBuy'] = db('toplearning_order')->where(['user_id'=>$token_uid, 'net_material_id'=>$value['net_material_id']])->count()?true:false;
+                $ret['isCollection'] = db('toplearning_favorite')->where(['type'=>0,'source_id'=>$value['net_material_id'],'user_id'=>$token_uid])->count()?true:false;
+            }
+        }
+        
+
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+
+    /**
+     * [getCourseInformation 课程信息]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function getCourseInformation($params)
+    {
+
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+
+    /**
+     * [getLessonFestivalArrangementList 课节安排]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function getLessonFestivalArrangementList($params)
+    {
+
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
 
     /**
      * [getCollegeTeachers  学院下的课程]
@@ -2917,7 +3003,17 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         $sc = db('toplearning_school')->where(['school_id'=>$schoolId])->find();//学校
 
         //组数据
-        $data['user_id'] = $token_uid;
+        // $data['user_id'] = $token_uid;
+        // $data['nickname'] = $user['nickname'];
+        // $data['seller_id'] = $token_uid;
+        // $data['seller_name'] = $token_uid;
+        // $data['seller_user_id'] = $token_uid;
+        // $data['net_material_id'] = $token_uid;
+        // $data['product_name'] = $token_uid;
+        // $data['price'] = $token_uid;
+        // $data['order_number'] = $token_uid;
+        // $data['teacher_id'] = $token_uid;
+        // $data['teacher_user_id'] = $token_uid;
 
         //返回信息
         $data = [
