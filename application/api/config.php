@@ -16,6 +16,10 @@ return [
         'getCollegeInfo'=>'find.getCollegeInfo',
         'focusCollege'=>'find.focusCollege',
 
+        'getFindCourse'=>'find.getFindCourse',
+        'getCourseInformation'=>'find.getCourseInformation',
+        'getLessonFestivalArrangementList'=>'find.getLessonFestivalArrangementList',
+
         'getfindIndexCollege'=>'find.getfindIndexCollege',
         'getCollegeCourse'=>'find.getCollegeCourse',
         'getCollegeTeachers'=>'find.getCollegeTeachers',
@@ -79,6 +83,8 @@ return [
         'yesPaperList'=>'exam.yesPaperList',
         'lecturerExaminationStudentList'=>'exam.lecturerExaminationStudentList',
         'seacherCourse'=>'exam.seacherCourse',
+        'buyNowCourse'=>'exam.buyNowCourse',
+        'CourseCollection'=>'exam.CourseCollection',
 
 
         
