@@ -78,7 +78,7 @@ return [
         'lecturerExaminationTeacherList'=>'exam.lecturerExaminationTeacherList',
         'yesPaperList'=>'exam.yesPaperList',
         'lecturerExaminationStudentList'=>'exam.lecturerExaminationStudentList',
-        'lecturerCourse'=>'exam.lecturerCourse',
+        'seacherCourse'=>'exam.seacherCourse',
 
 
         
