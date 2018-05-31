@@ -2125,7 +2125,7 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
         //通过token获取 uid
         // $token_uid = $this->decrypt($token);
 
-        $info = db('toplearning_login')->alias('a')->join('toplearning_teacher t','a.user_id = t.user_id')->join('toplearning_net_material m','a.user_id = m.teacher_user_id')->where(['a.user_id'=>$teacherid])->find();
+        $info = db('toplearning_login')->alias('a')->join('toplearning_teacher t','a.user_id = t.user_id')->join('toplearning_net_material m','a.user_id = m.teacher_user_id')->where(['m.teacher_user_id'=>$teacherid])->find();
         $ret = array();
         if ($info) {
             $ret['headurl'] = $info['avatar'];
@@ -2140,24 +2140,24 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
             $ret['collegeId'] = $info['school_id'];
             $ret['teacherId'] = $info['teacher_user_id'];
 
-            
+            //相关课程
+            $course = db('toplearning_net_material')->where(['del'=>0,'teacher_user_id'=>$teacherid])->select();
+            $coursearr = array();
+            if ($course) {
+                foreach ($course as $key => $value) {
+                    $coursearr[$key]['courseHeadUrl'] = $value['picture'];
+                    $coursearr[$key]['courseName'] = $value['title'];
+                    $coursearr[$key]['courseNum'] = $value['price'];
+                    $coursearr[$key]['purchaseNumber'] = $value['order_num'];
+                    $coursearr[$key]['courseType'] = $value['create_name'];
+                    $coursearr[$key]['courseid'] = $value['net_material_id'];
+                }
+                $ret['correlatedCurriculumList'] = $coursearr;
+            }
         }
         
 
-        //相关课程
-        $course = db('toplearning_net_material')->where(['del'=>0,'teacher_user_id'=>$teacherid])->select();
-        $coursearr = array();
-        if ($course) {
-            foreach ($course as $key => $value) {
-                $coursearr[$key]['courseHeadUrl'] = $value['picture'];
-                $coursearr[$key]['courseName'] = $value['title'];
-                $coursearr[$key]['courseNum'] = $value['price'];
-                $coursearr[$key]['purchaseNumber'] = $value['order_num'];
-                $coursearr[$key]['courseType'] = $value['create_name'];
-                $coursearr[$key]['courseid'] = $value['net_material_id'];
-            }
-            $ret['correlatedCurriculumList'] = $coursearr;
-        }
+        
         //返回信息
         $data = [
             'Code'=>'0',
