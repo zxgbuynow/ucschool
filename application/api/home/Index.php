@@ -2134,11 +2134,11 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
             $ret['school'] = $info['school_name'];
             $ret['introduction'] = $info['introduce'];
             $ret['correlatedCurriculumList'] = array();
-            @$ret['teacherName'] = db('toplearning_teacher')->where(['teacher_id'=>$value['teacher_user_id']])->column('teacher_name')[0];
-            $ret['collegeName'] = $info['school_name'] ;
+            // @$ret['teacherName'] = db('toplearning_teacher')->where(['teacher_id'=>$value['teacher_user_id']])->column('teacher_name')[0];
+            // $ret['collegeName'] = $info['school_name'] ;
             
-            $ret['collegeId'] = $info['school_id'];
-            $ret['teacherId'] = $info['teacher_user_id'];
+            // $ret['collegeId'] = $info['school_id'];
+            // $ret['teacherId'] = $info['teacher_user_id'];
 
             //相关课程
             $course = db('toplearning_net_material')->where(['del'=>0,'teacher_user_id'=>$teacherid])->select();
@@ -2151,6 +2151,13 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
                     $coursearr[$key]['purchaseNumber'] = $value['order_num'];
                     $coursearr[$key]['courseType'] = $value['create_name'];
                     $coursearr[$key]['courseid'] = $value['net_material_id'];
+
+                    @$coursearr[$key]['teacherName'] = db('toplearning_teacher')->where(['teacher_id'=>$teacherid])->column('teacher_name')[0];
+                    $coursearr[$key]['collegeName'] = $info['school_name'] ;
+                    
+                    $coursearr[$key]['collegeId'] = $info['school_id'];
+                    $coursearr[$key]['teacherId'] = $info['teacher_user_id'];
+
                 }
                 $ret['correlatedCurriculumList'] = $coursearr;
             }
