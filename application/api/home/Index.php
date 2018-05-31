@@ -956,6 +956,8 @@ return json($data);
             $ret[$key]['lessonWay'] = $value['status'];
             $ret[$key]['guide'] = $value['guide'];
 
+            $ret[$key]['index'] = $value['index'];
+
             $ret[$key]['status'] = (strtotime($value['stage_start'])>time())?'2':(strtotime($value['stage_end'])<time()?'3':'1');
             
             
@@ -1009,7 +1011,14 @@ return json($data);
             $ret[$key]['teacher'] = '';
             if (db('toplearning_teacher')->where(['teacher_id'=>$value['teacher_id']])->find()) {
                 $ret[$key]['teacher']  = db('toplearning_teacher')->where(['teacher_id'=>$value['teacher_id']])->column('teacher_name')[0];
+
             }
+            @$ret[$key]['teacherName'] = db('toplearning_teacher')->where(['teacher_id'=>$value['teacher_user_id']])->column('teacher_name')[0];
+            $ret[$key]['collegeName'] = $value['school_name'] ;
+            
+            $ret[$key]['collegeId'] = $value['school_id'];
+            $ret[$key]['teacherId'] = $value['teacher_user_id'];
+
         }
 
         //返回信息
@@ -1064,6 +1073,11 @@ return json($data);
             $ret[$key]['lessontime'] = $value['lesson_time'];
             $ret[$key]['startTime'] = date('H:i',strtotime($value['stage_start']));
             $ret[$key]['endTime'] = date('H:i',strtotime($value['stage_end']));
+
+            $ret[$key]['collegeName'] = $value['school_name'] ;
+            @$ret[$key]['teacherName'] = db('toplearning_login')->where(['user_id'=>$value['teacher_user_id']])->column('nickname')[0];
+            $ret[$key]['collegeId'] = $value['school_id'];
+            $ret[$key]['teacherId'] = $value['teacher_user_id'];
         }
         
         $data = [        //返回信息
@@ -1125,6 +1139,13 @@ return json($data);
                 break;
             }
             $ret[$key]['status'] = $status;
+
+            $ret[$key]['collegeName'] = $value['school_name'] ;
+            $ret[$key]['teacherName'] = $user['nickname'];
+            $ret[$key]['collegeId'] = $value['school_id'];
+            $ret[$key]['teacherId'] = $value['teacher_user_id'];
+
+
             // $ret[$key]['type'] = $value['lession_status'];
         }   
 
@@ -1164,8 +1185,13 @@ return json($data);
             }
             $ret[$key]['status'] = $status;
 
+            $ret[$key]['collegeName'] = $value['school_name'] ;
+            @$ret[$key]['teacherName'] = db('toplearning_login')->where(['user_id'=>$value['teacher_user_id']])->column('nickname')[0];
+            $ret[$key]['collegeId'] = $value['school_id'];
+            $ret[$key]['teacherId'] = $value['teacher_user_id'];
 
-            $ret[$key]['complete'] = 20;
+
+            $ret[$key]['complete'] = 20;//TODO
             // $ret[$key]['type'] = $value['lession_status'];
 
         }
@@ -2108,6 +2134,12 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
             $ret['school'] = $info['school_name'];
             $ret['introduction'] = $info['introduce'];
             $ret['correlatedCurriculumList'] = array();
+            @$ret['teacherName'] = db('toplearning_teacher')->where(['teacher_id'=>$value['teacher_user_id']])->column('teacher_name')[0];
+            $ret['collegeName'] = $info['school_name'] ;
+            
+            $ret['collegeId'] = $info['school_id'];
+            $ret['teacherId'] = $info['teacher_user_id'];
+
             
         }
         
@@ -3015,7 +3047,12 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
             $ret[$key]['image'] =$value['picture'];
             $ret[$key]['price'] =$value['price'];
             $ret[$key]['buycount'] =$value['order_num'];
-            @$ret[$key]['teacher'] = db('toplearning_login')->where(['user_id'=>$value['teacher_user_id']])->column('nickname')[0]; ;
+            @$ret[$key]['teacher'] = db('toplearning_login')->where(['user_id'=>$value['teacher_user_id']])->column('nickname')[0];
+
+            $ret[$key]['collegeName'] = $value['school_name'] ;
+            @$ret[$key]['teacherName'] = db('toplearning_login')->where(['user_id'=>$value['teacher_user_id']])->column('nickname')[0];
+            $ret[$key]['collegeId'] = $value['school_id'];
+            $ret[$key]['teacherId'] = $value['teacher_user_id'];
         }
         
         //返回信息

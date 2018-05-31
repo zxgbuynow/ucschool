@@ -55,6 +55,11 @@ return [
         'LaunchAGroupChat'=>'class.LaunchAGroupChat',
 
         'GroupList'=>'class.GroupList',
+        'groupMemberList'=>'class.groupMemberList',
+        'addCurrentBulletin'=>'class.addCurrentBulletin',
+        'cleanUpChatRecords'=>'class.cleanUpChatRecords',
+        // 'ulogin'=>'class.login',
+
         'ModifyingPersonalInformation'=>'class.ModifyingPersonalInformation',
         'BusinessCard'=>'class.BusinessCard',
         'ClassroomSetting'=>'class.ClassroomSetting',
