@@ -186,6 +186,9 @@ class Index
      $ret['email'] = $user['email'];
      $ret['collegeid'] = $user['school_id'];
 
+     $ret['identifier'] = $user['im_account'];
+     $ret['userSig'] = $ret['token'];
+
 
      $data = [
         'Success'=>true,
@@ -870,6 +873,7 @@ return json($data);
             $ret['MonthlyPitchNumber'] = $value['month_lessons'];
             $ret['CommonPitchNumber'] = $value['total_lessons'];
             $ret['type'] = $value['course_type'];
+            @$ret['typeName'] = db('toplearning_course_type')->where(['type_id'=>$value['course_type']])->column('type_name')[0];
             $ret['keyword'] = $value['tags'];
             $ret['price'] = $value['price'];
             $ret['paynumber'] = $value['order_num'];
@@ -900,7 +904,24 @@ return json($data);
      */
     public function getCourseInformation($params)
     {
+        //params
+        $token = trim($params['token']);
+        $courseid = trim($params['courseid']);
 
+        $token_uid = $this->decrypt($token);
+
+        $info = db('toplearning_net_material')->alias('a')->field("a.*,l.*,l.introduce as lintroduce")->join('toplearning_login l','a.teacher_user_id = l.user_id')->where(['net_material_id'=>$courseid])->find();
+
+        $ret = [];
+        if ($info) {
+            $ret['courseid'] = $info['net_material_id'];
+            $ret['desc'] = $info['introduce'];
+            $ret['teacherName'] = $info['nickname'];
+            $ret['teacherHead'] = $info['avatar'];
+            $ret['teacherPersent'] = $info['lintroduce'];
+            $ret['teachingOutline'] = [];
+
+        }
         //返回信息
         $data = [
             'Code'=>'0',
@@ -919,7 +940,32 @@ return json($data);
      */
     public function getLessonFestivalArrangementList($params)
     {
+        //params
+        $token = trim($params['token']);
+        $courseid = trim($params['courseid']);
 
+        $map['a.net_material_id'] = $courseid;
+        $map['f.del'] = 0;
+        $info = db('toplearning_net_material')->alias('a')->join('toplearning_class_festival f','a.net_material_id = f.material_id','LEFT')->where($map)->select();
+        $ret = array();
+        foreach ($info as $key => $value) {
+            $ret[$key]['lessonsId'] = $value['class_id'];
+            $ret[$key]['name'] = $value['class_name'];
+            $ret[$key]['time'] = date('Y-m-d H:i',strtotime($value['stage_start'])).'-'.date('H:i',strtotime($value['stage_end'])) ;
+            $ret[$key]['lessontime'] = $value['lesson_time'];
+            $ret[$key]['lessonWay'] = $value['status'];
+            $ret[$key]['guide'] = $value['guide'];
+
+            $ret[$key]['status'] = (strtotime($value['stage_start'])>time())?'2':(strtotime($value['stage_end'])<time()?'3':'1');
+            
+            
+            if ($value['status']==1) {
+                @$ret[$key]['liveAddress'] = $this->is_serialized($value['video'])?unserialize($value['video'])[0]['video']:$value['video'];
+            }else{
+               @$ret[$key]['videoBroadcastAddress'] = $this->is_serialized($value['courseware'])?unserialize($value['courseware'])[0]['address']:$value['courseware'];
+            }
+
+        }
         //返回信息
         $data = [
             'Code'=>'0',
@@ -3089,25 +3135,27 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
             'Success'=>true
         ];
 
-    }
+        return json($data);
 
-    public function ModifyingPersonalInformation($params)
+    }
+    /**
+     * [groupMemberList 2.  群聊成员列表（新增]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function groupMemberList($params)
     {
         //params
         $token = trim($params['token']);
-        $userid = trim($params['userid']);
-        $nickname = trim($params['nickname']);
-        $birthday = trim($params['birthday']);
-        $sex = trim($params['sex']);
-        $city = trim($params['city']);
-        $phone = trim($params['phone']);
-        $wechat = trim($params['wechat']);
-        $qq = trim($params['qq']);
-        $city = trim($params['city']);
-        $email  = trim($params['email']);
-        $IndividualResume = trim($params['IndividualResume']);
-        $head = trim($params['head']);
+        $groupId = trim($params['groupId']);
 
+        $info = db('toplearning_chat_record')->alias('a')->join('toplearning_login r','a.user_id = r.user_id')->where(['group_id'=>$groupId])->select();
+
+        $ret = [];
+        foreach ($info as $key => $value) {
+            $ret[$key]['name'] = $value['nickname'];
+            $ret[$key]['head'] = $value['avatar'];
+        }
         //返回信息
         $data = [
             'Code'=>'0',
@@ -3115,7 +3163,77 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
             'Data'=>$ret,
             'Success'=>true
         ];
+
+        return json($data);
     }
+    /**
+     * [groupMemberList 3.  上传公告（新增]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function addCurrentBulletin($params)
+    {
+        //params
+        $token = trim($params['token']);
+        $groupId = trim($params['groupId']);
+        $msg = trim($params['msg']);
+
+        $token_uid = $this->decrypt($token);
+
+        $data['group_id'] = $group_id;
+        $data['content'] = $msg;
+        $data['user_id'] = $token_uid;
+        db('toplearning_chat_group_notice')->insert($data);
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            // 'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+    /**
+     * [groupMemberList   4. 清除聊天记录]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function cleanUpChatRecords($params)
+    {
+        //params
+        $token = trim($params['token']);
+        $groupId = trim($params['groupId']);
+        $token_uid = $this->decrypt($token);
+
+        db('toplearning_chat_record')->where(['group_id'=>$groupId,'user_id'=>$token_uid])->delete();
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            // 'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+    /**
+     * [groupMemberList  5.  登录]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    // public function ulogin($params)
+    // {
+    //     //返回信息
+    //     $data = [
+    //         'Code'=>'0',
+    //         'Msg'=>'操作成功',
+    //         'Data'=>$ret,
+    //         'Success'=>true
+    //     ];
+
+    //     return json($data);
+    // }
     //---------- common function-----------
     /**
      * 发送
