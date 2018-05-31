@@ -955,8 +955,8 @@ return json($data);
             $ret[$key]['time'] = date('Y-m-d',strtotime($value['stage_start']));
             $ret[$key]['startTime'] = date("H:i",strtotime($value['stage_start']));
             $ret[$key]['endTime'] =  date("H:i",strtotime($value['stage_end']));
-            $ret[$key]['completion'] = 10.'%';//TODO
-            
+            $ret[$key]['completion'] = '10%';//TODO
+
             $ret[$key]['lessontime'] = $value['lesson_time'];
             $ret[$key]['lessonWay'] = $value['status'];
             $ret[$key]['guide'] = $value['guide'];
@@ -2231,7 +2231,7 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
             $rs[$key]['endTime'] =  date("H:i",strtotime($value['stage_end']));
             $rs[$key]['lessontime'] = $value['lesson_time'];
             $rs[$key]['lessonWay'] = $value['status'];
-            $rs[$key]['completion'] = 10.'%';//TODO
+            $rs[$key]['completion'] = '10%';//TODO
 
             $rs[$key]['status'] = (strtotime($value['stage_start'])>time())?'2':(strtotime($value['stage_end'])<time()?'3':'1');
 
