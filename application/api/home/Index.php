@@ -2787,7 +2787,7 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         $data = [
             'Code'=>'0',
             'Msg'=>'操作成功',
-            'Data'=>$ret,
+            'Data'=>null,
             'Success'=>true
         ];
 
