@@ -1018,7 +1018,7 @@ return json($data);
             //     $ret[$key]['teacher']  = db('toplearning_teacher')->where(['teacher_id'=>$value['teacher_id']])->column('teacher_name')[0];
 
             // }
-            @$ret[$key]['teacherName'] = db('toplearning_login')->where(['user_id'=>$value['teacher_user_id']])->column('teacher_name')[0];
+            @$ret[$key]['teacherName'] = db('toplearning_login')->where(['user_id'=>$value['teacher_user_id']])->column('nickname')[0];
             $ret[$key]['collegeName'] = $value['school_name'] ;
             
             $ret[$key]['collegeId'] = $value['school_id'];
