@@ -1013,12 +1013,12 @@ return json($data);
             $ret[$key]['image'] = $value['picture'];
             $ret[$key]['price'] = $value['price'];
             $ret[$key]['buycount'] = $value['order_num'];
-            $ret[$key]['teacher'] = '';
-            if (db('toplearning_teacher')->where(['teacher_id'=>$value['teacher_id']])->find()) {
-                $ret[$key]['teacher']  = db('toplearning_teacher')->where(['teacher_id'=>$value['teacher_id']])->column('teacher_name')[0];
+            // $ret[$key]['teacher'] = '';
+            // if (db('toplearning_teacher')->where(['teacher_id'=>$value['teacher_id']])->find()) {
+            //     $ret[$key]['teacher']  = db('toplearning_teacher')->where(['teacher_id'=>$value['teacher_id']])->column('teacher_name')[0];
 
-            }
-            @$ret[$key]['teacherName'] = db('toplearning_teacher')->where(['teacher_id'=>$value['teacher_user_id']])->column('teacher_name')[0];
+            // }
+            @$ret[$key]['teacherName'] = db('toplearning_login')->where(['user_id'=>$value['teacher_user_id']])->column('teacher_name')[0];
             $ret[$key]['collegeName'] = $value['school_name'] ;
             
             $ret[$key]['collegeId'] = $value['school_id'];
@@ -2157,11 +2157,11 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
                     $coursearr[$key]['courseType'] = $value['create_name'];
                     $coursearr[$key]['courseid'] = $value['net_material_id'];
 
-                    @$coursearr[$key]['teacherName'] = db('toplearning_teacher')->where(['teacher_id'=>$teacherid])->column('teacher_name')[0];
-                    $coursearr[$key]['collegeName'] = $info['school_name'] ;
+                    @$coursearr[$key]['teacherName'] = db('toplearning_login')->where(['user_id'=>$value['teacher_user_id']])->column('teacher_name')[0];
+                    $coursearr[$key]['collegeName'] = $value['school_name'] ;
                     
-                    $coursearr[$key]['collegeId'] = $info['school_id'];
-                    $coursearr[$key]['teacherId'] = $info['teacher_user_id'];
+                    $coursearr[$key]['collegeId'] = $value['school_id'];
+                    $coursearr[$key]['teacherId'] = $value['teacher_user_id'];
 
                 }
                 $ret['correlatedCurriculumList'] = $coursearr;
@@ -2993,7 +2993,7 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
                 $ret[$key]['name'] = $value['exam_name'];
                 $ret[$key]['schoolName'] = $value['create_name'];
                 $ret[$key]['propositionalPerson'] = $value['user_name'];
-                $ret[$key]['time'] = $value['start_time'].'  '.date('H:i',strtotime($value['end_time']));
+                $ret[$key]['time'] = $value['start_time'].'-'.date('H:i',strtotime($value['end_time']));
                 $ret[$key]['duration'] = ceil((strtotime($value['end_time'])-strtotime($value['start_time']))/60) ;
 
                 $ret[$key]['yesToday'] = false;
