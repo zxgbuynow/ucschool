@@ -3002,6 +3002,13 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
                 }
                 $ret[$key]['alreadyZtAll'] = $value['total'];
 
+                $ret[$key]['isInTheExamTime'] = false;
+
+                if (strtotime($value['start_time'])<time()&&strtotime($value['end_time'])>time()) {
+                   $ret[$key]['isInTheExamTime'] = true;
+                }
+
+
                 $usersumb = db('toplearning_exam_submit')->where(['exam_id'=>$value['exam_id'],'student_user_id'=>$token_uid])->find();
                 @$ret[$key]['alreadyZt'] = $usersumb['had_done'];
                 
