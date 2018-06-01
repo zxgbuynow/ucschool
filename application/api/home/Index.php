@@ -2157,7 +2157,7 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
                     $coursearr[$key]['courseType'] = $value['create_name'];
                     $coursearr[$key]['courseid'] = $value['net_material_id'];
 
-                    @$coursearr[$key]['teacherName'] = db('toplearning_login')->where(['user_id'=>$value['teacher_user_id']])->column('teacher_name')[0];
+                    @$coursearr[$key]['teacherName'] = db('toplearning_login')->where(['user_id'=>$value['teacher_user_id']])->column('nickname')[0];
                     $coursearr[$key]['collegeName'] = $value['school_name'] ;
                     
                     $coursearr[$key]['collegeId'] = $value['school_id'];
