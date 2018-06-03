@@ -1225,7 +1225,17 @@ return json($data);
         //params
         $token = trim($params['token']);
 
-        $info = db('toplearning_school')->where(['del'=>0])->select();
+        //通过token获取 uid
+        $token_uid = $this->decrypt($token);
+
+        $mobiles = db('toplearning_login')->where(['user_id'=>$token_uid])->column('mobile');
+        $info = [];
+        if ($mobiles) {
+            $map['l.mobile'] = array('in',implode(',', $mobiles));
+            $info = db('toplearning_school')->alias('a')->field("a.*")->join('toplearning_login l','a.school_id = l.school_id')->where($map)->select();
+        }
+
+        // $info = db('toplearning_school')->where(['del'=>0])->select();
 
         $ret = array();
         foreach ($info as $key => $value) {
@@ -1437,6 +1447,7 @@ return json($data);
         $token_uid = $this->decrypt($token);
         //data
         $data['title'] = $title;
+        $data['lession_name'] = $title;
         //处理图片
         
         // if(!empty($json['head'])){
@@ -1463,25 +1474,28 @@ return json($data);
         
 
 
+        // $school = db('toplearning_login')->where(['user_id'=>$token_uid])->find();
 
         // $data['picture'] = $image;
         $data['school_id'] = $college;
         $school_name = db('toplearning_school')->where(['school_id'=>$college])->value('school_name');
         $data['school_name'] = $school_name?$school_name:'';
         $data['course_type'] = $type;
+        $data['type'] = 2;
         $data['tags'] = $keyword;
         $data['total_lessons'] = $totallessons;
         $data['month_lessons'] = $monthlessons;
         $data['price'] = $price;
         $data['student_num'] = $limitnumber;
+        $data['lock_pople'] = $limitnumber;
         $data['introduce'] = $desc;
         $data['lession_status'] = 1;
         $data['user_id'] = $token_uid;
         $data['teacher_user_id'] = $token_uid;
         $data['teacher_id'] = db('toplearning_teacher')->where(['user_id'=>$token_uid])->column('teacher_id')?db('toplearning_teacher')->where(['user_id'=>$token_uid])->column('teacher_id')[0]:'';
         $data['school_id'] = $college;
-        $data['release_status'] = 0;
-        $data['reviewed_status'] = null;
+        $data['release_status'] = 1;
+        $data['reviewed_status'] = 0;
         
         if(!empty($courseid)){
             $insertid = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->update($data);
