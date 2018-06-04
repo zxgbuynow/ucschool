@@ -2343,6 +2343,9 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
                 @$save['lesson_time'] = intval($json['lessontime']);
                 @$save['add_time'] = date('Y-m-d H:i:s',strtotime($sttime));
 
+                @$save['stage_start'] = date('Y-m-d H:i:s',strtotime($sttime));
+                @$save['stage_end'] = date('Y-m-d H:i:s',strtotime($sttime)+intval($json['lessontime'])*60);
+
                 // $timearr = explode(' ', $json['time']);
                 // @$save['lesson_time'] = intval($timearr[1]);
                 // $srt = str_replace(array('年','月'),'-',$timearr[0]);
@@ -2427,7 +2430,8 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
                 @$save['lesson_time'] = intval($json['lessontime']);
                 @$save['add_time'] = date('Y-m-d H:i:s',strtotime($sttime));
 
-
+                @$save['stage_start'] = date('Y-m-d H:i:s',strtotime($sttime));
+                @$save['stage_end'] = date('Y-m-d H:i:s',strtotime($sttime)+intval($json['lessontime'])*60);
                 // $timearr = explode(' ', $json['time']);
                 // @$save['lesson_time'] = intval($timearr[1]);
                 // $srt = str_replace(array('年','月'),'-',$timearr[0]);
