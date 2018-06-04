@@ -3226,7 +3226,8 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
     {
         $token = trim($params['token']);
         $courseid = trim($params['courseid']);
-        $schoolId = trim($params['schoolId']);
+
+        // $schoolId = trim($params['schoolId']);
 
         $token_uid = $this->decrypt($token);
 
@@ -3235,21 +3236,30 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
 
         $nt = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->find();//课程
 
-        $sc = db('toplearning_school')->where(['school_id'=>$schoolId])->find();//学校
+        // $sc = db('toplearning_school')->where(['school_id'=>$schoolId])->find();//学校
 
+        if ($nt) {
+            $t = db('toplearning_login')->where(['user_id'=>$nt['teacher_user_id']])->find();//教师
+        }
         //组数据
-        // $data['user_id'] = $token_uid;
-        // $data['nickname'] = $user['nickname'];
-        // $data['seller_id'] = $token_uid;
-        // $data['seller_name'] = $token_uid;
-        // $data['seller_user_id'] = $token_uid;
-        // $data['net_material_id'] = $token_uid;
-        // $data['product_name'] = $token_uid;
-        // $data['price'] = $token_uid;
-        // $data['order_number'] = $token_uid;
-        // $data['teacher_id'] = $token_uid;
-        // $data['teacher_user_id'] = $token_uid;
+        $data['user_id'] = $token_uid;
+        $data['nickname'] = $user['nickname']?$user['nickname']:$user['realname'];
 
+        $data['seller_id'] = $t['user_id'];
+        $data['seller_name'] = $t['nickname'];
+        $data['seller_user_id'] = $t['user_id'];
+
+        $data['net_material_id'] = $courseid;
+        $data['product_name'] = $nt['title'];
+        $data['price'] = $nt['price'];
+
+        $data['order_number'] = date('YmdHis',time()).rand(1000,9999);
+        $data['teacher_id'] = $nt['teacher_id'];
+        $data['teacher_user_id'] = $nt['teacher_user_id'];
+        $data['teacher_name'] = $t['nickname'];
+        $data['create_time'] = time();
+
+        db('toplearning_order')->insert($data);
         //返回信息
         $data = [
             'Code'=>'0',
