@@ -1061,8 +1061,8 @@ return json($data);
         $map['a.release_status'] = 1;
         $map['a.reviewed_status'] = 1;
         $map['a.user_id'] = $this->decrypt($token);
-        // $info = db('toplearning_net_material')->alias('a')->join('toplearning_class_festival f','a.net_material_id = f.material_id')->where($map)->whereTime('stage_start', 'between', [$todaytime, $todayetime])->select();
-        $info = db('toplearning_net_material')->alias('a')->join('toplearning_class_festival f','a.net_material_id = f.material_id','LEFT')->where($map)->select();
+        $info = db('toplearning_net_material')->alias('a')->join('toplearning_class_festival f','a.net_material_id = f.material_id')->where($map)->whereTime('stage_start', 'today')->select();//3，今日课程数据错误
+        // $info = db('toplearning_net_material')->alias('a')->join('toplearning_class_festival f','a.net_material_id = f.material_id','LEFT')->where($map)->select();
         $ret = array();
         foreach ($info as $key => $value) {
             $ret[$key]['courseid'] = $value['material_id'];
@@ -1131,7 +1131,7 @@ return json($data);
          foreach ($info as $key => $value) {
             $ret[$key]['courseid'] = $value['net_material_id'];
             @$ret[$key]['image'] = json_decode($value['picture'],true)['m'];
-            $ret[$key]['type'] = $value['lession_status'];
+            $ret[$key]['type'] = $value['type'];
             $ret[$key]['title'] = $value['title'];
                 // $college = db('toplearning_school')->where(['school_id'=>$value['school_id']])->column('school_name');
             $ret[$key]['college'] = $value['school_name'];
@@ -3186,6 +3186,8 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         if (isset($params['msg'])) {
             $map['title'] = array('like','%'.$params['msg'].'%');
         }
+
+        $map['lession_status'] = 1;//2，录制课程不出现在搜索课程范围内
         $info = db('toplearning_net_material')->where($map)
         ->limit($page*$size,$size)
         ->select();
