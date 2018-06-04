@@ -1408,6 +1408,7 @@ return json($data);
             $ret[$key]['month'] = date('m',strtotime($value['stage_start']));
             $ret[$key]['day'] = date('d',strtotime($value['stage_start']));
             $ret[$key]['startTime'] = date('H:i',strtotime($value['stage_start']));
+            $ret[$key]['endTime'] = date('H:i',strtotime($value['stage_end']));
 
             $ret[$key]['lessontime'] = $value['lesson_time'];
 
@@ -2572,7 +2573,9 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
             $ret[$key]['day'] = date('d',strtotime($value['stage_start']));
             $ret[$key]['startTime'] = date('H:i',strtotime($value['stage_start']));
             $ret[$key]['lessontime'] = $value['lesson_time'];
-            
+            $ret[$key]['endTime'] = date('H:i',strtotime($value['stage_end']));
+
+            @$ret[$key]['liveAddress'] = $this->is_serialized($value['video'])?unserialize($value['video']):$value['video'];
 
         }
 
@@ -2638,6 +2641,7 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
             $rs[$key]['month'] = date('m',strtotime($value['stage_start']));
             $rs[$key]['day'] = date('d',strtotime($value['stage_start']));
             $rs[$key]['startTime'] = date('H:i',strtotime($value['stage_start']));
+            $rs[$key]['endTime'] = date('H:i',strtotime($value['stage_end']));
 
 // var_dump($value['courseware']);
              $rs[$key]['coursewareList'] = unserialize($value['courseware']);
