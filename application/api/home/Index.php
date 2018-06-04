@@ -2329,39 +2329,57 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
         foreach($json_arr as $json){
 
 
-        //处理课节
-        if ($json) {
-            $save['guide'] = $json['guide'];
-            $save['class_name'] = $json['name'];
-            $save['material_id'] = $courseid;
-            $save['status'] = $json['way'];
+            //处理课节
+            if ($json) {
+                $save['guide'] = $json['guide'];
+                $save['class_name'] = $json['name'];
+                $save['material_id'] = $courseid;
+                $save['status'] = $json['way'];
 
-            //时间处理
-            // if ($json['time']) {
+                //时间处理
+                // if ($json['time']) {
 
-                $sttime = $json['year'].'-'.$json['month'].'-'.$json['day'].' '.$json['startTime'];
-                @$save['lesson_time'] = intval($json['lessontime']);
-                @$save['add_time'] = date('Y-m-d H:i:s',strtotime($sttime));
+                    $sttime = $json['year'].'-'.$json['month'].'-'.$json['day'].' '.$json['startTime'];
+                    @$save['lesson_time'] = intval($json['lessontime']);
+                    @$save['add_time'] = date('Y-m-d H:i:s',strtotime($sttime));
 
-                @$save['stage_start'] = date('Y-m-d H:i:s',strtotime($sttime));
-                @$save['stage_end'] = date('Y-m-d H:i:s',strtotime($sttime)+intval($json['lessontime'])*60);
+                    @$save['stage_start'] = date('Y-m-d H:i:s',strtotime($sttime));
+                    @$save['stage_end'] = date('Y-m-d H:i:s',strtotime($sttime)+intval($json['lessontime'])*60);
 
-                // $timearr = explode(' ', $json['time']);
-                // @$save['lesson_time'] = intval($timearr[1]);
-                // $srt = str_replace(array('年','月'),'-',$timearr[0]);
-                // $str1 = str_replace(array('日'),' ',$srt);
-                // $save['add_time'] = date('Y-m-d H:i:s',strtotime($str1));
-            // }
-            
-            $save['index'] = $json['index'];
+                    // $timearr = explode(' ', $json['time']);
+                    // @$save['lesson_time'] = intval($timearr[1]);
+                    // $srt = str_replace(array('年','月'),'-',$timearr[0]);
+                    // $str1 = str_replace(array('日'),' ',$srt);
+                    // $save['add_time'] = date('Y-m-d H:i:s',strtotime($str1));
+                // }
+                
+                $save['index'] = $json['index'];
 
-            //视频
-            $save['video'] = serialize($json['video']);
-            //课件
-            $save['courseware'] = serialize($json['coursewareIdList']);
+                //视频
+                $save['video'] = serialize($json['video']);
+                //课件
+                $save['courseware'] = serialize($json['coursewareIdList']);
 
-            db('toplearning_class_festival')->insert($save);
-        }
+
+                db('toplearning_class_festival')->insert($save);
+
+                $class_id = Db::name('toplearning_class_festival')->getLastInsID();
+
+                db("toplearning_teacher_prepare")->where(['class_id'=>$class_id])->delete();
+                
+                foreach ($json['coursewareIdList'] as $k => $v) {
+                    $cid = $v['coursewareid'];
+                    $in = Db::name('toplearning_teacher_prepare')->where(['prepare_id'=>$cid])->find();
+                    $s = $in;
+                    unset($s['prepare_id']);
+                    unset($s['class_id']);
+                    unset($s['create_time']);
+                    $s['class_id'] = $class_id;
+                    $s['create_time'] = time();
+                    @db('toplearning_teacher_prepare')->insert($s);
+
+                }
+            }
         }
         // $ret = array('courseid'=>intval($courseid));
 
@@ -2445,6 +2463,23 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
             $save['video'] = serialize($json['video']);
             //课件
             $save['courseware'] = serialize($json['coursewareIdList']);
+
+
+
+            db("toplearning_teacher_prepare")->where(['class_id'=>$lessonid])->delete();
+            
+            foreach ($json['coursewareIdList'] as $k => $v) {
+                $cid = $v['coursewareid'];
+                $in = Db::name('toplearning_teacher_prepare')->where(['prepare_id'=>$cid])->find();
+                $s = $in;
+                unset($s['prepare_id']);
+                unset($s['class_id']);
+                unset($s['create_time']);
+                $s['class_id'] = $lessonid;
+                $s['create_time'] = time();
+                @db('toplearning_teacher_prepare')->insert($s);
+
+            }
 
             db('toplearning_class_festival')->where(['material_id'=>$courseid,'class_id'=>$lessonid])->update($save);
         }
