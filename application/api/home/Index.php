@@ -1251,10 +1251,15 @@ return json($data);
         // $info = db('toplearning_school')->where(['del'=>0])->select();
 
         $ret = array();
+        $i = 0;
         foreach ($info as $key => $value) {
             $ret[$key]['collegeid'] = $value['school_id'];
             $ret[$key]['name'] = $value['school_name'];
+            $i++;
         }
+        $s = db('toplearning_school')->where(['school_id'=>7])->find();
+        $ret[$i]['collegeid'] =  $s['school_id'];
+        $ret[$i]['name'] =  $s['school_name'];
         //返回信息
         $data = [
             'Code'=>'0',
@@ -1642,7 +1647,7 @@ return json($data);
         $token = trim($params['token']);
         $courseid = trim($params['courseid']);
 
-        db('toplearning_net_material')->where(['net_material_id'=>$courseid])->update(['release_status'=>0,'reviewed_status'=>0]);
+        db('toplearning_net_material')->where(['net_material_id'=>$courseid])->update(['release_status'=>0,'reviewed_status'=>1]);
 
         $info = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->find();
 
