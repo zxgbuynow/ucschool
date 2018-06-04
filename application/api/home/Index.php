@@ -957,6 +957,12 @@ return json($data);
             $ret[$key]['endTime'] =  date("H:i",strtotime($value['stage_end']));
             $ret[$key]['completion'] = '10%';//TODO
 
+
+            $ret[$key]['year'] = date('Y',strtotime($value['stage_start']));
+            $ret[$key]['month'] = date('m',strtotime($value['stage_start']));
+            $ret[$key]['day'] = date('d',strtotime($value['stage_start']));
+            $ret[$key]['startTime'] = date('H:i',strtotime($value['stage_start']));
+
             $ret[$key]['lessontime'] = $value['lesson_time'];
             $ret[$key]['lessonWay'] = $value['status'];
             $ret[$key]['guide'] = $value['guide'];
@@ -1066,6 +1072,13 @@ return json($data);
             $ret[$key]['status'] = (strtotime($value['stage_start'])>time())?'2':(strtotime($value['stage_end'])<time()?'3':'1');
             $ret[$key]['number'] = $value['off_num'];
             $ret[$key]['time'] = $value['stage_start'];
+
+            //返回时间处理
+            //$value['year'].'-'.$value['month'].'-'.$value['day'].' '.$value['startTime'];
+            $ret[$key]['year'] = date('Y',strtotime($value['stage_start']));
+            $ret[$key]['month'] = date('m',strtotime($value['stage_start']));
+            $ret[$key]['day'] = date('d',strtotime($value['stage_start']));
+
             $ret[$key]['type'] = $value['status'];
 
             //liveAddress |videoBroadcastAddress TODO
@@ -1390,6 +1403,14 @@ return json($data);
             $ret[$key]['lessonsid'] = $value['class_id'];
             $ret[$key]['name'] = $value['class_name'];
             $ret[$key]['index'] = $i;
+
+            $ret[$key]['year'] = date('Y',strtotime($value['stage_start']));
+            $ret[$key]['month'] = date('m',strtotime($value['stage_start']));
+            $ret[$key]['day'] = date('d',strtotime($value['stage_start']));
+            $ret[$key]['startTime'] = date('H:i',strtotime($value['stage_start']));
+
+            $ret[$key]['lessontime'] = $value['lesson_time'];
+
             // $video = unserialize($value['video']);
 
             $ret[$key]['video'] = $this->is_serialized($value['video'])?unserialize($value['video']):$value['video'];
@@ -1518,12 +1539,19 @@ return json($data);
             $save['status'] = $value['way'];
 
             //时间处理
-            $timearr = explode(' ', $value['time']);
-            @$save['lesson_time'] = intval($timearr[1]);
-            $srt = str_replace(array('年','月'),'-',$timearr[0]);
-            $str1 = str_replace(array('日'),' ',$srt);
-            $save['stage_start'] = date('Y-m-d H:i:s',strtotime($str1));
-            @$save['stage_end'] = date('Y-m-d H:i:s',strtotime($str1)+intval($timearr[1])*60);
+            $sttime = $value['year'].'-'.$value['month'].'-'.$value['day'].' '.$value['startTime'];
+            @$save['lesson_time'] = intval($value['lessontime']);
+            @$save['stage_start'] = date('Y-m-d H:i:s',strtotime($sttime));
+            @$save['stage_end'] = date('Y-m-d H:i:s',strtotime($sttime)+intval($value['lessontime'])*60);
+
+            // $timearr = explode(' ', $value['time']);
+            // @$save['lesson_time'] = intval($timearr[1]);
+            // $srt = str_replace(array('年','月'),'-',$timearr[0]);
+            // $str1 = str_replace(array('日'),' ',$srt);
+            // $save['stage_start'] = date('Y-m-d H:i:s',strtotime($str1));
+            // @$save['stage_end'] = date('Y-m-d H:i:s',strtotime($str1)+intval($timearr[1])*60);
+
+
             $save['index'] = $value['index'];
 
             //视频
@@ -1776,7 +1804,13 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
             $save['material_id'] = $net_material_id;
             $save['status'] = 2;
             
-                $save['stage_start'] = date('Y-m-d H:i:s',strtotime(strtr($value['time'],['年'=>'-','月'=>'-','日'=>""])));
+            $sttime = $value['year'].'-'.$value['month'].'-'.$value['day'].' '.$value['startTime'];
+
+            @$save['stage_start'] = date('Y-m-d H:i:s',strtotime($sttime));
+
+            // $save['stage_start'] = date('Y-m-d H:i:s',strtotime(strtr($value['time'],['年'=>'-','月'=>'-','日'=>""])));
+
+
             $save['lesson_time'] = $value['lessontime'];
                 $save['add_time'] = date('Y-m-d H:i:s',time());
 
@@ -2247,6 +2281,11 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
             $rs[$key]['lessonWay'] = $value['status'];
             $rs[$key]['completion'] = '10%';//TODO
 
+
+            $rs[$key]['year'] = date('Y',strtotime($value['stage_start']));
+            $rs[$key]['month'] = date('m',strtotime($value['stage_start']));
+            $rs[$key]['day'] = date('d',strtotime($value['stage_start']));
+
             $rs[$key]['status'] = (strtotime($value['stage_start'])>time())?'2':(strtotime($value['stage_end'])<time()?'3':'1');
 
             //liveAddress |videoBroadcastAddress 
@@ -2297,13 +2336,18 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
             $save['status'] = $json['way'];
 
             //时间处理
-            if ($json['time']) {
-                $timearr = explode(' ', $json['time']);
-                @$save['lesson_time'] = intval($timearr[1]);
-                $srt = str_replace(array('年','月'),'-',$timearr[0]);
-                $str1 = str_replace(array('日'),' ',$srt);
-                $save['add_time'] = date('Y-m-d H:i:s',strtotime($str1));
-            }
+            // if ($json['time']) {
+
+                $sttime = $json['year'].'-'.$json['month'].'-'.$json['day'].' '.$json['startTime'];
+                @$save['lesson_time'] = intval($json['lessontime']);
+                @$save['add_time'] = date('Y-m-d H:i:s',strtotime($sttime));
+
+                // $timearr = explode(' ', $json['time']);
+                // @$save['lesson_time'] = intval($timearr[1]);
+                // $srt = str_replace(array('年','月'),'-',$timearr[0]);
+                // $str1 = str_replace(array('日'),' ',$srt);
+                // $save['add_time'] = date('Y-m-d H:i:s',strtotime($str1));
+            // }
             
             $save['index'] = $json['index'];
 
@@ -2377,13 +2421,18 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
             $save['status'] = $json['way'];
 
             //时间处理
-            if ($json['time']) {
-                $timearr = explode(' ', $json['time']);
-                @$save['lesson_time'] = intval($timearr[1]);
-                $srt = str_replace(array('年','月'),'-',$timearr[0]);
-                $str1 = str_replace(array('日'),' ',$srt);
-                $save['add_time'] = date('Y-m-d H:i:s',strtotime($str1));
-            }
+            // if ($json['time']) {
+                $sttime = $json['year'].'-'.$json['month'].'-'.$json['day'].' '.$json['startTime'];
+                @$save['lesson_time'] = intval($json['lessontime']);
+                @$save['add_time'] = date('Y-m-d H:i:s',strtotime($sttime));
+
+
+                // $timearr = explode(' ', $json['time']);
+                // @$save['lesson_time'] = intval($timearr[1]);
+                // $srt = str_replace(array('年','月'),'-',$timearr[0]);
+                // $str1 = str_replace(array('日'),' ',$srt);
+                // $save['add_time'] = date('Y-m-d H:i:s',strtotime($str1));
+            // }
             
             $save['index'] = $json['index'];
 
@@ -2459,6 +2508,9 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
             //     $save['stage_start'] = date('Y-m-d H:i:s',strtotime($str1));
             // }
             
+            $sttime = $json['year'].'-'.$json['month'].'-'.$json['day'].' '.$json['startTime'];
+            @$save['stage_start'] = date('Y-m-d H:i:s',strtotime($sttime));
+
             $save['lesson_time'] = isset($json['lessontime'])?$json['lessontime']:'';
 
 
@@ -2508,11 +2560,21 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
         $res = $this->uploadFile($file,"mp4");
  
 
+        $map['a.net_material_id'] = $courseid;
+        $map['f.del'] = 0;
+        $info = db('toplearning_net_material')->alias('a')->field('f.*')->join('toplearning_class_festival f','a.net_material_id = f.material_id','LEFT')->where($map)->select();
+        $ret = array();
 
+        foreach ($info as $key => $value) {
+            
+            $ret[$key]['year'] = date('Y',strtotime($value['stage_start']));
+            $ret[$key]['month'] = date('m',strtotime($value['stage_start']));
+            $ret[$key]['day'] = date('d',strtotime($value['stage_start']));
+            $ret[$key]['startTime'] = date('H:i',strtotime($value['stage_start']));
+            $ret[$key]['lessontime'] = $value['lesson_time'];
+            
 
-
-
-
+        }
 
 
 
@@ -2521,7 +2583,7 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
         $data = [
             'Code'=>$res['code'],
             'Msg'=>'操作成功',
-            'Data'=>null,
+            'Data'=>$ret,
             'Success'=>true
         ];
 
@@ -2571,6 +2633,11 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
             $rs[$key]['time'] = date("Y年-m月-d日 H:i",strtotime($value['stage_start']));
             $rs[$key]['vdeoDuration'] = date("H:i",strtotime($value['stage_start']));
             $rs[$key]['lessontime'] = $value['lesson_time'];
+
+            $rs[$key]['year'] = date('Y',strtotime($value['stage_start']));
+            $rs[$key]['month'] = date('m',strtotime($value['stage_start']));
+            $rs[$key]['day'] = date('d',strtotime($value['stage_start']));
+            $rs[$key]['startTime'] = date('H:i',strtotime($value['stage_start']));
 
 // var_dump($value['courseware']);
              $rs[$key]['coursewareList'] = unserialize($value['courseware']);
