@@ -1139,24 +1139,24 @@ return json($data);
                 // $ret[$key]['release'] = db('toplearning_class_festival')->where(['material_id'=>$value['net_material_id']])->count();
             $ret[$key]['release'] = $value['release'];
 
-            $status = 0;
-            switch ($value['reviewed_status']) {
-                case '0':
-                $status = 1;
-                break;
-                case '1':
-                $status = 3;
+            // $status = 0;
+            // switch ($value['reviewed_status']) {
+            //     case '0':
+            //     $status = 1;
+            //     break;
+            //     case '1':
+            //     $status = 3;
 
-                break;
-                case '2':
-                $status = 2;
+            //     break;
+            //     case '2':
+            //     $status = 2;
 
-                break;
-                default:
-                $status = 0;
-                break;
-            }
-            $ret[$key]['status'] = $status;
+            //     break;
+            //     default:
+            //     $status = 0;
+            //     break;
+            // }
+            $ret[$key]['status'] = $value['reviewed_status'];
 
             $ret[$key]['collegeName'] = $value['school_name'] ;
             $ret[$key]['teacherName'] = $user['nickname'];
