@@ -1508,7 +1508,7 @@ return json($data);
         $school_name = db('toplearning_school')->where(['school_id'=>$college])->value('school_name');
         $data['school_name'] = $school_name?$school_name:'';
         $data['course_type'] = $type;
-        $data['type'] = 2;
+        $data['type'] = 1;
         $data['tags'] = $keyword;
         $data['total_lessons'] = $totallessons;
         $data['month_lessons'] = $monthlessons;
@@ -1647,7 +1647,7 @@ return json($data);
         $token = trim($params['token']);
         $courseid = trim($params['courseid']);
 
-        db('toplearning_net_material')->where(['net_material_id'=>$courseid])->update(['release_status'=>0,'reviewed_status'=>1]);
+        db('toplearning_net_material')->where(['net_material_id'=>$courseid])->update(['release_status'=>1,'reviewed_status'=>1]);
 
         $info = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->find();
 
@@ -1774,6 +1774,7 @@ return json($data);
         $data['title'] = $title;
         // $data['lession_img'] = $image;
                         $data['course_type']  = trim($json['typeid']);
+        $data['type'] = 2;
         $data['lesson_type'] = 2;
         $data['lession_status'] = 2;
          $data['keyword'] = $keyword;
@@ -1781,7 +1782,7 @@ return json($data);
         $data['share'] = $share;
         $data['add_time'] = date('Y-m-d H:i:s',time());
         $data['release_status'] = "1";
-        $data['reviewed_status'] = "1";
+        $data['reviewed_status'] = "3";//审核通过了
         //toplearning_micro_class
         $data['total_lessons'] = count($json['classFestivalList']);
         $data['release'] = count($json['classFestivalList']);
