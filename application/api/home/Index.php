@@ -1509,6 +1509,7 @@ return json($data);
         $data['school_name'] = $school_name?$school_name:'';
         $data['course_type'] = $type;
         $data['type'] = 1;
+        $data['type_from'] = 2;//from APP
         $data['tags'] = $keyword;
         $data['total_lessons'] = $totallessons;
         $data['month_lessons'] = $monthlessons;
