@@ -1061,7 +1061,7 @@ return json($data);
         $map['a.release_status'] = 1;
         $map['a.reviewed_status'] = 1;
         $map['a.user_id'] = $this->decrypt($token);
-        $info = db('toplearning_net_material')->alias('a')->join('toplearning_class_festival f','a.net_material_id = f.material_id')->where($map)->whereTime('stage_start', 'today')->select();//3，今日课程数据错误
+        $info = db('toplearning_net_material')->alias('a')->join('toplearning_class_festival f','a.net_material_id = f.material_id')->where($map)->whereTime('f.stage_start', 'today')->select();//3，今日课程数据错误
         // $info = db('toplearning_net_material')->alias('a')->join('toplearning_class_festival f','a.net_material_id = f.material_id','LEFT')->where($map)->select();
         $ret = array();
         foreach ($info as $key => $value) {
@@ -1170,7 +1170,7 @@ return json($data);
 
 
     }else{
-        $info = db('toplearning_net_material')->alias('a')->join('toplearning_student_material s','a.net_material_id = s.material_id')->where(['a.del'=>0,'s.user_id'=>$token_uid])->select();
+        $info = db('toplearning_net_material')->alias('a')->field('a.*,s.*')->join('toplearning_student_material s','a.net_material_id = s.material_id')->where(['a.del'=>0,'s.user_id'=>$token_uid])->select();
         foreach ($info as $key => $value) {
             $ret[$key]['courseid'] = $value['net_material_id'];
             $ret[$key]['image'] = $value['picture'];
