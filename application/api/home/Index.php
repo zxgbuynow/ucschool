@@ -1009,6 +1009,8 @@ return json($data);
         $page = $page ==''?0:$page;
         $size = $size == ''?10:$size;
 
+        $map['type'] = 1;
+        $map['reviewed_status'] = 3;
         $limit = $page*$size;
         $teachers = db('toplearning_net_material')->where($map)->limit($limit, $size)->select();
 
@@ -2184,7 +2186,7 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
         //通过token获取 uid
         // $token_uid = $this->decrypt($token);
 
-        $info = db('toplearning_login')->alias('a')->field('a.*,m.*,m.introduce as mintroduce')->join('toplearning_teacher t','a.user_id = t.user_id')->join('toplearning_net_material m','a.user_id = m.teacher_user_id')->where(['m.teacher_user_id'=>$teacherid])->find();
+        $info = db('toplearning_login')->alias('a')->field('a.*,m.*,m.introduce as mintroduce')->join('toplearning_teacher t','a.user_id = t.user_id')->join('toplearning_net_material m','a.user_id = m.teacher_user_id')->where(['m.teacher_user_id'=>$teacherid,'m.type'=>1,'m.reviewed_status'=>3])->find();
         $ret = array();
         if ($info) {
             $ret['headurl'] = $info['avatar'];
@@ -3188,6 +3190,8 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         }
 
         $map['lession_status'] = 1;//2，录制课程不出现在搜索课程范围内
+        $map['type'] = 1;
+        $map['reviewed_status'] = 3;
         $info = db('toplearning_net_material')->where($map)
         ->limit($page*$size,$size)
         ->select();
