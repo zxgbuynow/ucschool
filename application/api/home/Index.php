@@ -878,6 +878,10 @@ return json($data);
             $ret['price'] = $value['price'];
             $ret['paynumber'] = $value['order_num'];
             $ret['limitpaynumber'] = $value['student_num'];
+
+            $now = time();
+            @$ret['haveStartedClassNum'] = db('toplearning_class_festival')->where(['material_id'=>$value['net_material_id']])->whereTime('stage_start', '>=', $now)->count();
+
             $ret['isOwnCourse'] = $value['user_id'] == $token_uid ?true:false ;
             if ($user&& $user['group_id']==5) {
                 $ret['isBuy'] = db('toplearning_order')->where(['user_id'=>$token_uid, 'net_material_id'=>$value['net_material_id']])->count()?true:false;
@@ -910,12 +914,12 @@ return json($data);
 
         $token_uid = $this->decrypt($token);
 
-        $info = db('toplearning_net_material')->alias('a')->field("a.*,l.*,l.introduce as lintroduce")->join('toplearning_login l','a.teacher_user_id = l.user_id')->where(['net_material_id'=>$courseid])->find();
+        $info = db('toplearning_net_material')->alias('a')->field("a.*,a.introduce as aintroduce,l.*,l.introduce as lintroduce")->join('toplearning_login l','a.teacher_user_id = l.user_id')->where(['net_material_id'=>$courseid])->find();
 
         $ret = [];
         if ($info) {
             $ret['courseid'] = $info['net_material_id'];
-            $ret['desc'] = $info['introduce'];
+            $ret['desc'] = $info['aintroduce'];
             $ret['teacherName'] = $info['nickname'];
             $ret['teacherHead'] = $info['avatar'];
             $ret['teacherPersent'] = $info['lintroduce'];
@@ -3265,6 +3269,16 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         $data['create_time'] = time();
 
         db('toplearning_order')->insert($data);
+
+        //学生关联表
+        $sdata['material_id'] = $courseid;
+        $sdata['user_id'] = $token_uid;
+        $sdata['add_time'] = time();
+        db('toplearning_student_material')->insert($sdata);
+
+        //更新课程表
+        
+        db('toplearning_net_material')->where(['net_material_id'=>$courseid])->setInc('order_num');
         //返回信息
         $data = [
             'Code'=>'0',
