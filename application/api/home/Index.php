@@ -2186,14 +2186,14 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
         //通过token获取 uid
         // $token_uid = $this->decrypt($token);
 
-        $info = db('toplearning_login')->alias('a')->join('toplearning_teacher t','a.user_id = t.user_id')->join('toplearning_net_material m','a.user_id = m.teacher_user_id')->where(['m.teacher_user_id'=>$teacherid])->find();
+        $info = db('toplearning_login')->alias('a')->field('a.*,m.*,m.introduce as mintroduce')->join('toplearning_teacher t','a.user_id = t.user_id')->join('toplearning_net_material m','a.user_id = m.teacher_user_id')->where(['m.teacher_user_id'=>$teacherid])->find();
         $ret = array();
         if ($info) {
             $ret['headurl'] = $info['avatar'];
             $ret['name'] = $info['nickname'];
             $ret['score'] = $info['persent'];//TODO
             $ret['school'] = $info['school_name'];
-            $ret['introduction'] = $info['introduce'];
+            $ret['introduction'] = $info['mintroduce'];
             $ret['correlatedCurriculumList'] = array();
             // @$ret['teacherName'] = db('toplearning_teacher')->where(['teacher_id'=>$value['teacher_user_id']])->column('teacher_name')[0];
             // $ret['collegeName'] = $info['school_name'] ;
