@@ -1136,8 +1136,8 @@ return json($data);
                 // $college = db('toplearning_school')->where(['school_id'=>$value['school_id']])->column('school_name');
             $ret[$key]['college'] = $value['school_name'];
             $ret[$key]['total'] = $value['total_lessons'];
-                // $ret[$key]['release'] = db('toplearning_class_festival')->where(['material_id'=>$value['net_material_id']])->count();
-            $ret[$key]['release'] = $value['release'];
+            $ret[$key]['release'] = db('toplearning_class_festival')->where(['material_id'=>$value['net_material_id']])->count();
+            // $ret[$key]['release'] = $value['release'];
 
             // $status = 0;
             // switch ($value['reviewed_status']) {
