@@ -1057,9 +1057,7 @@ return json($data);
         $todayetime = strtotime(date('Y-m-d',time()))+24 * 60 * 60;
 
         $map['a.del'] = 0;
-        $map['a.lession_status'] = 1;
-        $map['a.release_status'] = 1;
-        $map['a.reviewed_status'] = 1;
+        $map['a.reviewed_status'] = 3;
         $map['a.user_id'] = $this->decrypt($token);
         $info = db('toplearning_net_material')->alias('a')->join('toplearning_class_festival f','a.net_material_id = f.material_id')->where($map)->whereTime('f.stage_start', 'today')->select();//3，今日课程数据错误
         // $info = db('toplearning_net_material')->alias('a')->join('toplearning_class_festival f','a.net_material_id = f.material_id','LEFT')->where($map)->select();
