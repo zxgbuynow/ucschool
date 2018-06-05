@@ -2195,6 +2195,7 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
             $ret['score'] = $info['persent'];//TODO
             $ret['school'] = $info['school_name'];
             $ret['introduction'] = $info['mintroduce'];
+            $ret['signture'] = $info['introduce'];
             $ret['correlatedCurriculumList'] = array();
             // @$ret['teacherName'] = db('toplearning_teacher')->where(['teacher_id'=>$value['teacher_user_id']])->column('teacher_name')[0];
             // $ret['collegeName'] = $info['school_name'] ;
