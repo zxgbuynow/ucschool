@@ -2187,6 +2187,7 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
         // $token_uid = $this->decrypt($token);
 
         $info = db('toplearning_login')->alias('a')->field('a.*,m.*,m.introduce as mintroduce')->join('toplearning_teacher t','a.user_id = t.user_id')->join('toplearning_net_material m','a.user_id = m.teacher_user_id')->where(['m.teacher_user_id'=>$teacherid,'m.type'=>1,'m.reviewed_status'=>3])->find();
+        // echo db('toplearning_login')->getlastsql();exit;
         $ret = array();
         if ($info) {
             $ret['headurl'] = $info['avatar'];
@@ -2202,7 +2203,7 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
             // $ret['teacherId'] = $info['teacher_user_id'];
 
             //相关课程
-            $course = db('toplearning_net_material')->where(['del'=>0,'teacher_user_id'=>$teacherid])->select();
+            $course = db('toplearning_net_material')->where(['del'=>0,'teacher_user_id'=>$teacherid,'type'=>1,'reviewed_status'=>3])->select();
             $coursearr = array();
             if ($course) {
                 foreach ($course as $key => $value) {
