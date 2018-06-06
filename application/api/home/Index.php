@@ -871,7 +871,7 @@ return json($data);
             $ret['title'] = $value['title'];
             $ret['college'] = $value['school_name'];
             $ret['MonthlyPitchNumber'] = $value['month_lessons'];
-            $ret['CommonPitchNumber'] = $value['total_lessons'];
+            $ret['CommonPitchNumber'] = db('toplearning_class_festival')->where(['material_id'=>$value['net_material_id']])->count();
             $ret['type'] = $value['course_type'];
             @$ret['typeName'] = db('toplearning_course_type')->where(['type_id'=>$value['course_type']])->column('type_name')[0];
             $ret['keyword'] = $value['tags'];
@@ -2277,7 +2277,9 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
         $ret['collegeId'] = $info['school_id'];
         $ret['typeId'] = $info['course_type'];
         $ret['monthlyPitchNumber'] = $info['month_lessons'];
-        $ret['commonPitchNumber'] = $info['total_lessons'];
+
+
+        $ret['commonPitchNumber'] = db('toplearning_class_festival')->where(['material_id'=>$info['net_material_id']])->count();
 
         //课时 
         $lesson =  db('toplearning_class_festival')->where(['del'=>0,'material_id'=>$courseid])->select();
