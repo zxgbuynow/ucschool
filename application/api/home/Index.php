@@ -1109,8 +1109,7 @@ return json($data);
 
         }else{
             $token_uid = $this->decrypt($token);
-            $info = db('toplearning_net_material')->alias('a')->field('a.*,s.*')->join('toplearning_student_material s','a.net_material_id = s.material_id')->join('toplearning_class_festival f','a.net_material_id = f.material_id')->where(['a.del'=>0,'s.user_id'=>$token_uid])->select();
-
+            $info = db('toplearning_net_material')->alias('a')->field('a.*,s.*,f.*')->join('toplearning_student_material s','a.net_material_id = s.material_id')->join('toplearning_class_festival f','a.net_material_id = f.material_id')->where(['a.del'=>0,'s.user_id'=>$token_uid])->select();
             foreach ($info as $key => $value) {
                 $ret[$key]['courseid'] = $value['net_material_id'];
                 $ret[$key]['courseName'] = $value['title'];
