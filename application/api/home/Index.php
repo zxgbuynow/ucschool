@@ -2310,6 +2310,8 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
         $ret['limitpaynumber'] = $info['student_num'];
         $ret['desc'] = $info['introduce'];
 
+        $ret['total'] = $info['lession_num'];
+
         //新加
         $ret['collegeId'] = $info['school_id'];
         $ret['typeId'] = $info['course_type'];
