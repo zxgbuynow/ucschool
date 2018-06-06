@@ -880,7 +880,7 @@ return json($data);
             $ret['limitpaynumber'] = $value['student_num'];
 
             $now = time();
-            @$ret['haveStartedClassNum'] = db('toplearning_class_festival')->where(['material_id'=>$value['net_material_id']])->whereTime('stage_end', '>=', $now)->count();
+            @$ret['haveStartedClassNum'] = db('toplearning_class_festival')->where(['material_id'=>$value['net_material_id']])->whereTime('stage_start', '<', $now)->count();
 
             $ret['isOwnCourse'] = $value['user_id'] == $token_uid ?true:false ;
             if ($user&& $user['group_id']==5) {
