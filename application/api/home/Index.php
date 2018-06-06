@@ -1068,40 +1068,78 @@ return json($data);
         $info = db('toplearning_net_material')->alias('a')->join('toplearning_class_festival f','a.net_material_id = f.material_id')->where($map)->whereTime('f.stage_start', 'today')->select();//3，今日课程数据错误
         // $info = db('toplearning_net_material')->alias('a')->join('toplearning_class_festival f','a.net_material_id = f.material_id','LEFT')->where($map)->select();
         $ret = array();
-        foreach ($info as $key => $value) {
-            $ret[$key]['courseid'] = $value['material_id'];
-            $ret[$key]['courseName'] = $value['title'];
-            $ret[$key]['lessonsId'] = $value['class_id'];
-            $ret[$key]['lessonsName'] = $value['class_name'];
-            $ret[$key]['status'] = (strtotime($value['stage_start'])>time())?'2':(strtotime($value['stage_end'])<time()?'3':'1');
-            $ret[$key]['number'] = $value['off_num'];
-            $ret[$key]['time'] = $value['stage_start'];
 
-            //返回时间处理
-            //$value['year'].'-'.$value['month'].'-'.$value['day'].' '.$value['startTime'];
-            $ret[$key]['year'] = date('Y',strtotime($value['stage_start']));
-            $ret[$key]['month'] = date('m',strtotime($value['stage_start']));
-            $ret[$key]['day'] = date('d',strtotime($value['stage_start']));
 
-            $ret[$key]['type'] = $value['status'];
+        $user = db('toplearning_login')->where(['user_id'=>$map['a.user_id']])->find();
+        if ($user&& $user['group_id']==3) {//laoshi
 
-            //liveAddress |videoBroadcastAddress TODO
-            // if ($value['status']==1) {
+            foreach ($info as $key => $value) {
+                $ret[$key]['courseid'] = $value['material_id'];
+                $ret[$key]['courseName'] = $value['title'];
+                $ret[$key]['lessonsId'] = $value['class_id'];
+                $ret[$key]['lessonsName'] = $value['class_name'];
+                $ret[$key]['status'] = (strtotime($value['stage_start'])>time())?'2':(strtotime($value['stage_end'])<time()?'3':'1');
+                $ret[$key]['number'] = $value['off_num'];
+                $ret[$key]['time'] = $value['stage_start'];
+
+                //返回时间处理
+                //$value['year'].'-'.$value['month'].'-'.$value['day'].' '.$value['startTime'];
+                $ret[$key]['year'] = date('Y',strtotime($value['stage_start']));
+                $ret[$key]['month'] = date('m',strtotime($value['stage_start']));
+                $ret[$key]['day'] = date('d',strtotime($value['stage_start']));
+
+                $ret[$key]['type'] = $value['status'];
+
+                //liveAddress |videoBroadcastAddress TODO
+                // if ($value['status']==1) {
+                    @$ret[$key]['liveAddress'] = $this->is_serialized($value['video'])?unserialize($value['video'])[0]['video']:$value['video'];
+                // }else{
+                   @$ret[$key]['videoBroadcastAddress'] = $this->is_serialized($value['courseware'])?unserialize($value['courseware'])[0]['address']:$value['courseware'];
+                // }
+
+                $ret[$key]['lessontime'] = $value['lesson_time'];
+                $ret[$key]['startTime'] = date('H:i',strtotime($value['stage_start']));
+                $ret[$key]['endTime'] = date('H:i',strtotime($value['stage_end']));
+
+                $ret[$key]['collegeName'] = $value['school_name'] ;
+                @$ret[$key]['teacherName'] = db('toplearning_login')->where(['user_id'=>$value['teacher_user_id']])->column('nickname')[0];
+                $ret[$key]['collegeId'] = $value['school_id'];
+                $ret[$key]['teacherId'] = $value['teacher_user_id'];
+            }
+
+        }else{
+            $token_uid = $this->decrypt($token);
+            $info = db('toplearning_net_material')->alias('a')->field('a.*,s.*')->join('toplearning_student_material s','a.net_material_id = s.material_id')->join('toplearning_class_festival f','a.net_material_id = f.material_id')->where(['a.del'=>0,'s.user_id'=>$token_uid])->select();
+
+            foreach ($info as $key => $value) {
+                $ret[$key]['courseid'] = $value['net_material_id'];
+                $ret[$key]['courseName'] = $value['title'];
+                $ret[$key]['lessonsId'] = $value['class_id'];
+                $ret[$key]['lessonsName'] = $value['class_name'];
+                $ret[$key]['status'] = (strtotime($value['stage_start'])>time())?'2':(strtotime($value['stage_end'])<time()?'3':'1');
+                $ret[$key]['number'] = $value['off_num'];
+                $ret[$key]['time'] = $value['stage_start'];
+
+                //返回时间处理
+                $ret[$key]['year'] = date('Y',strtotime($value['stage_start']));
+                $ret[$key]['month'] = date('m',strtotime($value['stage_start']));
+                $ret[$key]['day'] = date('d',strtotime($value['stage_start']));
                 @$ret[$key]['liveAddress'] = $this->is_serialized($value['video'])?unserialize($value['video'])[0]['video']:$value['video'];
-            // }else{
-               @$ret[$key]['videoBroadcastAddress'] = $this->is_serialized($value['courseware'])?unserialize($value['courseware'])[0]['address']:$value['courseware'];
-            // }
+                @$ret[$key]['videoBroadcastAddress'] = $this->is_serialized($value['courseware'])?unserialize($value['courseware'])[0]['address']:$value['courseware'];
+                $ret[$key]['lessontime'] = $value['lesson_time'];
+                $ret[$key]['startTime'] = date('H:i',strtotime($value['stage_start']));
+                $ret[$key]['endTime'] = date('H:i',strtotime($value['stage_end']));
+                $ret[$key]['type'] = $value['status'];
 
-            $ret[$key]['lessontime'] = $value['lesson_time'];
-            $ret[$key]['startTime'] = date('H:i',strtotime($value['stage_start']));
-            $ret[$key]['endTime'] = date('H:i',strtotime($value['stage_end']));
+                $ret[$key]['collegeName'] = $value['school_name'] ;
+                @$ret[$key]['teacherName'] = db('toplearning_login')->where(['user_id'=>$value['teacher_user_id']])->column('nickname')[0];
+                $ret[$key]['collegeId'] = $value['school_id'];
+                $ret[$key]['teacherId'] = $value['teacher_user_id'];
+                $ret[$key]['complete'] = 20;//TODO                
 
-            $ret[$key]['collegeName'] = $value['school_name'] ;
-            @$ret[$key]['teacherName'] = db('toplearning_login')->where(['user_id'=>$value['teacher_user_id']])->column('nickname')[0];
-            $ret[$key]['collegeId'] = $value['school_id'];
-            $ret[$key]['teacherId'] = $value['teacher_user_id'];
+            }
+
         }
-        
         $data = [        //返回信息
 
         'Code'=>'0',
