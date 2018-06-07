@@ -249,7 +249,7 @@ class Index
     public function register($params)
     {
         //参数
-        $data['group_id'] = trim($params['type'])=='1'?'4':'3';
+        $data['group_id'] = trim($params['type'])=='1'?'5':'3';
         $data['nickname'] = trim($params['name']);
         $data['code'] = trim($params['code']);
         $data['mobile'] = trim($params['phone']);
@@ -267,7 +267,8 @@ class Index
         //生成密码 md5
         // $data['password'] =  Hash::make((string)trim($params['password']));
         $data['password'] =  md5((string)trim($params['password']));
-
+        $data['school_ids_own'] = 7;//U学院
+        $data['school_ids'] = 7;//U学院
         //插入数据
         $me = db('toplearning_login')->insert($data);
         if (!$me) {
@@ -507,7 +508,6 @@ class Index
         //是否有该学院
         //通过token获取 uid
         $token_uid = $this->decrypt($token);
-        $map['school_id'] = $collegeid;
 
         if (!db('toplearning_school')->where($map)->find()) {
             return $this->error('该学院不存在或删除');
@@ -3236,7 +3236,8 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
             $map['title'] = array('like','%'.$params['msg'].'%');
         }
 
-        $map['lession_status'] = 1;//2，录制课程不出现在搜索课程范围内
+        // $map['lession_status'] = 1;//2，录制课程不出现在搜索课程范围内 后台沟通后去掉
+
         $map['type'] = 1;
         $map['reviewed_status'] = 3;
         $info = db('toplearning_net_material')->where($map)
@@ -3292,11 +3293,16 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
             $t = db('toplearning_login')->where(['user_id'=>$nt['teacher_user_id']])->find();//教师
         }
         //查看U豆
-        @$ud = db('toplearning_ud_school')->where(['user_id'=>$token_uid,'school_id'=>$user['school_id']])->find();
+        //通过老师查找课程学院ID
+        @$school_id = db('toplearning_net_material')->alias('a')->join('toplearning_login l','a.teacher_user_id = l.user_id')->where(['a.net_material_id'=>$courseid])->value('school_id');
+
+        @$ud = db('toplearning_ud_school')->where(['user_id'=>$token_uid,'school_id'=>$school_id])->find();
 
         //setDec
         if ( $nt&&( $ud['num'] > intval($nt['price']) ) ) {
-            db('toplearning_ud_school')->where(['user_id'=>$token_uid,'school_id'=>$user['school_id']])->setDec( 'num',intval($nt['price']) );
+            
+            db('toplearning_ud_school')->where(['user_id'=>$token_uid,'school_id'=>$school_id])->setDec( 'num',intval($nt['price']) );
+
         }else{
             return $this->error('您的U豆不够');
         }
@@ -3331,6 +3337,12 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         //更新课程表
         
         db('toplearning_net_material')->where(['net_material_id'=>$courseid])->setInc('order_num');
+
+        //更新用户表 学院
+        $save['school_ids'] = $user['school_ids'].",".$school_id;
+        $save['school_ids_own'] = $user['school_ids'].",".$school_id;
+        db('toplearning_login')->where(['user_id'=>$token_uid])->update($save);
+
         //返回信息
         $data = [
             'Code'=>'0',
