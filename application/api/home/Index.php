@@ -3291,6 +3291,15 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         if ($nt) {
             $t = db('toplearning_login')->where(['user_id'=>$nt['teacher_user_id']])->find();//教师
         }
+        //查看U豆
+        @$ud = db('toplearning_ud_school')->where(['user_id'=>$token_uid,'school_id'=>$user['school_id']])->find();
+
+        //setDec
+        if ( $nt&&( $ud['num'] > intval($nt['price']) ) ) {
+            db('toplearning_ud_school')->where(['user_id'=>$token_uid,'school_id'=>$user['school_id']])->setDec( 'num',intval($nt['price']) );
+        }   
+
+
         //组数据
         $data['user_id'] = $token_uid;
         $data['nickname'] = $user['nickname']?$user['nickname']:$user['realname'];
