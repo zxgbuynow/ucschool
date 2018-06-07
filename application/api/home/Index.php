@@ -3297,7 +3297,9 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         //setDec
         if ( $nt&&( $ud['num'] > intval($nt['price']) ) ) {
             db('toplearning_ud_school')->where(['user_id'=>$token_uid,'school_id'=>$user['school_id']])->setDec( 'num',intval($nt['price']) );
-        }   
+        }else{
+            return $this->error('您的U豆不够');
+        }
 
 
         //组数据
