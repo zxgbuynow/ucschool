@@ -187,7 +187,7 @@ class Index
      $ret['collegeid'] = $user['school_id'];
 
      $ret['identifier'] = $user['im_account'];
-     $ret['userSig'] = $ret['userSig'];
+     $ret['userSig'] = $user['userSig'];
 
 
      $data = [
