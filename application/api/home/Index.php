@@ -521,7 +521,7 @@ class Index
             return $this->wrong('token失效，请重新登录');
         }
 
-
+        $map['school_id'] = $collegeid;
         //是否有该学院
         //通过token获取 uid
         $token_uid = $this->decrypt($token);
@@ -3311,12 +3311,13 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         }
         //查看U豆
         //通过老师查找课程学院ID
-        @$school_id = db('toplearning_net_material')->alias('a')->join('toplearning_login l','a.teacher_user_id = l.user_id')->where(['a.net_material_id'=>$courseid])->value('school_id');
+        @$school_id = db('toplearning_net_material')->alias('a')->join('toplearning_login l','a.teacher_user_id = l.user_id')->where(['a.net_material_id'=>$courseid])->value('l.school_id');
 
         @$ud = db('toplearning_ud_school')->where(['user_id'=>$token_uid,'school_id'=>$school_id])->find();
-
+        // var_dump(db()->getlastsql());
         //setDec
-        if ( $nt&&( $ud['num'] > intval($nt['price']) ) ) {
+        // var_dump($ud,$nt['price']);
+        if ( $nt&&( $ud['num'] > intval($nt['price']) ) ) { 
             
             db('toplearning_ud_school')->where(['user_id'=>$token_uid,'school_id'=>$school_id])->setDec( 'num',intval($nt['price']) );
 
