@@ -58,6 +58,7 @@ return [
         'groupMemberList'=>'class.groupMemberList',
         'addCurrentBulletin'=>'class.addCurrentBulletin',
         'cleanUpChatRecords'=>'class.cleanUpChatRecords',
+        'groupCreate'=>'class.groupCreate',
         // 'ulogin'=>'class.login',
 
         'ModifyingPersonalInformation'=>'class.ModifyingPersonalInformation',
@@ -90,6 +91,7 @@ return [
         'seacherCourse'=>'exam.seacherCourse',
         'buyNowCourse'=>'exam.buyNowCourse',
         'CourseCollection'=>'exam.CourseCollection',
+        'tenxunim'=>'tenxunim'
 
 
         

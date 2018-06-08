@@ -187,7 +187,7 @@ class Index
      $ret['collegeid'] = $user['school_id'];
 
      $ret['identifier'] = $user['im_account'];
-     $ret['userSig'] = $ret['token'];
+     $ret['userSig'] = $ret['userSig'];
 
 
      $data = [
@@ -248,6 +248,7 @@ class Index
      */
     public function register($params)
     {
+        
         //参数
         $data['group_id'] = trim($params['type'])=='1'?'5':'3';
         $data['nickname'] = trim($params['name']);
@@ -269,14 +270,30 @@ class Index
         $data['password'] =  md5((string)trim($params['password']));
         $data['school_ids_own'] = 7;//U学院
         $data['school_ids'] = 7;//U学院
+
+        //同步注册腾讯IM
+        /*
+        $post['method'] = 'regist';
+        $post['identifier'] = $data['mobile'];
+        $post['nick'] = $data['nickname'];
+        $post['face_url'] = null;
+
+        $rs = $this->tenxunim($post);
+        if ($rs && $rs['errorcode']!=0) {
+            $this->error('同步注册腾讯IM失败');
+        }
+
+        $data['im_account'] = $data['mobile'];
+        $data['userSig'] = $rs['usersig'];
+        */
+
         //插入数据
         $me = db('toplearning_login')->insert($data);
         if (!$me) {
             return $this->error('注册失败！请稍后重试');
         }
 
-        //插入关联表
-        
+
         //返回信息
         $data = [
             'Code'=>'0',
@@ -3499,6 +3516,59 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
 
         return json($data);
     }
+
+    /**
+     * [groupCreate description]
+     * @param  [type] $params [{
+    "Owner_Account": "leckie", // 群主的UserId（选填）
+    "Type": "Public", // 群组类型：Private/Public/ChatRoom/AVChatRoom/BChatRoom（必填）
+    "Name": "TestGroup" // 群名称（必填）
+    }]
+     * @return [type]         [description]
+     */
+    public function groupCreate($params)
+    {
+        //params
+        $post['method'] = 'group';
+        $post['group_type'] = isset($params['group_type'])?$params['group_type']:'Private';//Private | Public | ChatRoom | AVChatRoom| BChatRoom
+        $post['group_name'] = isset($params['group_name'])?$params['group_name']:'U学院群聊';
+        $post['owner_id'] = isset($params['owner_id'])?$params['owner_id']:'zg';
+
+
+        $rs = $this->tenxunim($post);
+
+        if ($rs && $rs['errorcode']!=0) {
+            $this->error('创建群组失败');
+        }
+
+        if (isset($params['lesson_id'])||isset($params['user_id'])||isset($params['pic'])) {
+            $this->error('必要参数缺失');
+        }
+        $params['lesson_id'] = isset($params['lesson_id'])?$params['lesson_id']:'';
+        $params['user_id'] = isset($params['user_id'])?$params['user_id']:'';
+        $params['pic'] = isset($params['pic'])?$params['pic']:'';
+
+        $data['lesson_id'] = $params['lesson_id'];
+        $data['user_id'] = $params['user_id'];
+        $data['pic'] = $params['pic'];
+
+        $data['owner_id'] = $post['owner_id'];
+        $data['group_name'] = $post['group_name'];
+        $data['group_type'] = $post['group_type'];
+
+        db('toplearning_chat_group')->insert($data);
+
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            // 'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+
+    }
     /**
      * [groupMemberList  5.  登录]
      * @param  [type] $params [description]
@@ -3838,4 +3908,50 @@ function passkey(){
          }
          return false;
      }
+
+
+    //腾讯IM 注册账号|群聊
+    function tenxunim($params)
+    {   
+        //param
+        $method = $params['method'];
+
+        //(group_type) (group_name) (owner_id)
+        //(identifier) (nick) (face_url)
+        $commandList = array(
+            'regist'=>'php /home/wwwroot/ucschool/PhpServerSdk/TimRestApiGear.php im_open_login_svc account_import ',
+            'group'=>'php /home/wwwroot/ucschool/PhpServerSdk/TimRestApiGear.php group_open_http_svc create_group '
+        );
+
+        //生成执行命令
+        if (!$commandList[$method]) {
+            return $this->error('不存在腾讯IM'.$method);
+        }
+        unset($params['method']);
+
+        //实例：$command = "php /data/httpd/ucschool/PhpServerSdk/TimRestApiGear.php im_open_login_svc account_import hello2 hello2 null";
+        $command = $commandList[$method].implode(' ', $params);
+        
+        $retval = array();
+        exec($command, $retval, $status);
+        $usersig = 0;
+        $errorCode = 9;//错误code        
+        if ($status == 0) {
+
+            foreach ($retval as $key => $value) {
+                if ($value == 'Request Url:') {
+                    $rs = $retval[$key+1];
+                    $usersig =explode('=', explode('&', explode('?', $rs)[1])[0])[1];
+                }
+                if (strstr($value, 'ErrorCode')) {
+
+                    $errorCode = intval(explode(':', $value)[1]);
+                }
+            }
+        }
+
+        $rs = ['usersig'=>$usersig,'errorcode'=>$errorCode];
+
+        return $rs;
+    }
 }
