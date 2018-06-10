@@ -270,7 +270,7 @@ class Index
         // $data['password'] =  Hash::make((string)trim($params['password']));
         $data['password'] =  md5((string)trim($params['password']));
         // $data['school_ids_own'] = 7;//U学院
-        // $data['school_ids'] = 7;//U学院
+        $data['school_id'] = 7;//U学院
 
         //同步注册腾讯IM
         /*
@@ -1267,12 +1267,24 @@ return json($data);
         //通过token获取 uid
         $token_uid = $this->decrypt($token);
 
-        $mobiles = db('toplearning_login')->where(['user_id'=>$token_uid])->column('mobile');
-        $info = [];
-        if ($mobiles) {
-            $map['l.mobile'] = array('in',implode(',', $mobiles));
-            $info = db('toplearning_school')->alias('a')->field("a.*")->join('toplearning_login l','a.school_id = l.school_id')->where($map)->select();
+        $school_ids = db("toplearning_school_teacher")->where(['user_id'=>$token_uid])->column("school_id");
+        $school_ids = $school_ids?$school_ids:[];
+         if(!in_array("7",$school_ids)){
+            array_unshift($school_ids, 7);
         }
+
+        $info = db("toplearning_school")->where(" school_id IN (".implode(",",$school_ids).")")->order(" field(school_id,".implode(",",$school_ids).")")->select();         
+
+        // $mobiles = db('toplearning_login')->where(['user_id'=>$token_uid])->column('mobile');
+        // $info = [];
+        // if ($mobiles) {
+        //     $map['l.mobile'] = array('in',implode(',', $mobiles));
+        //     $info = db('toplearning_school')->alias('a')->field("a.*")->join('toplearning_login l','a.school_id = l.school_id')->where($map)->select();
+        // }
+
+
+
+
 
         // $info = db('toplearning_school')->where(['del'=>0])->select();
 
@@ -1283,9 +1295,7 @@ return json($data);
             $ret[$key]['name'] = $value['school_name'];
             $i++;
         }
-        $s = db('toplearning_school')->where(['school_id'=>7])->find();
-        $ret[$i]['collegeid'] =  $s['school_id'];
-        $ret[$i]['name'] =  $s['school_name'];
+      
         //返回信息
         $data = [
             'Code'=>'0',
@@ -3047,7 +3057,6 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
             if (date('Y-m-d',strtotime($value['start_time'])) == date('Y-m-d',time()) ) {
                 $ret[$key]['yesToday'] = true;
             }
-            
         }
         //返回信息
         $data = [
