@@ -252,6 +252,7 @@ class Index
         //参数
         $data['group_id'] = trim($params['type'])=='1'?'5':'3';
         $data['nickname'] = trim($params['name']);
+        $data['realname'] = $data['nickname'];
         $data['code'] = trim($params['code']);
         $data['mobile'] = trim($params['phone']);
         $data['create_time'] = time();
@@ -268,8 +269,8 @@ class Index
         //生成密码 md5
         // $data['password'] =  Hash::make((string)trim($params['password']));
         $data['password'] =  md5((string)trim($params['password']));
-        $data['school_ids_own'] = 7;//U学院
-        $data['school_ids'] = 7;//U学院
+        // $data['school_ids_own'] = 7;//U学院
+        // $data['school_ids'] = 7;//U学院
 
         //同步注册腾讯IM
         /*
@@ -284,7 +285,7 @@ class Index
         }
 
         $data['im_account'] = $data['mobile'];
-        $data['userSig'] = $rs['usersig'];
+        $data['userSig'] = $rs['usersig'];Hashtable.php
         */
 
         //插入数据
@@ -293,7 +294,13 @@ class Index
             return $this->error('注册失败！请稍后重试');
         }
 
-
+        if($data['group_id'] == '3'){
+            db("toplearning_teacher")->insert([
+                'user_id'=>db("toplearning_login")->getLastInsID(),
+                'teacher_name'=>$data['realname'],
+                'type'=>2,
+            ]);
+        }
         //返回信息
         $data = [
             'Code'=>'0',
@@ -468,21 +475,24 @@ class Index
         }
 
 
-        $map['a.type'] = 2;
-        $map['a.del'] = 0;
-        $map['a.user_id'] = $token_uid;
+        // $map['a.type'] = 2;
+        // $map['a.del'] = 0;
+        // $map['a.user_id'] = $token_uid;
         //关注信息
-        //
-        $school_ids = db('toplearning_login')->where(['user_id'=>$token_uid])->find();
-
-        $attention = array();
-        if ($school_ids&&$school_ids['school_ids']) {
-            $map1['school_id'] = array('in',$school_ids['school_ids']);
-            $attention = db('toplearning_school')->where($map1)->select();
-        }
         
-        // $attention = db('toplearning_login')->alias('a')->join('toplearning_school s','a.source_id = s.school_id')->where($map)->select();
 
+
+
+        $school_ids = db('toplearning_concern')->where(['user_id'=>$token_uid])->order("id")->column("school_id");
+
+
+        $school_ids = $school_ids?$school_ids:[];
+        array_unshift($school_ids,"7"); 
+        
+        $attention = db("toplearning_school")->where(" school_id IN (".implode(",",$school_ids).")")->order(" field(school_id,".implode(",",$school_ids).")")->select();         
+
+
+ 
 
         //处理
         $ret = array();
@@ -493,6 +503,9 @@ class Index
             $ret[$key]['image'] = $value['logo'];
             $ret[$key]['del'] = $value['del'];
         }
+
+
+
 
         //返回信息
         $data = [
@@ -590,14 +603,11 @@ class Index
         $amap['source_id'] = $ret['school_id'];
 
         $token_uid = $this->decrypt($token);
-        $gz = db('toplearning_login')->where(['user_id'=>$token_uid])->column('school_ids');
+        // $gz = db('toplearning_login')->where(['user_id'=>$token_uid])->column('school_ids');
 
-        if ($gz) {
-            $gzs = explode(',', $gz[0]);
-            if (in_array($collegeid, $gzs)) {
-                $rs['isfocus'] = 1;
-            }
-        }
+        $gz = db('toplearning_concern')->where(['user_id'=>$token_uid,'school_id'=>$collegeid])->count();
+$rs['isfocus'] = $gz >0?1:0;
+       
 
         // if (db('toplearning_attention')->where($amap)->find()) {
         //     $rs['isfocus'] = 1;
@@ -653,71 +663,27 @@ return json($data);
 
         //关注或取关 （有状态）
         
-        $users = db('toplearning_login')->where(['user_id'=>$token_uid])->find();
+        $user = db('toplearning_login')->field("group_id,user_id")->where(['user_id'=>$token_uid])->find();
 
-        if ($users['school_ids']) {
-            $school_ids = explode(',', $users['school_ids']);
-            if (in_array($collegeid, $school_ids)) {
-                if ($type == 2) {//取关
-                    foreach ($school_ids as $key => $value) {
-                        if ($value == $collegeid) {
-                            unset($school_ids[$key]);
-                        }
-                    }
-                    $save['school_ids'] = implode(',', $school_ids);
-                    db('toplearning_login')->where(['user_id'=>$token_uid])->update($save);
-                }
-            }else{
-                if ($type == 1) {//关注
-                    $save['school_ids'] = $users['school_ids'].",".$collegeid;
-                    db('toplearning_login')->where(['user_id'=>$token_uid])->update($save);
-                }
-            }
+
+        if($type == 1){
+
+
+        db("toplearning_concern")
+        ->insert([
+            'user_id'=>$user['user_id'],
+            'school_id'=>$collegeid,
+            'type'=>$user['group_id']
+        ]);
+
         }else{
-            if ($type == 1) {//关注
-                $save['school_ids'] = $collegeid;
-                db('toplearning_login')->where(['user_id'=>$token_uid])->update($save);
-            }
+
+        db("toplearning_concern")
+        ->where(['user_id'=>$user['user_id'],'school_id'=>$collegeid])
+        ->delete();
         }
-        // $map['source_id'] = $collegeid;
-        // $map['user_id'] = $token_uid;
-        // $map['type'] = 2;
-        // //存在关注记录
-        // if (db('toplearning_attention')->where($map)->find()) {
-        //     //type 1 关注 2取消
-        //     if ($type == 1) {
-        //         //更新学院信息
-        //         $umap['user_id'] = $token_uid;
-        //         $save['del'] = 0;
-        //         db('toplearning_attention')->where($map)->update($save);
-        //     }else{
-        //         //更新学院信息
-        //         $umap['user_id'] = $token_uid;
-        //         $save['del'] = 1;
-        //         db('toplearning_attention')->where($map)->update($save);
-        //     }
 
-        // }else{
-        //     //type 1 关注 2取消
-        //     if ($type == 1) {
-        //         //更新学院信息
-        //         $save['user_id'] = $token_uid;
-        //         $save['source_id'] = $collegeid;
-        //         $save['type'] = 2;
-        //         $save['create_time'] = time();
-        //         $save['del'] = 0;
-        //         db('toplearning_attention')->insert($save);
-        //     }else{
-        //         //更新学院信息
-        //         $save['user_id'] = $token_uid;
-        //         $save['source_id'] = $collegeid;
-        //         $save['type'] = 2;
-        //         $save['create_time'] = time();
-        //         $save['del'] = 1;
-        //         db('toplearning_attention')->insert($save);
-        //     }
-        // }
-
+ 
         
         $ret = array();
         //返回信息
@@ -775,10 +741,12 @@ return json($data);
             $amap['del'] = 0;
             $amap['source_id'] = $school['school_id'];
 
-            $gz = db('toplearning_login')->where(['user_id'=>$token_uid])->column('school_ids');
 
-            if ($gz) {
-                $gzs = explode(',', $gz[0]);
+
+            $gzs = db('toplearning_concern')->where(['user_id'=>$token_uid])->column('school_id');
+
+            if ($gzs) {
+                // $gzs = explode(',', $gz[0]);
                 if (in_array($school['school_id'], $gzs)) {
                     $ret['isfocus'] = 1;
                 }
@@ -3357,9 +3325,22 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         db('toplearning_net_material')->where(['net_material_id'=>$courseid])->setInc('order_num');
 
         //更新用户表 学院
-        $save['school_ids'] = $user['school_ids'].",".$school_id;
-        $save['school_ids_own'] = $user['school_ids'].",".$school_id;
-        db('toplearning_login')->where(['user_id'=>$token_uid])->update($save);
+
+        // $save['school_ids'] = $user['school_ids'].",".$school_id;
+        // $save['school_ids_own'] = $user['school_ids'].",".$school_id;
+        // db('toplearning_login')->where(['user_id'=>$token_uid])->update($save);
+        $concern = db('toplearning_concern')->where(['user_id'=>$user['user_id'],'school_id'=>$school_id])->find();
+        if($concern){
+            db('toplearning_concern')->where(['user_id'=>$user['user_id'],'school_id'=>$school_id])->update(['is_buy'=>1]);
+        }else{
+            db('toplearning_concern')->insert([
+                'user_id'=>$user['user_id'],
+                'school_id'=>$school_id,
+                'is_buy'=>1,
+                'type'=>$user['group_id']
+            ]);
+
+        }
 
         //返回信息
         $data = [
