@@ -324,7 +324,7 @@ class Index
 
         $rs = $this->tenxunim($post);
         if ($rs && $rs['errorcode']!=0) {
-            return $this->error('同步注册腾讯IM失败');
+            return $this->error('同步注册腾讯IM失败'.$rs['msg']);
         }
 
         $save['im_account'] = $params['mobile'];
@@ -3970,7 +3970,7 @@ function passkey(){
             }
         }
 
-        $rs = ['usersig'=>$usersig,'errorcode'=>$errorCode];
+        $rs = ['usersig'=>$usersig,'errorcode'=>$errorCode,'msg'=>json_encode($retval)];
 
         return $rs;
     }
