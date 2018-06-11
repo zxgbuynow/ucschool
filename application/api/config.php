@@ -6,6 +6,7 @@ return [
         //登录
         'login'=>'user.login',//登录
         'register'=>'user.register',//注册
+        'bregister'=>'back.register',//注册
         'findPassword'=>'user.findPassword',
         'sendSms'=>'user.sendSms',
         'getUserInfo'=>'user.getUserInfo',

@@ -273,7 +273,7 @@ class Index
         $data['school_id'] = 7;//U学院
 
         //同步注册腾讯IM
-        /*
+        
         $post['method'] = 'regist';
         $post['identifier'] = $data['mobile'];
         $post['nick'] = $data['nickname'];
@@ -285,8 +285,8 @@ class Index
         }
 
         $data['im_account'] = $data['mobile'];
-        $data['userSig'] = $rs['usersig'];Hashtable.php
-        */
+        $data['userSig'] = $rs['usersig'];//Hashtable.php
+        
 
         //插入数据
         $me = db('toplearning_login')->insert($data);
@@ -306,6 +306,35 @@ class Index
             'Code'=>'0',
             'Msg'=>'操作成功',
             'Data'=>$me,
+            'Success'=>true
+        ];
+        return json($data);
+    }
+    /**
+     * [bregister 后台注册IM]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function bregister($params)
+    {   
+        $post['method'] = 'regist';
+        $post['identifier'] = $params['mobile'];
+        $post['nick'] = $params['nickname'];
+        $post['face_url'] = null;
+
+        $rs = $this->tenxunim($post);
+        if ($rs && $rs['errorcode']!=0) {
+            $this->error('同步注册腾讯IM失败');
+        }
+
+        $save['im_account'] = $data['mobile'];
+        $save['userSig'] = $rs['usersig'];//Hashtable.php
+
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$save,
             'Success'=>true
         ];
         return json($data);
