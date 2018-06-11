@@ -327,7 +327,7 @@ class Index
             $this->error('同步注册腾讯IM失败');
         }
 
-        $save['im_account'] = $data['mobile'];
+        $save['im_account'] = $params['mobile'];
         $save['userSig'] = $rs['usersig'];//Hashtable.php
 
         //返回信息
