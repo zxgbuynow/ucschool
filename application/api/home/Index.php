@@ -324,7 +324,7 @@ class Index
 
         $rs = $this->tenxunim($post);
         if ($rs && $rs['errorcode']!=0) {
-            $this->error('同步注册腾讯IM失败');
+            return $this->error('同步注册腾讯IM失败');
         }
 
         $save['im_account'] = $params['mobile'];
