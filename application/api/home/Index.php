@@ -277,7 +277,7 @@ class Index
         $post['method'] = 'regist';
         $post['identifier'] = $data['mobile'];
         $post['nick'] = $data['nickname'];
-        $post['face_url'] = null;
+        $post['face_url'] = 'http://www.qq.com';
 
         $rs = $this->tenxunim($post);
         if ($rs && $rs['errorcode']!=0) {
