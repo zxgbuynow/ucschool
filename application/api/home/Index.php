@@ -3529,7 +3529,7 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         $rs = $this->tenxunim($post);
 
         if ($rs && $rs['errorcode']!=0) {
-            $this->error('创建群组失败');
+            return $this->error('创建群组失败');
         }
 
         if (isset($params['lesson_id'])||isset($params['user_id'])||isset($params['pic'])) {
