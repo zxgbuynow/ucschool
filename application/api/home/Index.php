@@ -320,7 +320,7 @@ class Index
         $post['method'] = 'regist';
         $post['identifier'] = $params['mobile'];
         $post['nick'] = $params['nickname'];
-        $post['face_url'] = null;
+        $post['face_url'] = 'http://www.qq.com';
 
         $rs = $this->tenxunim($post);
         if ($rs && $rs['errorcode']!=0) {
