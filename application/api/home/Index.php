@@ -901,6 +901,8 @@ return json($data);
                 $ret['isBuy'] = db('toplearning_order')->where(['user_id'=>$token_uid, 'net_material_id'=>$value['net_material_id']])->count()?true:false;
                 $ret['isCollection'] = db('toplearning_favorite')->where(['type'=>0,'source_id'=>$value['net_material_id'],'user_id'=>$token_uid])->count()?true:false;
             }
+
+            $ret['total'] = intval($value['total_lessons']);
         }
         
 
