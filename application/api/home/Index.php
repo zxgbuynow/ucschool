@@ -892,7 +892,7 @@ return json($data);
             $ret['price'] = $value['price'];
             $ret['paynumber'] = $value['order_num'];
             $ret['limitpaynumber'] = $value['student_num'];
-
+            
             $now = time();
             @$ret['haveStartedClassNum'] = db('toplearning_class_festival')->where(['material_id'=>$value['net_material_id']])->whereTime('stage_start', '<', $now)->count();
 
