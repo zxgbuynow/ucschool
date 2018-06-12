@@ -3453,7 +3453,7 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
 
         $ret = array();
         foreach ($info as $key => $value) {
-            $ret[$key]['groupId'] = $value['group_id'];
+            $ret[$key]['groupId'] = $value['txgroupid'];
             $ret[$key]['groupName'] = $value['group_name'];
 
             $ret[$key]['groupOwnerName'] = db('toplearning_login')->where(['user_id'=>$value['user_id']])->value('nickname');
@@ -3492,7 +3492,7 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         $token = trim($params['token']);
         $groupId = trim($params['groupId']);
 
-        $info = db('toplearning_chat_group_user')->alias('a')->join('toplearning_login r','a.user_id = r.user_id')->where(['group_id'=>$groupId])->select();
+        $info = db('toplearning_chat_group_user')->alias('a')->join('toplearning_login r','a.user_id = r.user_id')->join('toplearning_chat_group g','a.group_id = g.txgroupid')->where(['g.txgroupid'=>$groupId])->select();
 
         $ret = [];
         foreach ($info as $key => $value) {
