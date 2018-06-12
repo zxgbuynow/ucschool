@@ -187,7 +187,10 @@ class Index
      $ret['collegeid'] = $user['school_id'];
 
      $ret['identifier'] = $user['im_account'];
-     $ret['userSig'] = $user['userSig'];
+
+     $lastid = db('toplearning_login')->getLastInsID();
+     $userSig = db('toplearning_login')->where(['user_id'=>$lastid])->value('userSig');
+     @$ret['userSig'] = $userSig;
 
 
      $data = [
@@ -4007,6 +4010,13 @@ function passkey(){
             }
         }
 
+        //更新usersig
+        if ($errorCode==0) {
+            $lastid = db('toplearning_login')->getLastInsID();
+            db('toplearning_login')->where(['user_id'=>$lastid])->update(['userSig'=>$usersig]);
+        }
+        
+        
         $rs = ['usersig'=>$usersig,'errorcode'=>$errorCode,'msg'=>json_encode($retval),'groupid'=>$groupId];
 
         return $rs;
