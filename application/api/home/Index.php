@@ -3303,6 +3303,7 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         $token = trim($params['token']);
         $courseid = trim($params['courseid']);
 
+        
         // $schoolId = trim($params['schoolId']);
 
         $token_uid = $this->decrypt($token);
@@ -3382,6 +3383,21 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
 
         }
 
+        //加入群聊
+        $chatGroup = db('toplearning_chat_group')->where(['lesson_id'=>$courseid])->find();
+        $post['method'] = 'addgroup';
+        //(group_id) (member_id) (silence)
+        $post['group_id'] = $chatGroup['txgroupid'];
+        $post['member_id'] = $user['mobile'];
+        $post['silence'] = '1';
+
+        $rs = $this->tenxunim($post);
+
+        // if ($rs && $rs['errorcode']!=0) {
+        //     $this->error('同步注册腾讯IM失败');
+        // }
+
+        
         //返回信息
         $data = [
             'Code'=>'0',
@@ -3429,22 +3445,28 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
     {
         //params
         $token = trim($params['token']);
-        $userid = trim($params['userid']);
+        // $userid = trim($params['userid']);
 
         //
         $token_uid = $this->decrypt($token);
-
-        $info = db('toplearning_chat_group')->alias('a')->join('toplearning_chat_record r','a.group_id = r.group_id')->where(['r.user_id'=>$token_uid])->group('r.group_id')->order('r.id DESC')->select();
-
+        $info = db('toplearning_chat_group')->alias('a')->field('a.*,a.user_id as auid,u.*,r.*')->join('toplearning_chat_group_user u','a.id = u.group_id')->join('toplearning_chat_record r','a.id = r.group_id')->where(['r.user_id'=>$token_uid])->group('r.group_id')->order('r.id DESC')->select();
 
         $ret = array();
         foreach ($info as $key => $value) {
             $ret[$key]['groupId'] = $value['group_id'];
-            $ret[$key]['groupName'] = db('toplearning_class_festival')->where(['class_id'=>$value['lesson_id']])->column('class_name')?db('toplearning_class_festival')->where(['class_id'=>$value['lesson_id']])->column('class_name')[0].'交流群':'交流群';
-            $ret[$key]['groupHead'] = '';//todo
+            $ret[$key]['groupName'] = $value['group_name'];
+
+            $ret[$key]['groupOwnerName'] = db('toplearning_login')->where(['user_id'=>$value['user_id']])->value('nickname');
+            $ret[$key]['isGroup'] = $value['auid']==$token_uid?'true':'false';
+            $ret[$key]['groupHead'] = $value['pic'];
             $ret[$key]['msg'] = $value['content'];
             $ret[$key]['data'] = $value['create_time'];
-            $ret[$key]['unreadMsgNumber'] = 1;//todo
+            $ret[$key]['unreadMsgNumber'] = 1;
+            $ret[$key]['actualite'] = $value['group_name'];
+            @$ret[$key]['currentBulletin'] = db('toplearning_chat_group_notice')->where(['group_id'=>$value['group_id']])->value('content');
+            $ret[$key]['courseid'] = $value['lesson_id'];
+            @$ret[$key]['courseName'] = db('toplearning_net_material')->where(['net_material_id'=>$value['lesson_id']])->value('content');
+
 
         }
 
@@ -3470,7 +3492,7 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         $token = trim($params['token']);
         $groupId = trim($params['groupId']);
 
-        $info = db('toplearning_chat_record')->alias('a')->join('toplearning_login r','a.user_id = r.user_id')->where(['group_id'=>$groupId])->select();
+        $info = db('toplearning_chat_group_user')->alias('a')->join('toplearning_login r','a.user_id = r.user_id')->where(['group_id'=>$groupId])->select();
 
         $ret = [];
         foreach ($info as $key => $value) {
@@ -3553,11 +3575,17 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         //params
         $post['method'] = 'group';
         $post['group_type'] = isset($params['group_type'])?$params['group_type']:'Private';//Private | Public | ChatRoom | AVChatRoom| BChatRoom
-        $post['group_name'] = isset($params['group_name'])?$params['group_name']:'U学院群聊';
+        $post['group_name'] = isset($params['group_name'])?$params['group_name']:'U学院群聊'.time();
         $post['owner_id'] = isset($params['owner_id'])?$params['owner_id']:'zg';
 
 
+        // $post['GroupId'] = 'TGS'.time();
         $rs = $this->tenxunim($post);
+        if ($rs['groupid']) {
+            $pattern = '#"(.*?)"#i'; 
+            preg_match_all($pattern, $rs['groupid'], $matches); 
+            $rs['groupid'] = $matches[1][0];
+        }
 
         if ($rs && $rs['errorcode']!=0) {
             return $this->error('创建群组失败');
@@ -3577,6 +3605,7 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         $data['owner_id'] = $post['owner_id'];
         $data['group_name'] = $post['group_name'];
         $data['group_type'] = $post['group_type'];
+        $data['txgroupid'] = $rs['groupid'];
 
         db('toplearning_chat_group')->insert($data);
 
@@ -3740,7 +3769,6 @@ function decrypt($str) {
     if ($pad && $pad < $block && preg_match('/' . chr($pad) . '{' . $pad . '}$/', $str)) { 
         $str = substr($str, 0, strlen($str) - $pad); 
     } 
-
     return unserialize($str); 
 }
 
@@ -3940,9 +3968,11 @@ function passkey(){
 
         //(group_type) (group_name) (owner_id)
         //(identifier) (nick) (face_url)
+        // (group_id) (member_id) (silence)
         $commandList = array(
             'regist'=>'php /home/wwwroot/ucschool/PhpServerSdk/TimRestApiGear.php im_open_login_svc account_import ',
-            'group'=>'php /home/wwwroot/ucschool/PhpServerSdk/TimRestApiGear.php group_open_http_svc create_group '
+            'group'=>'php /home/wwwroot/ucschool/PhpServerSdk/TimRestApiGear.php group_open_http_svc create_group ',
+            'addgroup'=>'php /home/wwwroot/ucschool/PhpServerSdk/TimRestApiGear.php group_open_http_svc add_group_member '
         );
 
         //生成执行命令
@@ -3957,7 +3987,8 @@ function passkey(){
         $retval = array();
         exec($command, $retval, $status);
         $usersig = 0;
-        $errorCode = 9;//错误code        
+        $errorCode = 9;//错误code   
+        $groupId  = 0;     
         if ($status == 0) {
 
             foreach ($retval as $key => $value) {
@@ -3969,10 +4000,14 @@ function passkey(){
 
                     $errorCode = intval(explode(':', $value)[1]);
                 }
+                //返回群组ID
+                if ($method == 'group'&&strstr($value, 'GroupId')) {
+                    $groupId = explode(':', $value)[1];
+                }
             }
         }
 
-        $rs = ['usersig'=>$usersig,'errorcode'=>$errorCode,'msg'=>json_encode($retval)];
+        $rs = ['usersig'=>$usersig,'errorcode'=>$errorCode,'msg'=>json_encode($retval),'groupid'=>$groupId];
 
         return $rs;
     }
