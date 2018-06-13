@@ -281,6 +281,13 @@ class Index
         $post['face_url'] = 'http://www.qq.com';
 
         $rs = $this->tenxunim($post);
+
+        if ($rs['usersig']) {
+            $pattern = '#"(.*?)"#i'; 
+            preg_match_all($pattern, $rs['usersig'], $matches); 
+            $rs['usersig'] = $matches[1][0];
+        }
+
         if ($rs && $rs['errorcode']!=0) {
             $this->error('同步注册腾讯IM失败');
         }
@@ -324,6 +331,13 @@ class Index
         $post['face_url'] = 'http://www.qq.com';
 
         $rs = $this->tenxunim($post);
+
+        if ($rs['usersig']) {
+            $pattern = '#"(.*?)"#i'; 
+            preg_match_all($pattern, $rs['usersig'], $matches); 
+            $rs['usersig'] = $matches[1][0];
+        }
+
         if ($rs && $rs['errorcode']!=0) {
             return $this->error('同步注册腾讯IM失败'.$rs['msg']);
         }
@@ -3993,9 +4007,14 @@ function passkey(){
         if ($status == 0) {
 
             foreach ($retval as $key => $value) {
-                if ($value == 'Request Url:') {
-                    $rs = $retval[$key+1];
-                    $usersig =explode('=', explode('&', explode('?', $rs)[1])[0])[1];
+                // if ($value == 'Request Url:') {
+                //     $rs = $retval[$key+1];
+                //     $usersig =explode('=', explode('&', explode('?', $rs)[1])[0])[1];
+                // }
+                
+                if (strstr($value, 'registSig')) {
+
+                    $usersig = explode(':', $value)[1];
                 }
                 if (strstr($value, 'ErrorCode')) {
 
@@ -4008,11 +4027,11 @@ function passkey(){
             }
         }
 
-        //更新usersig
-        if ($errorCode==0) {
-            $lastid = db('toplearning_login')->where(1)->order('user_id DESC')->value('user_id');
-            db('toplearning_login')->where(['user_id'=>$lastid])->update(['userSig'=>$usersig]);
-        }
+        //更新usersig 取消
+        // if ($errorCode==0) {
+        //     $lastid = db('toplearning_login')->where(1)->order('user_id DESC')->value('user_id');
+        //     db('toplearning_login')->where(['user_id'=>$lastid])->update(['userSig'=>$usersig]);
+        // }
         
         
         $rs = ['usersig'=>$usersig,'errorcode'=>$errorCode,'msg'=>json_encode($retval),'groupid'=>$groupId];

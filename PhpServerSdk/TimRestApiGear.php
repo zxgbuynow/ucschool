@@ -97,10 +97,15 @@
 			}
 		}
 		$ret = $api->generate_user_sig($identifier, '36000', $private_pem_path, $signature);
-
 		if($ret == null || strstr($ret[0], "failed")){
 			echo "获取usrsig失败, 请确保TimRestApiConfig.json配置信息正确\n";
 			return -1;
+		}
+		//返回注册账号的
+		if ($command == 'account_import') {
+			$userSig = $api->generate_user_sig($argv[3], '36000', $private_pem_path, $signature);
+			echo json_format(array('registSig'=>$userSig[0]));
+			echo "\n";
 		}
 	}else if($user_sig != ""){
 		//托管模式
