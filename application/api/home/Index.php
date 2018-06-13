@@ -188,8 +188,8 @@ class Index
 
      $ret['identifier'] = $user['im_account'];
 
-     $userSig = db('toplearning_login')->where(1)->order('user_id DESC')->value('userSig');
-     @$ret['userSig'] = $userSig;
+     // $userSig = db('toplearning_login')->where(1)->order('user_id DESC')->value('userSig');
+     @$ret['userSig'] = $user['userSig'];
 
      $data = [
         'Success'=>true,
