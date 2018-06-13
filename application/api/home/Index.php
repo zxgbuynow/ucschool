@@ -188,10 +188,8 @@ class Index
 
      $ret['identifier'] = $user['im_account'];
 
-     $lastid = db('toplearning_login')->getLastInsID();
-     $userSig = db('toplearning_login')->where(['user_id'=>$lastid])->value('userSig');
+     $userSig = db('toplearning_login')->where(1)->order('user_id DESC')->value('userSig');
      @$ret['userSig'] = $userSig;
-
 
      $data = [
         'Success'=>true,
@@ -4012,7 +4010,7 @@ function passkey(){
 
         //更新usersig
         if ($errorCode==0) {
-            $lastid = db('toplearning_login')->getLastInsID();
+            $lastid = db('toplearning_login')->where(1)->order('user_id DESC')->value('user_id');
             db('toplearning_login')->where(['user_id'=>$lastid])->update(['userSig'=>$usersig]);
         }
         
