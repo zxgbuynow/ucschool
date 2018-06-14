@@ -3604,16 +3604,15 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
 
         // $post['GroupId'] = 'TGS'.time();
         $rs = $this->tenxunim($post);
+        
+        if ($rs && $rs['errorcode']!=0) {
+            return $this->error('创建群组失败');
+        }
         if ($rs['groupid']) {
             $pattern = '#"(.*?)"#i'; 
             preg_match_all($pattern, $rs['groupid'], $matches); 
             $rs['groupid'] = $matches[1][0];
         }
-
-        if ($rs && $rs['errorcode']!=0) {
-            return $this->error('创建群组失败');
-        }
-
         if (isset($params['lesson_id'])||isset($params['user_id'])||isset($params['pic'])) {
             $this->error('必要参数缺失');
         }
