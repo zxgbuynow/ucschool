@@ -3453,16 +3453,20 @@ class Index
 
         //加入群聊
         $chatGroup = db('toplearning_chat_group')->where(['lesson_id'=>$courseid])->find();
-        $post['method'] = 'addgroup';
-        //(group_id) (member_id) (silence)
-        $post['group_id'] = $chatGroup['txgroupid'];
-        $post['member_id'] = $user['mobile'];
-        $post['silence'] = '1';
+        // $post['method'] = 'addgroup';
+        // //(group_id) (member_id) (silence)
+        // $post['group_id'] = $chatGroup['txgroupid'];
+        // $post['member_id'] = $user['mobile'];
+        // $post['silence'] = '1';
 
-        $rs = $this->tenxunim($post);
+        // $rs = $this->tenxunim($post);
 
+        $resp = $this->addGroupMember([
+            'groupid'=>$chatGroup['txgroupid'],
+            'account'=>$user['im_account']
+        ]);
 
-
+        
 
         db("toplearning_chat_group_user")->insert([
             'user_id'=>$token_uid,
@@ -3724,7 +3728,7 @@ class Index
         $data['lesson_id'] = $params['lesson_id'];
         $data['user_id'] = $params['user_id'];
         $data['pic'] = $params['pic'];
-         $data['owner_id'] = $this->getUserSign($params['owner_id']);
+         $data['owner_id'] = $params['owner_id'];
         $data['group_name'] = $params['group_name'];
         $data['group_type'] = $params['group_type'];
         $data['txgroupid'] = $resp['GroupId'];
@@ -4202,6 +4206,27 @@ function passkey(){
 
     }
 
+    function addGroupMember($data){
+          $userSig = $this->getUserSign();
+        $url = "https://console.tim.qq.com/v4/group_open_http_svc/add_group_member?usersig=".$userSig."&identifier=admin&sdkappid=1400099084&random=".rand(100000,999999)."&contenttype=json";
+        $params = [
+             "GroupId"=>$data['groupid'],
+   "MemberList"=>[['Member_Account'=>$data['account']]]
+        ];
+ 
+
+
+        $params = json_encode($params);
+        $resp = curlRequest($url,$params);
+        $resp = json_decode($resp,true);
+
+
+
+
+
+
+        return $resp;
+    }
 
     function createUser($data){
               $userSig = $this->getUserSign();
