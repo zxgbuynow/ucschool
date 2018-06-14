@@ -3349,6 +3349,9 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
             return $this->error('您的U豆不够');
         }
 
+        if (!$t) {
+            return $this->error('服务器忙，请稍后');
+        }
 
         //组数据
         $data['user_id'] = $token_uid;
@@ -3374,6 +3377,7 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         $sdata['material_id'] = $courseid;
         $sdata['user_id'] = $token_uid;
         $sdata['add_time'] = time();
+
         db('toplearning_student_material')->insert($sdata);
 
         //更新课程表
