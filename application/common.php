@@ -1447,4 +1447,36 @@ if (!function_exists('generate_rand_str')) {
         }
         return $str;
     }
+
+
+
+
+     function curlRequest($url,$data,$header = []){
+    if(function_exists('curl_init')){
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        if (!empty($data)){
+            curl_setopt($curl, CURLOPT_POST, 1);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+        }
+        if(!empty($header)){
+            curl_setopt($curl, CURLOPT_HTTPHEADER,$header);
+        }
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+        $output = curl_exec($curl);
+        // var_dump(curl_error($curl));
+        curl_close($curl);
+        // var_dump($output);
+        return $output;
+    }elseif(function_exists('file_get_contents')){
+        $output=file_get_contents($url."?".$data);
+        return $output;
+    }else{
+        return false;
+    }
+
+}
+
 }

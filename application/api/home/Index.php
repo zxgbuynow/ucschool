@@ -41,20 +41,20 @@ class Index
 
 
     public function uploadFile($file,$ext = ""){
-         $data['ext'] = $ext;
-         if (version_compare(PHP_VERSION, '5.6.0') >= 0) {
-            $data['file'] = new \CURLFile($file);
-        } else {
-            $data['file'] = "@" . $file;
-        }
+       $data['ext'] = $ext;
+       if (version_compare(PHP_VERSION, '5.6.0') >= 0) {
+        $data['file'] = new \CURLFile($file);
+    } else {
+        $data['file'] = "@" . $file;
+    }
 
 
 
 
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, "http://139.196.20.81:8077/?mod=public&app=public&action=upload");
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_URL, "http://139.196.20.81:8077/?mod=public&app=public&action=upload");
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($curl, CURLOPT_TIMEOUT, 120);//设置curl执行超时时间最大是多少
 
         if (!empty($data)) {
@@ -150,48 +150,48 @@ class Index
 
         // if (!Hash::check((string)$password, $user['password'])) {
         if (md5($password) != $user['password']) {
-         return $this->error( '密码错误！');
-     }
+           return $this->error( '密码错误！');
+       }
 
         //生成token
-     $ret['token'] = $this->encrypt($user['user_id']);
+       $ret['token'] = $this->encrypt($user['user_id']);
         //设置过期时间
-     cache($ret['token'], time() + 3600) ;
+       cache($ret['token'], time() + 3600) ;
 
         //用户类型
-     $ret['customerType'] = $user['group_id']==3?'2':'1';
+       $ret['customerType'] = $user['group_id']==3?'2':'1';
         // $customerType = db('toplearning_user_account')->where('user_id',$user['user_id'])->column('type');
         // if ($customerType) {
         //    $ret['customerType'] = $customerType[0];
         // }
 
         //组数据  
-     $ret['userid'] = $user['user_id'];
-     $ret['phone'] = $user['mobile'];
+       $ret['userid'] = $user['user_id'];
+       $ret['phone'] = $user['mobile'];
 
-     $ret['nickname'] = $user['nickname'];
-     $ret['birthday'] = $user['birthday'];
-     $ret['sex'] = $user['sex'];
+       $ret['nickname'] = $user['nickname'];
+       $ret['birthday'] = $user['birthday'];
+       $ret['sex'] = $user['sex'];
 
-     $ret['headurl'] = $user['avatar'];
-     $ret['tokenlife'] = 1;
+       $ret['headurl'] = $user['avatar'];
+       $ret['tokenlife'] = 1;
 
-     $ret['wechat'] = $user['weixin'];
-     $ret['qq'] = $user['qq'];
-     $ret['city'] = $user['city'];
+       $ret['wechat'] = $user['weixin'];
+       $ret['qq'] = $user['qq'];
+       $ret['city'] = $user['city'];
         //todo
-     $ret['signture'] = $user['introduce'];
-     $ret['coins'] = 10;
+       $ret['signture'] = $user['introduce'];
+       $ret['coins'] = 10;
 
-     $ret['email'] = $user['email'];
-     $ret['collegeid'] = $user['school_id'];
+       $ret['email'] = $user['email'];
+       $ret['collegeid'] = $user['school_id'];
 
-     $ret['identifier'] = $user['im_account'];
+       $ret['identifier'] = $user['im_account'];
 
      // $userSig = db('toplearning_login')->where(1)->order('user_id DESC')->value('userSig');
-     @$ret['userSig'] = $user['userSig'];
+       @$ret['userSig'] = $user['userSig'];
 
-     $data = [
+       $data = [
         'Success'=>true,
         'Code'=>'0',
         'Msg'=>'操作成功',
@@ -249,7 +249,7 @@ class Index
      */
     public function register($params)
     {
-        
+
         //参数
         $data['group_id'] = trim($params['type'])=='1'?'5':'3';
         $data['nickname'] = trim($params['name']);
@@ -536,7 +536,7 @@ class Index
         $attention = db("toplearning_school")->where(" school_id IN (".implode(",",$school_ids).")")->order(" field(school_id,".implode(",",$school_ids).")")->select();         
 
 
- 
+
 
         //处理
         $ret = array();
@@ -650,8 +650,8 @@ class Index
         // $gz = db('toplearning_login')->where(['user_id'=>$token_uid])->column('school_ids');
 
         $gz = db('toplearning_concern')->where(['user_id'=>$token_uid,'school_id'=>$collegeid])->count();
-$rs['isfocus'] = $gz >0?1:0;
-       
+        $rs['isfocus'] = $gz >0?1:0;
+
 
         // if (db('toplearning_attention')->where($amap)->find()) {
         //     $rs['isfocus'] = 1;
@@ -661,26 +661,26 @@ $rs['isfocus'] = $gz >0?1:0;
         $sc = db('toplearning_school_extend')->where(['school_id'=>$collegeid])->select();
         $scarr = array();
         foreach ($sc as $key => $value) {
-         $scarr[$key]['achtitle'] = $value['title'];
-         $scarr[$key]['achdesc'] = $value['content'];
-         $imgs = explode(',',$value['achimages']);
-         $imgar = array();
-         foreach ($imgs as $k => $v) {
-           $imgar[$k]['image'] = $v;
-       }
-       $scarr[$key]['achimages'] = $imgar;
-   }
-   $rs['achievement'] = $scarr;
+           $scarr[$key]['achtitle'] = $value['title'];
+           $scarr[$key]['achdesc'] = $value['content'];
+           $imgs = explode(',',$value['achimages']);
+           $imgar = array();
+           foreach ($imgs as $k => $v) {
+             $imgar[$k]['image'] = $v;
+         }
+         $scarr[$key]['achimages'] = $imgar;
+     }
+     $rs['achievement'] = $scarr;
 
         //返回信息
-   $data = [
-    'Code'=>'0',
-    'Msg'=>'操作成功',
-    'Data'=>$rs,
-    'Success'=>true
-];
+     $data = [
+        'Code'=>'0',
+        'Msg'=>'操作成功',
+        'Data'=>$rs,
+        'Success'=>true
+    ];
 
-return json($data);
+    return json($data);
 }
     /**
      * [focusCollege 关注]
@@ -713,21 +713,21 @@ return json($data);
         if($type == 1){
 
 
-        db("toplearning_concern")
-        ->insert([
-            'user_id'=>$user['user_id'],
-            'school_id'=>$collegeid,
-            'type'=>$user['group_id']
-        ]);
+            db("toplearning_concern")
+            ->insert([
+                'user_id'=>$user['user_id'],
+                'school_id'=>$collegeid,
+                'type'=>$user['group_id']
+            ]);
 
         }else{
 
-        db("toplearning_concern")
-        ->where(['user_id'=>$user['user_id'],'school_id'=>$collegeid])
-        ->delete();
+            db("toplearning_concern")
+            ->where(['user_id'=>$user['user_id'],'school_id'=>$collegeid])
+            ->delete();
         }
 
- 
+
         
         $ret = array();
         //返回信息
@@ -799,29 +799,29 @@ return json($data);
             $sc = db('toplearning_school_extend')->where(['school_id'=>$school['school_id']])->select();
             $scarr = array();
             foreach ($sc as $key => $value) {
-             $scarr[$key]['achtitle']=$value['title'];
-             $scarr[$key]['achdesc']=$value['content'];
+               $scarr[$key]['achtitle']=$value['title'];
+               $scarr[$key]['achdesc']=$value['content'];
                // $scarr[$key]['achimages']= $value['achimages'];
-             $imgs = explode(',',$value['achimages']);
-             $imgar = array();
-             foreach ($imgs as $k => $v) {
-               $imgar[$k]['image'] = $v;
-           }
-           $scarr[$key]['achimages'] = $imgar;
-       }
-       $ret['achievement'] = $scarr;
-   }
+               $imgs = explode(',',$value['achimages']);
+               $imgar = array();
+               foreach ($imgs as $k => $v) {
+                 $imgar[$k]['image'] = $v;
+             }
+             $scarr[$key]['achimages'] = $imgar;
+         }
+         $ret['achievement'] = $scarr;
+     }
 
 
         //返回信息
-   $data = [
-    'Code'=>'0',
-    'Msg'=>'操作成功',
-    'Data'=>$ret,
-    'Success'=>true
-];
+     $data = [
+        'Code'=>'0',
+        'Msg'=>'操作成功',
+        'Data'=>$ret,
+        'Success'=>true
+    ];
 
-return json($data);
+    return json($data);
 }
 
     /**
@@ -1010,20 +1010,20 @@ return json($data);
             if ($value['status']==1) {
                 @$ret[$key]['liveAddress'] = $this->is_serialized($value['video'])?unserialize($value['video'])[0]['video']:$value['video'];
             }else{
-               @$ret[$key]['videoBroadcastAddress'] = $this->is_serialized($value['courseware'])?unserialize($value['courseware'])[0]['address']:$value['courseware'];
-            }
+             @$ret[$key]['videoBroadcastAddress'] = $this->is_serialized($value['courseware'])?unserialize($value['courseware'])[0]['address']:$value['courseware'];
+         }
 
-        }
+     }
         //返回信息
-        $data = [
-            'Code'=>'0',
-            'Msg'=>'操作成功',
-            'Data'=>$ret,
-            'Success'=>true
-        ];
+     $data = [
+        'Code'=>'0',
+        'Msg'=>'操作成功',
+        'Data'=>$ret,
+        'Success'=>true
+    ];
 
-        return json($data);
-    }
+    return json($data);
+}
 
     /**
      * [getCollegeTeachers  学院下的课程]
@@ -1123,9 +1123,9 @@ return json($data);
 
                 //liveAddress |videoBroadcastAddress TODO
                 // if ($value['status']==1) {
-                    @$ret[$key]['liveAddress'] = $this->is_serialized($value['video'])?unserialize($value['video'])[0]['video']:$value['video'];
+                @$ret[$key]['liveAddress'] = $this->is_serialized($value['video'])?unserialize($value['video'])[0]['video']:$value['video'];
                 // }else{
-                   @$ret[$key]['videoBroadcastAddress'] = $this->is_serialized($value['courseware'])?unserialize($value['courseware'])[0]['address']:$value['courseware'];
+                @$ret[$key]['videoBroadcastAddress'] = $this->is_serialized($value['courseware'])?unserialize($value['courseware'])[0]['address']:$value['courseware'];
                 // }
 
                 $ret[$key]['lessontime'] = $value['lesson_time'];
@@ -1199,8 +1199,8 @@ return json($data);
         $user = db('toplearning_login')->where(['user_id'=>$token_uid])->find();
         $ret = array();
         if ($user&& $user['group_id']==3) {//laoshi
-         $info = db('toplearning_net_material')->where(['del'=>0,'user_id'=>$token_uid])->select();
-         foreach ($info as $key => $value) {
+           $info = db('toplearning_net_material')->where(['del'=>0,'user_id'=>$token_uid])->select();
+           foreach ($info as $key => $value) {
             $ret[$key]['courseid'] = $value['net_material_id'];
             @$ret[$key]['image'] = json_decode($value['picture'],true)['m'];
             $ret[$key]['type'] = $value['type'];
@@ -1315,7 +1315,7 @@ return json($data);
 
         $school_ids = db("toplearning_school_teacher")->where(['user_id'=>$token_uid])->column("school_id");
         $school_ids = $school_ids?$school_ids:[];
-         if(!in_array("7",$school_ids)){
+        if(!in_array("7",$school_ids)){
             array_unshift($school_ids, 7);
         }
 
@@ -1341,7 +1341,7 @@ return json($data);
             $ret[$key]['name'] = $value['school_name'];
             $i++;
         }
-      
+
         //返回信息
         $data = [
             'Code'=>'0',
@@ -1565,7 +1565,7 @@ return json($data);
         // }
 
 
-                  if(!empty($params['head'])){
+        if(!empty($params['head'])){
             $file = "/tmp/".time().rand(0,10000).".png";
             $r = file_put_contents($file, base64_decode($params['head']));//返回的是字节数
             if(!$r){
@@ -1573,7 +1573,7 @@ return json($data);
             }
             $res = $this->uploadFile($file,"png");
             if($res['code'] != 0){
-                                return $this->error('更新图片失败');
+                return $this->error('更新图片失败');
             }
             $data['picture'] = json_encode(['l'=>$res['path'],'m'=>$res['path'],'s'=>$res['path']]);
         }
@@ -1652,18 +1652,18 @@ return json($data);
 
             if(!empty($value['lessonid'])){
 
-            $f = $value['lessonid'];
-             db('toplearning_class_festival')->where(['class_id'=>$f])->update($save);
-            $kkk=array_search($f ,$class_ids);
-            if($kkk !== false){
-                array_splice($class_ids,$kkk,1);
-            }
+                $f = $value['lessonid'];
+                db('toplearning_class_festival')->where(['class_id'=>$f])->update($save);
+                $kkk=array_search($f ,$class_ids);
+                if($kkk !== false){
+                    array_splice($class_ids,$kkk,1);
+                }
 
 
 
             }else{
                 db('toplearning_class_festival')->insert($save);
-            $f = Db::name('toplearning_class_festival')->getLastInsID();
+                $f = Db::name('toplearning_class_festival')->getLastInsID();
             }
 
             db("toplearning_teacher_prepare")->where(['class_id'=>$f])->delete();
@@ -1822,7 +1822,7 @@ return json($data);
         $json = json_decode($json,true);
         // $image = trim($json['image']);//todo
         $title = trim($json['title']);
-         $keyword = trim($json['keyword']);
+        $keyword = trim($json['keyword']);
         $desc = trim($json['desc']);
         $share = trim($json['share']);
 
@@ -1835,9 +1835,9 @@ return json($data);
 
 
         
- 
 
-                 if(!empty($params['head'])){
+
+        if(!empty($params['head'])){
             $file = "/tmp/".time().rand(0,10000).".png";
             $r = file_put_contents($file, base64_decode($params['head']));//返回的是字节数
             if(!$r){
@@ -1845,7 +1845,7 @@ return json($data);
             }
             $res = $this->uploadFile($file,"png");
             if($res['code'] != 0){
-                                return $this->error('更新图片失败');
+                return $this->error('更新图片失败');
             }
             $data['picture'] = json_encode(['l'=>$res['path'],'m'=>$res['path'],'s'=>$res['path']]);
         }
@@ -1856,11 +1856,11 @@ return json($data);
         $data['user_id'] = $token_uid;
         $data['title'] = $title;
         // $data['lession_img'] = $image;
-                        $data['course_type']  = trim($json['typeid']);
+        $data['course_type']  = trim($json['typeid']);
         $data['type'] = 2;
         $data['lesson_type'] = 2;
         $data['lession_status'] = 2;
-         $data['keyword'] = $keyword;
+        $data['keyword'] = $keyword;
         $data['introduce'] = $desc;
         $data['share'] = $share;
         $data['add_time'] = date('Y-m-d H:i:s',time());
@@ -1871,22 +1871,22 @@ return json($data);
         $data['release'] = count($json['classFestivalList']);
         if(!empty($json['courseid'])){
             $net_material_id = $json['courseid'];
-             $res =    db('toplearning_net_material')->where(['net_material_id'=>$net_material_id])->update($data);
-               
-        }else{            
-        $res = db('toplearning_net_material')->insert($data);
-        
-$net_material_id = Db::name('toplearning_net_material')->getLastInsID();
-         }
+            $res =    db('toplearning_net_material')->where(['net_material_id'=>$net_material_id])->update($data);
 
-         if ($res === false) {
+        }else{            
+            $res = db('toplearning_net_material')->insert($data);
+
+            $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
+        }
+
+        if ($res === false) {
             return $this->error('保存失败');
         }
         //课程保存 处理课节
         $classTypeList = $json['classFestivalList'];
         $save = array();
         // db('toplearning_class_festival')->where(['material_id'=>$net_material_id])->delete();
-                $class_ids = db('toplearning_class_festival')->where(['material_id'=>$net_material_id])->column("class_id");
+        $class_ids = db('toplearning_class_festival')->where(['material_id'=>$net_material_id])->column("class_id");
 
         foreach ($classTypeList as $key => $value) {
             $save['guide'] = $value['guide'];
@@ -1902,7 +1902,7 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
 
 
             $save['lesson_time'] = $value['lessontime'];
-                $save['add_time'] = date('Y-m-d H:i:s',time());
+            $save['add_time'] = date('Y-m-d H:i:s',time());
 
             // $save['index'] = $value['index'];
 
@@ -1913,27 +1913,27 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
               'lessontime'=>$value['lessontime'],
               'videoUrl'=>$value['videoUrl'],
               
-            ]);
+          ]);
             //课件
             $save['courseware'] = serialize($value['coursewareList']);
 
 
 
 
-                   if(!empty($value['lessonid'])){
+            if(!empty($value['lessonid'])){
 
-            $f = $value['lessonid'];
-             db('toplearning_class_festival')->where(['class_id'=>$f])->update($save);
-            $kkk=array_search($f ,$class_ids);
-            if($kkk !== false){
-                array_splice($class_ids,$kkk,1);
-            }
+                $f = $value['lessonid'];
+                db('toplearning_class_festival')->where(['class_id'=>$f])->update($save);
+                $kkk=array_search($f ,$class_ids);
+                if($kkk !== false){
+                    array_splice($class_ids,$kkk,1);
+                }
 
 
 
             }else{
                 db('toplearning_class_festival')->insert($save);
-            $f = Db::name('toplearning_class_festival')->getLastInsID();
+                $f = Db::name('toplearning_class_festival')->getLastInsID();
             }
 
 
@@ -1946,7 +1946,7 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
         }
 
         if(!empty($class_ids)){
-            
+
             db("toplearning_class_festival")->where("class_id in (".implode(",",$class_ids).")")->delete();
         }
 
@@ -2329,6 +2329,8 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
      */
     public function getCourse($params)
     {
+
+
         //params
         $token = trim($params['token']);
         $courseid = trim($params['courseid']);
@@ -2414,7 +2416,7 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
     public function publishedAddClassFestival($params)
     {   
         //params
-       
+
         $token = trim($params['token']);
         $courseid = trim($params['courseid']);
         $json_arr = $params['json']?json_decode($params['json'],true):[];
@@ -2434,12 +2436,12 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
                 //时间处理
                 // if ($json['time']) {
 
-                    $sttime = $json['year'].'-'.$json['month'].'-'.$json['day'].' '.$json['startTime'];
-                    @$save['lesson_time'] = intval($json['lessontime']);
-                    @$save['add_time'] = date('Y-m-d H:i:s',strtotime($sttime));
+                $sttime = $json['year'].'-'.$json['month'].'-'.$json['day'].' '.$json['startTime'];
+                @$save['lesson_time'] = intval($json['lessontime']);
+                @$save['add_time'] = date('Y-m-d H:i:s',strtotime($sttime));
 
-                    @$save['stage_start'] = date('Y-m-d H:i:s',strtotime($sttime));
-                    @$save['stage_end'] = date('Y-m-d H:i:s',strtotime($sttime)+intval($json['lessontime'])*60);
+                @$save['stage_start'] = date('Y-m-d H:i:s',strtotime($sttime));
+                @$save['stage_end'] = date('Y-m-d H:i:s',strtotime($sttime)+intval($json['lessontime'])*60);
 
                     // $timearr = explode(' ', $json['time']);
                     // @$save['lesson_time'] = intval($timearr[1]);
@@ -2521,9 +2523,9 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
     {
 
         //params
-              
+
         $token = trim($params['token']);
-    $courseid = trim($params['courseid']);
+        $courseid = trim($params['courseid']);
         $lessonid = trim($params['lessonid']);
         $json = $params['json']?json_decode($params['json'],true):[];
 
@@ -2539,12 +2541,12 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
 
             //时间处理
             // if ($json['time']) {
-                $sttime = $json['year'].'-'.$json['month'].'-'.$json['day'].' '.$json['startTime'];
-                @$save['lesson_time'] = intval($json['lessontime']);
-                @$save['add_time'] = date('Y-m-d H:i:s',strtotime($sttime));
+            $sttime = $json['year'].'-'.$json['month'].'-'.$json['day'].' '.$json['startTime'];
+            @$save['lesson_time'] = intval($json['lessontime']);
+            @$save['add_time'] = date('Y-m-d H:i:s',strtotime($sttime));
 
-                @$save['stage_start'] = date('Y-m-d H:i:s',strtotime($sttime));
-                @$save['stage_end'] = date('Y-m-d H:i:s',strtotime($sttime)+intval($json['lessontime'])*60);
+            @$save['stage_start'] = date('Y-m-d H:i:s',strtotime($sttime));
+            @$save['stage_end'] = date('Y-m-d H:i:s',strtotime($sttime)+intval($json['lessontime'])*60);
                 // $timearr = explode(' ', $json['time']);
                 // @$save['lesson_time'] = intval($timearr[1]);
                 // $srt = str_replace(array('年','月'),'-',$timearr[0]);
@@ -2651,13 +2653,13 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
 
 
 
-                  $save['video'] = serialize([
+            $save['video'] = serialize([
               'vdeoId'=>$json['vdeoId'],
               'vdeoDuration'=>$json['vdeoDuration'],
               'lessontime'=>$json['lessontime'],
               'videoUrl'=>$json['videoUrl'],
               
-            ]);
+          ]);
             //视频
              //课件
             $save['courseware'] = serialize($json['coursewareList']);
@@ -2693,7 +2695,7 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
         $file = $_FILES['vdeoUrl']['tmp_name'];
 
         $res = $this->uploadFile($file,"mp4");
- 
+
 
         $map['a.net_material_id'] = $courseid;
         $map['f.del'] = 0;
@@ -2701,7 +2703,7 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
         $ret = array();
 
         foreach ($info as $key => $value) {
-            
+
             $ret[$key]['year'] = date('Y',strtotime($value['stage_start']));
             $ret[$key]['month'] = date('m',strtotime($value['stage_start']));
             $ret[$key]['day'] = date('d',strtotime($value['stage_start']));
@@ -2745,7 +2747,7 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
         $ret['courseid'] = $info['net_material_id'];
 
         @$ret['image'] =    json_decode($info['picture'],true)['l'];
-;
+        ;
         $ret['title'] = $info['title'];
         $ret['college'] = db('toplearning_school')->where(['school_id'=>$info['school_id']])->column('school_name')?db('toplearning_school')->where(['school_id'=>$info['school_id']])->column('school_name')[0]:'';
         $ret['type'] = db("toplearning_course_type")->where(['type_id'=>$info['course_type']])->value("type_name");
@@ -2778,7 +2780,7 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
             $rs[$key]['endTime'] = date('H:i',strtotime($value['stage_end']));
 
 // var_dump($value['courseware']);
-             $rs[$key]['coursewareList'] = unserialize($value['courseware']);
+            $rs[$key]['coursewareList'] = unserialize($value['courseware']);
 
             $rs[$key] = array_merge($rs[$key],unserialize($value['video']));
 
@@ -2860,9 +2862,9 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
     public function upDataWeike($params)
     {   
         $token = trim($params['token']);
-          $courseid = $params['courseid'];
+        $courseid = $params['courseid'];
         // $image = trim($json['image']);//todo
-     
+
 
 
         //通过token获取 uid
@@ -2874,41 +2876,41 @@ $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
             $file = "/tmp/".time().rand(0,10000).".png";
             $r = file_put_contents($file, base64_decode($params['image']));//返回的是字节数
             if(!$r){
-                                return $this->error('图片格式错误');
+                return $this->error('图片格式错误');
 
             }
 
 
             $res = $this->uploadFile($file,"png");
             if($res['code'] != 0){
-                                return $this->error('更新图片失败');
+                return $this->error('更新图片失败');
 
             }
             $data['picture'] = json_encode(['l'=>$res['path'],'m'=>$res['path'],'s'=>$res['path']]);
         }
 
         $data['user_id'] = $token_uid;
-          if(!empty($params['title'])){
-        $data['title'] = $params['title'];            
+        if(!empty($params['title'])){
+            $data['title'] = $params['title'];            
         }
-          if(!empty($params['typeid'])){
-        $data['course_type'] = $params['typeid'];            
+        if(!empty($params['typeid'])){
+            $data['course_type'] = $params['typeid'];            
         }
-          if(!empty($params['keyword'])){
-        $data['keyword'] = $params['keyword'];            
+        if(!empty($params['keyword'])){
+            $data['keyword'] = $params['keyword'];            
         }
-              if(!empty($params['desc'])){
-        $data['introduce'] = $params['desc'];            
+        if(!empty($params['desc'])){
+            $data['introduce'] = $params['desc'];            
         }
-              if(!empty($params['share'])){
-        $data['share'] = $params['share'];            
+        if(!empty($params['share'])){
+            $data['share'] = $params['share'];            
         }
-  
 
 
 
 
-$res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->update($data);
+
+        $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->update($data);
         if ($res === false) {
             return $this->error('更新失败');
         }
@@ -3070,7 +3072,7 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         $page = trim($params['page']);
         $size = trim($params['size']);
 
-            $token_uid = $this->decrypt($token);
+        $token_uid = $this->decrypt($token);
 
         //学院老师
         $map['del'] = 0;
@@ -3223,41 +3225,41 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
                 $ret[$key]['isInTheExamTime'] = false;
 
                 if (strtotime($value['start_time'])<time()&&strtotime($value['end_time'])>time()) {
-                   $ret[$key]['isInTheExamTime'] = true;
-                }
+                 $ret[$key]['isInTheExamTime'] = true;
+             }
 
 
-                $usersumb = db('toplearning_exam_submit')->where(['exam_id'=>$value['exam_id'],'student_user_id'=>$token_uid])->find();
-                @$ret[$key]['alreadyZt'] = $usersumb['had_done'];
-                
-                @$ret[$key]['type'] = $usersumb['is_marking'];
-                if ($ret[$key]['type']==3) {
-                    @$ret[$key]['score'] = number_format(($usersumb['score']/$usersumb['total'])*$usersumb['had_done'],1);
-                    @$ret[$key]['pyTime'] = date('Y-m-d H:i',strtotime($usersumb['mark_time'])) ;
-                }
-                if ($ret[$key]['type']==2) {
-                    @$ret[$key]['jjTime'] = date('Y-m-d H:i',strtotime($usersumb['submit_time']));
-                }
-                
-                
-                
-                
+             $usersumb = db('toplearning_exam_submit')->where(['exam_id'=>$value['exam_id'],'student_user_id'=>$token_uid])->find();
+             @$ret[$key]['alreadyZt'] = $usersumb['had_done'];
+
+             @$ret[$key]['type'] = $usersumb['is_marking'];
+             if ($ret[$key]['type']==3) {
+                @$ret[$key]['score'] = number_format(($usersumb['score']/$usersumb['total'])*$usersumb['had_done'],1);
+                @$ret[$key]['pyTime'] = date('Y-m-d H:i',strtotime($usersumb['mark_time'])) ;
             }
+            if ($ret[$key]['type']==2) {
+                @$ret[$key]['jjTime'] = date('Y-m-d H:i',strtotime($usersumb['submit_time']));
+            }
+
+
+
 
         }
 
-        
-        //返回信息
-        $data = [
-            'Code'=>'0',
-            'Msg'=>'操作成功',
-            'Data'=>$ret,
-            'Success'=>true
-        ];
-
-        return json($data);
-
     }
+
+
+        //返回信息
+    $data = [
+        'Code'=>'0',
+        'Msg'=>'操作成功',
+        'Data'=>$ret,
+        'Success'=>true
+    ];
+
+    return json($data);
+
+}
     /**
      * [lecturerCourse 搜索课程]
      * @param  [type] $params [description]
@@ -3266,7 +3268,7 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
     public function seacherCourse($params)
     {   
         $token = trim($params['token']);
-          $page = !empty($params['page'])?$params['page']:0;
+        $page = !empty($params['page'])?$params['page']:0;
         $size = !empty($params['size'])?$params['size']:10;
         $map = [];
         if (isset($params['typeId'])) {
@@ -3342,7 +3344,7 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         //setDec
         // var_dump($ud,$nt['price']);
         if ( $nt&&( intval($ud['num']) > intval($nt['price']) ) ) { 
-            
+
             db('toplearning_ud_school')->where(['user_id'=>$token_uid,'school_id'=>$school_id])->setDec( 'num',intval($nt['price']) );
 
         }else{
@@ -3476,38 +3478,49 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         // $userid = trim($params['userid']);
         //
         $token_uid = $this->decrypt($token);
+
+        $im_groups  =  $this->getUserGroupList($token_uid);
         // $info = db('toplearning_chat_group')->alias('a')->field('a.*,a.user_id as auid,u.*,r.*')->join('toplearning_chat_group_user u','a.id = u.group_id')->join('toplearning_chat_record r','a.id = r.group_id')->where(['r.user_id'=>$token_uid])->group('r.group_id')->order('r.id DESC')->select();
-        $info = db('toplearning_chat_group')->alias('a')->field('a.*,a.user_id as auid,u.*')->join('toplearning_chat_group_user u','a.id = u.group_id')->where(['u.user_id'=>$token_uid])->select();
+        // $info = db('toplearning_chat_group')->alias('a')->field('a.*,a.user_id as auid,u.*')->join('toplearning_chat_group_user u','a.id = u.group_id')->where(['u.user_id'=>$token_uid])->select();
         // echo db('toplearning_chat_group')->getlastsql();exit;
+
         $ret = array();
-        foreach ($info as $key => $value) {
-            $ret[$key]['groupId'] = $value['txgroupid'];
-            $ret[$key]['groupName'] = $value['group_name'];
+        foreach ($im_groups as $key => $value) {
 
-            $ret[$key]['groupOwnerName'] = db('toplearning_login')->where(['user_id'=>$value['user_id']])->value('nickname');
-            $ret[$key]['isGroup'] = $value['auid']==$token_uid?'true':'false';
-            $ret[$key]['groupHead'] = $value['pic'];
-            @$ret[$key]['currentBulletin'] = db('toplearning_chat_group_notice')->where(['group_id'=>$value['group_id']])->value('content');
-            @$ret[$key]['courseName'] = db('toplearning_net_material')->where(['net_material_id'=>$value['lesson_id']])->value('title');
-            $ret[$key]['actualite'] = $value['group_name'];
+            $ret[$key]['groupId'] = $value['GroupId'];
+            $ret[$key]['groupName'] = $value['Name'];
 
-            $r = db('toplearning_chat_record')->where(['group_id'=>$value['group_id']])->order('id DESC')->find();
-            $ret[$key]['msg'] = $r['content'];
-            $ret[$key]['data'] = $r['create_time'];
-            $ret[$key]['unreadMsgNumber'] = 1;
+            $group = db("toplearning_chat_group")->where(['txgroupid'=>$value['GroupId']])->find();
+            $owner_name = db("toplearning_login")->where(['user_id'=>$group['user_id']])->value('nickname');
+
+            $ret[$key]['groupOwnerName'] = $owner_name;
+            $ret[$key]['isGroup'] = $token_uid == $group['user_id'];
+            $ret[$key]['groupHead'] = $value['FaceUrl'];
+            @$ret[$key]['currentBulletin'] = db('toplearning_chat_group_notice')->where(['group_id'=>$group['id']])->value('content');
+            @$ret[$key]['courseName'] = db('toplearning_net_material')->where(['net_material_id'=>$group['lesson_id']])->value('title');
+            $ret[$key]['actualite'] = $group['group_name'];
+
+            // $r = db('toplearning_chat_record')->where(['group_id'=>$value['group_id']])->order('id DESC')->find();
+            $ret[$key]['msg'] = "";
+            $ret[$key]['data'] = date("m月d日",$value['LastMsgTime']);
+            $ret[$key]['unreadMsgNumber'] = $value['SelfInfo']['UnreadMsgNum'];
             
             
-            $ret[$key]['courseid'] = $value['lesson_id'];
+            $ret[$key]['courseid'] = $group['lesson_id'];
+            $ret[$key]['courseName'] = db("toplearning_net_material")->where(['net_material_id'=>$group['lesson_id']])->value("title");
             
 
 
         }
 
+        $identifier = db("toplearning_login")->where(['user_id'=>$token_uid])->value('im_account');
+        $userSig =  $this->getUserSign($identifier);
+        
         //返回信息
         $data = [
             'Code'=>'0',
             'Msg'=>'操作成功',
-            'Data'=>$ret,
+            'Data'=>['groupList'=>$ret,'identifier'=>$identifier,'userSig'=>$userSig],
             'Success'=>true
         ];
 
@@ -3521,6 +3534,8 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
      */
     public function groupMemberList($params)
     {
+
+
         //params
         $token = trim($params['token']);
         $groupId = trim($params['groupId']);
@@ -3604,28 +3619,58 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
      */
     public function groupCreate($params)
     {
-        //params
-        $post['method'] = 'group';
-        $post['group_type'] = isset($params['group_type'])?$params['group_type']:'Private';//Private | Public | ChatRoom | AVChatRoom| BChatRoom
-        $post['group_name'] = isset($params['group_name'])?$params['group_name']:'U学院群聊'.time();
-        $post['owner_id'] = isset($params['owner_id'])?$params['owner_id']:'zg';
+        // //params
+        // $post['method'] = 'group';
+        // $post['group_type'] = isset($params['group_type'])?$params['group_type']:'Private';//Private | Public | ChatRoom | AVChatRoom| BChatRoom
+        // $post['group_name'] = isset($params['group_name'])?$params['group_name']:'U学院群聊'.time();
+        // $post['owner_id'] = isset($params['owner_id'])?$params['owner_id']:'zg';
 
 
-        // $post['GroupId'] = 'TGS'.time();
-        $rs = $this->tenxunim($post);
-        if ($rs['groupid']) {
-            $pattern = '#"(.*?)"#i'; 
-            preg_match_all($pattern, $rs['groupid'], $matches); 
-            $rs['groupid'] = $matches[1][0];
+        // // $post['GroupId'] = 'TGS'.time();
+        // $rs = $this->tenxunim($post);
+        // if ($rs['groupid']) {
+        //     $pattern = '#"(.*?)"#i'; 
+        //     preg_match_all($pattern, $rs['groupid'], $matches); 
+        //     $rs['groupid'] = $matches[1][0];
+        // }
+
+        // if ($rs && $rs['errorcode']!=0) {
+        //     return $this->error('创建群组失败');
+        // }
+
+        // if (isset($params['lesson_id'])||isset($params['user_id'])||isset($params['pic'])) {
+        //     $this->error('必要参数缺失');
+        // }
+         if(empty($params['group_name'])){
+            return $this->error("参数不对");
+        }
+        if(empty($params['group_type'])){
+            return $this->error("参数不对");
+        }
+        if(empty($params['owner_id'])){
+            return $this->error("参数不对");
         }
 
-        if ($rs && $rs['errorcode']!=0) {
-            return $this->error('创建群组失败');
+        if(empty($params['lesson_id'])){
+           return  $this->error("参数不对");
+        }
+        if(empty($params['user_id'])){
+           return  $this->error("参数不对");
         }
 
-        if (isset($params['lesson_id'])||isset($params['user_id'])||isset($params['pic'])) {
-            $this->error('必要参数缺失');
+
+
+        $resp = $this->createGroup([
+            'name'=>$params['group_name'],
+            'type'=>$params['group_type'],
+            'user_id'=>$params['user_id']
+        ]);
+        if($resp['ActionStatus'] != "OK"){
+            return $this->error($resp['ErrorInfo']);
+
         }
+
+
         $params['lesson_id'] = isset($params['lesson_id'])?$params['lesson_id']:'';
         $params['user_id'] = isset($params['user_id'])?$params['user_id']:'';
         $params['pic'] = isset($params['pic'])?$params['pic']:'';
@@ -3634,10 +3679,10 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         $data['user_id'] = $params['user_id'];
         $data['pic'] = $params['pic'];
 
-        $data['owner_id'] = $post['owner_id'];
-        $data['group_name'] = $post['group_name'];
-        $data['group_type'] = $post['group_type'];
-        $data['txgroupid'] = $rs['groupid'];
+        $data['owner_id'] = $this->getUserSign($params['user_id']);
+        $data['group_name'] = $params['group_name'];
+        $data['group_type'] = $params['group_type'];
+        $data['txgroupid'] = $resp['GroupId'];
 
         db('toplearning_chat_group')->insert($data);
 
@@ -3771,15 +3816,15 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
      * @return [type]       [description]
      */
     function send($ch,$data){
-       curl_setopt ($ch, CURLOPT_URL, 'https://sms.yunpian.com/v2/sms/single_send.json');
-       curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-       $result = curl_exec($ch);
-       $error = curl_error($ch);
+     curl_setopt ($ch, CURLOPT_URL, 'https://sms.yunpian.com/v2/sms/single_send.json');
+     curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+     $result = curl_exec($ch);
+     $error = curl_error($ch);
          // checkErr($result,$error);
-       return $result;
-   }
+     return $result;
+ }
 
-   function encrypt($data) { 
+ function encrypt($data) { 
     $key = $this->passkey();
     $prep_code = serialize($data); 
     $block = mcrypt_get_block_size('des', 'ecb'); 
@@ -3792,16 +3837,25 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
 } 
 
 function decrypt($str) { 
-    $key = $this->passkey();
-    $str = base64_decode($str); 
-    $str = mcrypt_decrypt(MCRYPT_DES, $key, $str, MCRYPT_MODE_ECB); 
-    $block = mcrypt_get_block_size('des', 'ecb'); 
-    $pad = ord($str[($len = strlen($str)) - 1]); 
+    try{
 
-    if ($pad && $pad < $block && preg_match('/' . chr($pad) . '{' . $pad . '}$/', $str)) { 
-        $str = substr($str, 0, strlen($str) - $pad); 
-    } 
-    return unserialize($str); 
+
+        $key = $this->passkey();
+        $str = base64_decode($str); 
+        $str = mcrypt_decrypt(MCRYPT_DES, $key, $str, MCRYPT_MODE_ECB); 
+        $block = mcrypt_get_block_size('des', 'ecb'); 
+        $pad = ord($str[($len = strlen($str)) - 1]); 
+
+        if ($pad && $pad < $block && preg_match('/' . chr($pad) . '{' . $pad . '}$/', $str)) { 
+            $str = substr($str, 0, strlen($str) - $pad); 
+        } 
+        $re = unserialize($str);
+    }catch(Exception $e){
+        return "";
+    }
+
+
+    return $re; 
 }
 
 function passkey(){
@@ -3969,56 +4023,60 @@ function passkey(){
     //     return unserialize($str);  
     // }
     function is_serialized( $data ) {
-         $data = trim( $data );
-         if ( 'N;' == $data )
-             return true;
-         if ( !preg_match( '/^([adObis]):/', $data, $badions ) )
-             return false;
-         switch ( $badions[1] ) {
-             case 'a' :
-             case 'O' :
-             case 's' :
-                 if ( preg_match( "/^{$badions[1]}:[0-9]+:.*[;}]\$/s", $data ) )
-                     return true;
-                 break;
-             case 'b' :
-             case 'i' :
-             case 'd' :
-                 if ( preg_match( "/^{$badions[1]}:[0-9.E-]+;\$/", $data ) )
-                     return true;
-                 break;
-         }
-         return false;
-     }
+       $data = trim( $data );
+       if ( 'N;' == $data )
+       return true;
+       if ( !preg_match( '/^([adObis]):/', $data, $badions ) )
+           return false;
+           switch ( $badions[1] ) {
+               case 'a' :
+               case 'O' :
+               case 's' :
+               if ( preg_match( "/^{$badions[1]}:[0-9]+:.*[;}]\$/s", $data ) )
+                   return true;
+                   break;
+                   case 'b' :
+                   case 'i' :
+                   case 'd' :
+                   if ( preg_match( "/^{$badions[1]}:[0-9.E-]+;\$/", $data ) )
+                       return true;
+                       break;
+                   }
+                   return false;
+               }
+
+
+
+
 
 
     //腾讯IM 注册账号|群聊
-    function tenxunim($params)
-    {   
+               function tenxunim($params)
+               {   
         //param
-        $method = $params['method'];
+                $method = $params['method'];
 
         //(group_type) (group_name) (owner_id)
         //(identifier) (nick) (face_url)
         // (group_id) (member_id) (silence)
-        $commandList = array(
-            'regist'=>'php /home/wwwroot/ucschool/PhpServerSdk/TimRestApiGear.php im_open_login_svc account_import ',
-            'group'=>'php /home/wwwroot/ucschool/PhpServerSdk/TimRestApiGear.php group_open_http_svc create_group ',
-            'addgroup'=>'php /home/wwwroot/ucschool/PhpServerSdk/TimRestApiGear.php group_open_http_svc add_group_member '
-        );
+                $commandList = array(
+                    'regist'=>'php /home/wwwroot/ucschool/PhpServerSdk/TimRestApiGear.php im_open_login_svc account_import ',
+                    'group'=>'php /home/wwwroot/ucschool/PhpServerSdk/TimRestApiGear.php group_open_http_svc create_group ',
+                    'addgroup'=>'php /home/wwwroot/ucschool/PhpServerSdk/TimRestApiGear.php group_open_http_svc add_group_member '
+                );
 
         //生成执行命令
-        if (!$commandList[$method]) {
-            return $this->error('不存在腾讯IM'.$method);
-        }
-        unset($params['method']);
+                if (!$commandList[$method]) {
+                    return $this->error('不存在腾讯IM'.$method);
+                }
+                unset($params['method']);
 
         //实例：$command = "php /data/httpd/ucschool/PhpServerSdk/TimRestApiGear.php im_open_login_svc account_import hello2 hello2 null";
-        $command = $commandList[$method].implode(' ', $params);
-        
-        $retval = array();
-        exec($command, $retval, $status);
-        $usersig = 0;
+                $command = $commandList[$method].implode(' ', $params);
+
+                $retval = array();
+                exec($command, $retval, $status);
+                $usersig = 0;
         $errorCode = 9;//错误code   
         $groupId  = 0;     
         if ($status == 0) {
@@ -4028,7 +4086,7 @@ function passkey(){
                 //     $rs = $retval[$key+1];
                 //     $usersig =explode('=', explode('&', explode('?', $rs)[1])[0])[1];
                 // }
-                
+
                 if (strstr($value, 'registSig')) {
 
                     $usersig = explode(':', $value)[1];
@@ -4055,4 +4113,87 @@ function passkey(){
 
         return $rs;
     }
+
+
+
+    function getUserSign($user = "admin"){
+        $cache = cache("userSig".$user);
+        if(empty($cache)){
+            import('tls.TLSSig', EXTEND_PATH);
+            $tls =  \TLSSigAPI::getInstance();
+            $cache = $tls->genSig($user);
+            cache("userSig".$user,$cache,604800);
+        }
+        return $cache;
+
+    }  
+
+
+
+
+
+    function createGroup($data){
+
+        $userSig = $this->getUserSign();
+        $url = "https://console.tim.qq.com/v4/group_open_http_svc/create_group?usersig=".$userSig."&identifier=admin&sdkappid=1400099084&random=".rand(100000,999999)."&contenttype=json";
+        $account = db("toplearning_login")->where(['user_id'=>$data['user_id']])->value("im_account");
+        $params = [
+             "Owner_Account"=> $account, // 群主的UserId（选填）
+            "Type"=> !empty($data['type'])?$data['type']:"Public", // 群组类型：Private/Public/ChatRoom/AVChatRoom/BChatRoom（必填）
+            "Name"=> $data['name'] // 群名称（必填）
+        ];
+        // var_dump($params);
+        $params = json_encode($params);
+        $resp = curlRequest($url,$params);
+        $resp = json_decode($resp,true);
+
+
+
+
+
+
+        return $resp;
+
+
+    }
+
+    function getUserGroupList($userid){
+        $userSig = $this->getUserSign();
+        $url = "https://console.tim.qq.com/v4/group_open_http_svc/get_joined_group_list?usersig=".$userSig."&identifier=admin&sdkappid=1400099084&random=".rand(100000,999999)."&contenttype=json";
+        $account = db("toplearning_login")->where(['user_id'=>$userid])->value("im_account");
+        $params = [
+            'Member_Account'=>$account,
+            'ResponseFilter'=>[
+                'GroupBaseInfoFilter'=>[
+                   "Type",
+                   "Name",
+                   "Introduction",
+                   "Notification",
+                   "FaceUrl",
+                   "CreateTime",
+                   "Owner_Account",
+                   "LastInfoTime",
+                   "LastMsgTime",
+                   "NextMsgSeq",
+                   "MemberNum",
+                   "MaxMemberNum",
+                   "ApplyJoinOption",
+                   "ShutUpAllMember"
+
+               ],
+               'SelfInfoFilter'=>[
+                'UnreadMsgNum'
+            ]
+        ]
+    ];
+
+    $params = json_encode($params);
+    $resp = curlRequest($url,$params);
+    $resp = json_decode($resp,true);
+    if($resp['ActionStatus'] != "OK"){
+        return [];
+    }else{
+        return $resp['GroupIdList'];
+    }
+}
 }
