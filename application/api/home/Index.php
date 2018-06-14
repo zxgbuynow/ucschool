@@ -3638,9 +3638,7 @@ class Index
         //     return $this->error('创建群组失败');
         // }
 
-        // if (isset($params['lesson_id'])||isset($params['user_id'])||isset($params['pic'])) {
-        //     $this->error('必要参数缺失');
-        // }
+ 
          if(empty($params['group_name'])){
             return $this->error("参数不对");
         }
@@ -3668,6 +3666,7 @@ class Index
         if($resp['ActionStatus'] != "OK"){
             return $this->error($resp['ErrorInfo']);
 
+ 
         }
 
 
