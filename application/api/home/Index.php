@@ -3335,13 +3335,13 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         }
         //查看U豆
         //通过老师查找课程学院ID
-        @$school_id = db('toplearning_net_material')->alias('a')->join('toplearning_login l','a.teacher_user_id = l.user_id')->where(['a.net_material_id'=>$courseid])->value('l.school_id');
+        @$school_id = $nt['school_id'];
 
         @$ud = db('toplearning_ud_school')->where(['user_id'=>$token_uid,'school_id'=>$school_id])->find();
         // var_dump(db()->getlastsql());
         //setDec
         // var_dump($ud,$nt['price']);
-        if ( $nt&&( $ud['num'] > intval($nt['price']) ) ) { 
+        if ( $nt&&( intval($ud['num']) > intval($nt['price']) ) ) { 
             
             db('toplearning_ud_school')->where(['user_id'=>$token_uid,'school_id'=>$school_id])->setDec( 'num',intval($nt['price']) );
 
@@ -3411,6 +3411,15 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         $post['silence'] = '1';
 
         $rs = $this->tenxunim($post);
+
+
+
+
+        db("toplearning_chat_group_user")->insert([
+            'user_id'=>$token_uid,
+            'group_id'=>$chatGroup['id']
+        ]);
+
 
         // if ($rs && $rs['errorcode']!=0) {
         //     $this->error('同步注册腾讯IM失败');
