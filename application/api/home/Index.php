@@ -275,25 +275,38 @@ class Index
 
         //同步注册腾讯IM
         
-        $post['method'] = 'regist';
-        $post['identifier'] = $data['mobile'];
-        $post['nick'] = $data['nickname'];
-        $post['face_url'] = 'http://www.qq.com';
+        // $post['method'] = 'regist';
+        // $post['identifier'] = $data['mobile'];
+        // $post['nick'] = $data['nickname'];
+        // $post['face_url'] = 'http://www.qq.com';
 
-        $rs = $this->tenxunim($post);
+        // $rs = $this->tenxunim($post);
 
-        if ($rs['usersig']) {
-            $pattern = '#"(.*?)"#i'; 
-            preg_match_all($pattern, $rs['usersig'], $matches); 
-            $rs['usersig'] = $matches[1][0];
+        // if ($rs['usersig']) {
+        //     $pattern = '#"(.*?)"#i'; 
+        //     preg_match_all($pattern, $rs['usersig'], $matches); 
+        //     $rs['usersig'] = $matches[1][0];
+        // }
+
+        // if ($rs && $rs['errorcode']!=0) {
+        //     $this->error('同步注册腾讯IM失败');
+        // }
+
+        $resp = $this->createUser([
+            'account'=>$data['mobile'],
+            'name'=>$data['realname'],
+            'avatar'=>"",
+        ]); 
+
+ if($resp['ActionStatus'] != "OK"){
+            return $this->error($resp['ErrorInfo']);
         }
 
-        if ($rs && $rs['errorcode']!=0) {
-            $this->error('同步注册腾讯IM失败');
-        }
+
+
 
         $data['im_account'] = $data['mobile'];
-        $data['userSig'] = $rs['usersig'];//Hashtable.php
+        $data['userSig'] = $this->getUserSign($data['mobile']);//Hashtable.php
         
 
         //插入数据
@@ -325,25 +338,59 @@ class Index
      */
     public function bregister($params)
     {   
-        $post['method'] = 'regist';
-        $post['identifier'] = $params['mobile'];
-        $post['nick'] = $params['nickname'];
-        $post['face_url'] = 'http://www.qq.com';
+        // $post['method'] = 'regist';
+        // $post['identifier'] = $params['mobile'];
+        // $post['nick'] = $params['nickname'];
+        // $post['face_url'] = 'http://www.qq.com';
 
-        $rs = $this->tenxunim($post);
 
-        if ($rs['usersig']) {
-            $pattern = '#"(.*?)"#i'; 
-            preg_match_all($pattern, $rs['usersig'], $matches); 
-            $rs['usersig'] = $matches[1][0];
+        // $rs = $this->tenxunim($post);
+
+        // if ($rs['usersig']) {
+        //     $pattern = '#"(.*?)"#i'; 
+        //     preg_match_all($pattern, $rs['usersig'], $matches); 
+        //     $rs['usersig'] = $matches[1][0];
+        // }
+
+        // if ($rs && $rs['errorcode']!=0) {
+        //     return $this->error('同步注册腾讯IM失败'.$rs['msg']);
+        // }    
+
+
+
+ if(empty($params['nickname'])){
+            return $this->error("参数不对");
+        }
+        if(empty($params['mobile'])){
+            return $this->error("参数不对");
+        }
+        // if(empty($params['face_url'])){
+        //     return $this->error("参数不对");
+        // }
+ 
+
+
+
+
+
+        $resp = $this->createUser([
+            'account'=>$params['mobile'],
+            'name'=>$params['nickname'],
+            'avatar'=>"",
+        ]); 
+
+ if($resp['ActionStatus'] != "OK"){
+            return $this->error($resp['ErrorInfo']);
+
+ 
         }
 
-        if ($rs && $rs['errorcode']!=0) {
-            return $this->error('同步注册腾讯IM失败'.$rs['msg']);
-        }
 
-        $save['im_account'] = $params['mobile'];
-        $save['userSig'] = $rs['usersig'];//Hashtable.php
+
+
+
+                $save['im_account'] = $params['mobile'];
+        $save['userSig'] = $this->getUserSign($params['mobile']);
 
         //返回信息
         $data = [
@@ -3677,8 +3724,7 @@ class Index
         $data['lesson_id'] = $params['lesson_id'];
         $data['user_id'] = $params['user_id'];
         $data['pic'] = $params['pic'];
-
-        $data['owner_id'] = $this->getUserSign($params['user_id']);
+         $data['owner_id'] = $this->getUserSign($params['owner_id']);
         $data['group_name'] = $params['group_name'];
         $data['group_type'] = $params['group_type'];
         $data['txgroupid'] = $resp['GroupId'];
@@ -4155,6 +4201,29 @@ function passkey(){
 
 
     }
+
+
+    function createUser($data){
+              $userSig = $this->getUserSign();
+        $url = "https://console.tim.qq.com/v4/im_open_login_svc/account_import?usersig=".$userSig."&identifier=admin&sdkappid=1400099084&random=".rand(100000,999999)."&contenttype=json";
+        $params = [
+             "Identifier"=>$data['account'],
+   "Nick"=>$data['name'],
+   "FaceUrl"=>$data['avatar']
+        ];
+
+        $params = json_encode($params);
+        $resp = curlRequest($url,$params);
+        $resp = json_decode($resp,true);
+
+
+
+
+
+
+        return $resp;
+    }
+
 
     function getUserGroupList($userid){
         $userSig = $this->getUserSign();
