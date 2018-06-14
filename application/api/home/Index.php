@@ -3465,11 +3465,11 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
         //params
         $token = trim($params['token']);
         // $userid = trim($params['userid']);
-
         //
         $token_uid = $this->decrypt($token);
-        $info = db('toplearning_chat_group')->alias('a')->field('a.*,a.user_id as auid,u.*,r.*')->join('toplearning_chat_group_user u','a.id = u.group_id')->join('toplearning_chat_record r','a.id = r.group_id')->where(['r.user_id'=>$token_uid])->group('r.group_id')->order('r.id DESC')->select();
-
+        // $info = db('toplearning_chat_group')->alias('a')->field('a.*,a.user_id as auid,u.*,r.*')->join('toplearning_chat_group_user u','a.id = u.group_id')->join('toplearning_chat_record r','a.id = r.group_id')->where(['r.user_id'=>$token_uid])->group('r.group_id')->order('r.id DESC')->select();
+        $info = db('toplearning_chat_group')->alias('a')->field('a.*,a.user_id as auid,u.*')->join('toplearning_chat_group_user u','a.id = u.group_id')->where(['u.user_id'=>$token_uid])->select();
+        // echo db('toplearning_chat_group')->getlastsql();exit;
         $ret = array();
         foreach ($info as $key => $value) {
             $ret[$key]['groupId'] = $value['txgroupid'];
@@ -3478,13 +3478,18 @@ $res = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->up
             $ret[$key]['groupOwnerName'] = db('toplearning_login')->where(['user_id'=>$value['user_id']])->value('nickname');
             $ret[$key]['isGroup'] = $value['auid']==$token_uid?'true':'false';
             $ret[$key]['groupHead'] = $value['pic'];
-            $ret[$key]['msg'] = $value['content'];
-            $ret[$key]['data'] = $value['create_time'];
-            $ret[$key]['unreadMsgNumber'] = 1;
-            $ret[$key]['actualite'] = $value['group_name'];
             @$ret[$key]['currentBulletin'] = db('toplearning_chat_group_notice')->where(['group_id'=>$value['group_id']])->value('content');
+            @$ret[$key]['courseName'] = db('toplearning_net_material')->where(['net_material_id'=>$value['lesson_id']])->value('title');
+            $ret[$key]['actualite'] = $value['group_name'];
+
+            $r = db('toplearning_chat_record')->where(['group_id'=>$value['group_id']])->order('id DESC')->find();
+            $ret[$key]['msg'] = $r['content'];
+            $ret[$key]['data'] = $r['create_time'];
+            $ret[$key]['unreadMsgNumber'] = 1;
+            
+            
             $ret[$key]['courseid'] = $value['lesson_id'];
-            @$ret[$key]['courseName'] = db('toplearning_net_material')->where(['net_material_id'=>$value['lesson_id']])->value('content');
+            
 
 
         }
