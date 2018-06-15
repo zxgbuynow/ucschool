@@ -3751,25 +3751,23 @@ class Index
     {
         //参数
         $token = trim($params['token']);
-        $json = $params['json'];
-
+        $json = json_decode($params['json'],true);
         $token_uid = $this->decrypt($token);
         
 
-        if (!db('toplearning_login')->where(['user_id'=>$token_uid])->find()) {
-            return $this->error('账号不存在！');
-        }
-        
+        // if (!db('toplearning_login')->where(['user_id'=>$token_uid])->find()) {
+        //     return $this->error('账号不存在！');
+        // }
         if ($json) {
-            $data['nickname'] = trim($json['nickname']);
-            $data['birthday'] = trim($json['birthday']);
-            $data['sex'] = trim($json['sex']);
-            $data['city'] = trim($json['city']);
-            $data['phone'] = trim($json['phone']);
-            $data['wechat'] = trim($json['wechat']);
-            $data['qq'] = trim($json['qq']);
-            $data['email'] = trim($json['email']);
-            $data['IndividualResume'] = trim($json['IndividualResume']);
+            @$data['nickname'] = trim($json['nickname']);
+            @$data['birthday'] = trim($json['birthday']);
+            @$data['sex'] = trim($json['sex']);
+            @$data['city'] = trim($json['city']);
+            @$data['phone'] = trim($json['phone']);
+            @$data['wechat'] = trim($json['wechat']);
+            @$data['qq'] = trim($json['qq']);
+            @$data['email'] = trim($json['email']);
+            @$data['IndividualResume'] = trim($json['IndividualResume']);
 
             if(!empty($json['head'])){
                 $file = "/tmp/".time().rand(0,10000).".png";
@@ -3784,6 +3782,11 @@ class Index
                 $data['avatar'] = json_encode(['l'=>$res['path'],'m'=>$res['path'],'s'=>$res['path']]);
             }
 
+        }
+        foreach ($data as $key => $value) {
+            if (empty($value)) {
+                unset($data[$key]);
+            }
         }
         if (db('toplearning_login')->where(['user_id'=>$token_uid])->update($data)) {
             return $this->error('更新用户失败！');
@@ -3892,30 +3895,34 @@ class Index
         $groupId = trim($params['groupId']);
         $token_uid = $this->decrypt($token);
 
-        $json = trim($params['json']);
-
+        $json = json_decode($params['json'],true);
         //群信息 groupName groupActualite groupCurrentBulletin
         if ($json) {
-
             $resp = $this->uPgroupInfo([
                 'groupId'=>$groupId,
-                'groupName'=>$json['groupName'],
-                'groupActualite'=>$json['groupActualite'],
-                'groupCurrentBulletin'=>$json['groupCurrentBulletin']
+                'groupName'=>isset($json['groupName'])?$json['groupName']:'',
+                'groupActualite'=>isset($json['groupActualite'])?$json['groupActualite']:'',
+                'groupCurrentBulletin'=>isset($json['groupCurrentBulletin'])?$json['groupCurrentBulletin']:''
             ]);
             if($resp['ActionStatus'] != "OK"){
                 return $this->error($resp['ErrorInfo']);     
             }
         }
+        //更新群名
+        if (isset($json['groupName'])) {
+            db('toplearning_chat_group')->where(['txgroupid'=>$groupId])->update(['group_name'=>$json['groupName']]);
+        }
 
         //更新群公告表
-        if (db('toplearning_chat_group_notice')->where(['group_id'=>$groupId])->find()) {
+        if (db('toplearning_chat_group_notice')->where(['group_id'=>$groupId])->find()&&isset($json['groupCurrentBulletin'])) {
             db('toplearning_chat_group_notice')->where(['group_id'=>$groupId])->update(['content'=>$json['groupCurrentBulletin']]);
         }else{
-            $data['group_id'] = $groupId;
-            $data['content'] = $json['groupCurrentBulletin'];
-            $data['user_id'] = $token_uid;
-            db('toplearning_chat_group_notice')->insert($data);
+            if (isset($json['groupCurrentBulletin'])) {
+                $data['group_id'] = $groupId;
+                $data['content'] = $json['groupCurrentBulletin'];
+                $data['user_id'] = $token_uid;
+                db('toplearning_chat_group_notice')->insert($data);
+            }
         }
 
         
@@ -4444,6 +4451,11 @@ function passkey(){
             "Notification"=> $data['groupCurrentBulletin'], // 群公告（选填）
         ];
 
+        foreach ($params as $key => $value) {
+            if (empty($value)) {
+                unset($params[$key]);
+            }
+        }
         $params = json_encode($params);
         $resp = curlRequest($url,$params);
         $resp = json_decode($resp,true);
