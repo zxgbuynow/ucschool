@@ -70,6 +70,7 @@ return [
         'PaymentDetails'=>'class.PaymentDetails',
         'surplusDetails'=>'class.surplusDetails',
         'modificationNotification'=>'class.modificationNotification',
+        'upDatagroupInfo'=>'class.upDatagroupInfo',
 
         'publishedAddClassFestival'=>'class.publishedAddClassFestival',
         'deleteFestival'=>'class.deleteFestival',

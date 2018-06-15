@@ -3746,6 +3746,188 @@ class Index
         return json($data);
 
     }
+
+    public function ModifyingPersonalInformation($params)
+    {
+        //参数
+        $token = trim($params['token']);
+        $json = $params['json'];
+
+        $token_uid = $this->decrypt($token);
+        
+
+        if (!db('toplearning_login')->where(['user_id'=>$token_uid])->find()) {
+            return $this->error('账号不存在！');
+        }
+        
+        if ($json) {
+            $data['nickname'] = trim($json['nickname']);
+            $data['birthday'] = trim($json['birthday']);
+            $data['sex'] = trim($json['sex']);
+            $data['city'] = trim($json['city']);
+            $data['phone'] = trim($json['phone']);
+            $data['wechat'] = trim($json['wechat']);
+            $data['qq'] = trim($json['qq']);
+            $data['email'] = trim($json['email']);
+            $data['IndividualResume'] = trim($json['IndividualResume']);
+
+            if(!empty($json['head'])){
+                $file = "/tmp/".time().rand(0,10000).".png";
+                $r = file_put_contents($file, base64_decode($json['head']));//返回的是字节数
+                if(!$r){
+                    return $this->error('图片格式错误');
+                }
+                $res = $this->uploadFile($file,"png");
+                if($res['code'] != 0){
+                    return $this->error('更新图片失败');
+                }
+                $data['avatar'] = json_encode(['l'=>$res['path'],'m'=>$res['path'],'s'=>$res['path']]);
+            }
+
+        }
+        if (db('toplearning_login')->where(['user_id'=>$token_uid])->update($data)) {
+            return $this->error('更新用户失败！');
+        }
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            // 'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+    /**
+     * [PaymentDetails 支付列表]
+     * @param [type] $params [description]
+     */
+    public function PaymentDetails($params)
+    {   
+        //param
+        $token = trim($params['token']);
+        $userid = trim($params['userid']);
+        $token_uid = $this->decrypt($token);
+
+        $info  = db('toplearning_order')->where(['user_id'=>$token_uid])->select();
+        $ret = array();
+        $m = array();
+        foreach ($info as $key => $value) {
+            $cdate = date('Y-m',strtotime($value['create_time']));
+            array_push($m, date('Y-m',strtotime($value['create_time'])));
+            //商品信息
+            $goods = db('toplearning_net_material')->where(['net_material_id'=>$value['net_material_id']])->find();
+            @$pay['headUrl'] = $goods['picture'];
+            @$pay['Name'] = $goods['title'];
+            @$pay['absteact'] = $goods['introduce'];
+            @$pay['nun'] = '-￥'.$goods['price'];
+
+            $pay['modeOfPayment'] = 'U豆支付';
+            $pay['data'] = date('m d H:i',strtotime($value['create_time']));
+            $ret['paymentList'][$cdate][] = $pay;
+        }
+        $nowdate = date('Y-m',time());
+        $rs = array();
+        if ($ret && $ret['paymentList']) {
+            foreach ($ret['paymentList'] as $key => $value) {
+                $rs[$key]['data'] = $key;
+                $rs[$key]['paymentList'] = $value;
+            }
+        }
+        
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>array_values($rs),
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+
+    /**
+     * [surplusDetails Ud祥情]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function surplusDetails($params)
+    {
+        //param
+        $token = trim($params['token']);
+        $userid = trim($params['userid']);
+        $token_uid = $this->decrypt($token);
+
+        $info = db('toplearning_ud_school')->field('school_id,school_name,sum(num) as total')->where(['user_id'=>$token_uid])->group('school_id')->select();
+
+        $ret = array();
+        foreach ($info as $key => $value) {
+            if ($value['total']==0) {
+                continue;
+            }
+            $ret[$value['school_id']]['name'] = $value['school_name'];
+            $ret[$value['school_id']]['surplus'] = $value['total'];
+        }
+        
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>array_values($ret),
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+
+    /**
+     * [upDatagroupInfo 修改群聊信息]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function upDatagroupInfo($params)
+    {
+        //param
+        $token = trim($params['token']);
+        $groupId = trim($params['groupId']);
+        $token_uid = $this->decrypt($token);
+
+        $json = trim($params['json']);
+
+        //群信息 groupName groupActualite groupCurrentBulletin
+        if ($json) {
+
+            $resp = $this->uPgroupInfo([
+                'groupId'=>$groupId,
+                'groupName'=>$json['groupName'],
+                'groupActualite'=>$json['groupActualite'],
+                'groupCurrentBulletin'=>$json['groupCurrentBulletin']
+            ]);
+            if($resp['ActionStatus'] != "OK"){
+                return $this->error($resp['ErrorInfo']);     
+            }
+        }
+
+        //更新群公告表
+        if (db('toplearning_chat_group_notice')->where(['group_id'=>$groupId])->find()) {
+            db('toplearning_chat_group_notice')->where(['group_id'=>$groupId])->update(['content'=>$json['groupCurrentBulletin']]);
+        }else{
+            $data['group_id'] = $groupId;
+            $data['content'] = $json['groupCurrentBulletin'];
+            $data['user_id'] = $token_uid;
+            db('toplearning_chat_group_notice')->insert($data);
+        }
+
+        
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
     /**
      * [groupMemberList  5.  登录]
      * @param  [type] $params [description]
@@ -4247,6 +4429,27 @@ function passkey(){
 
 
         return $resp;
+    }
+
+    function uPgroupInfo($data){
+        $userSig = $this->getUserSign();
+        $url = "https://console.tim.qq.com/v4/group_open_http_svc/modify_group_base_info?usersig=".$userSig."&identifier=admin&sdkappid=1400099084&random=".rand(100000,999999)."&contenttype=json";
+
+        //groupName groupActualite groupCurrentBulletin groupId
+        
+        $params = [
+            "GroupId"=> $data['groupId'], // 要修改哪个群的基础资料（必填）
+            "Name"=> $data['groupName'], // 群名称（填）
+            "Introduction"=> $data['groupActualite'], // 群简介（选填）
+            "Notification"=> $data['groupCurrentBulletin'], // 群公告（选填）
+        ];
+
+        $params = json_encode($params);
+        $resp = curlRequest($url,$params);
+        $resp = json_decode($resp,true);
+        return $resp;
+
+
     }
 
 
