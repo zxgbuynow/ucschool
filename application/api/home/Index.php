@@ -3955,11 +3955,11 @@ class Index
 
         //更新群公告表
         $group = db('toplearning_chat_group')->where(['txgroupid'=>$groupId])->find();
-        if (db('toplearning_chat_group_notice')->where(['group_id'=>$group['group_id']])->find()&&isset($json['groupCurrentBulletin'])) {
-            db('toplearning_chat_group_notice')->where(['group_id'=>$group['group_id']])->update(['content'=>$json['groupCurrentBulletin']]);
+        if (db('toplearning_chat_group_notice')->where(['group_id'=>$group['id']])->find()&&isset($json['groupCurrentBulletin'])) {
+            db('toplearning_chat_group_notice')->where(['group_id'=>$group['ud']])->update(['content'=>$json['groupCurrentBulletin']]);
         }else{
             if (isset($json['groupCurrentBulletin'])) {
-                $data['group_id'] = $group['group_id'];
+                $data['group_id'] = $group['id'];
                 $data['content'] = $json['groupCurrentBulletin'];
                 $data['user_id'] = $token_uid;
                 db('toplearning_chat_group_notice')->insert($data);
