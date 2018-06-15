@@ -3547,9 +3547,11 @@ class Index
             $ret[$key]['groupOwnerName'] = $owner_name;
             $ret[$key]['isGroup'] = $token_uid == $group['user_id'];
             $ret[$key]['groupHead'] = $value['FaceUrl'];
-            @$ret[$key]['currentBulletin'] = db('toplearning_chat_group_notice')->where(['group_id'=>$group['id']])->value('content');
+            // @$ret[$key]['currentBulletin'] = db('toplearning_chat_group_notice')->where(['group_id'=>$group['id']])->value('content');
             @$ret[$key]['courseName'] = db('toplearning_net_material')->where(['net_material_id'=>$group['lesson_id']])->value('title');
-            $ret[$key]['actualite'] = $group['group_name'];
+            $ret[$key]['currentBulletin'] = $value['Notification'];
+            $ret[$key]['actualite'] = $value['Introduction'];
+            // $ret[$key]['actualite'] = $group['group_name'];
 
             // $r = db('toplearning_chat_record')->where(['group_id'=>$value['group_id']])->order('id DESC')->find();
             $ret[$key]['msg'] = "";
@@ -3789,7 +3791,7 @@ class Index
             }
         }
         if (db('toplearning_login')->where(['user_id'=>$token_uid])->update($data)) {
-            return $this->error('更新用户失败！');
+            // return $this->error('更新用户失败！');
         }
         //返回信息
         $data = [
@@ -3914,11 +3916,12 @@ class Index
         }
 
         //更新群公告表
-        if (db('toplearning_chat_group_notice')->where(['group_id'=>$groupId])->find()&&isset($json['groupCurrentBulletin'])) {
-            db('toplearning_chat_group_notice')->where(['group_id'=>$groupId])->update(['content'=>$json['groupCurrentBulletin']]);
+        $group = db('toplearning_chat_group')->where(['txgroupid'=>$groupId])->find();
+        if (db('toplearning_chat_group_notice')->where(['group_id'=>$group['group_id']])->find()&&isset($json['groupCurrentBulletin'])) {
+            db('toplearning_chat_group_notice')->where(['group_id'=>$group['group_id']])->update(['content'=>$json['groupCurrentBulletin']]);
         }else{
             if (isset($json['groupCurrentBulletin'])) {
-                $data['group_id'] = $groupId;
+                $data['group_id'] = $group['group_id'];
                 $data['content'] = $json['groupCurrentBulletin'];
                 $data['user_id'] = $token_uid;
                 db('toplearning_chat_group_notice')->insert($data);
@@ -4450,7 +4453,6 @@ function passkey(){
             "Introduction"=> $data['groupActualite'], // 群简介（选填）
             "Notification"=> $data['groupCurrentBulletin'], // 群公告（选填）
         ];
-
         foreach ($params as $key => $value) {
             if (empty($value)) {
                 unset($params[$key]);
