@@ -3793,11 +3793,49 @@ class Index
         if (db('toplearning_login')->where(['user_id'=>$token_uid])->update($data)) {
             // return $this->error('更新用户失败！');
         }
+
+        $ret = array();
+
+        //是否存在
+        $map['user_id'] = $token_uid;
+        $user = db('toplearning_login')->where($map)->find();
+
+        
+
+
+        //用户类型
+       $ret['customerType'] = $user['group_id']==3?'2':'1';
+       
+
+        //组数据  
+       $ret['userid'] = $user['user_id'];
+       $ret['phone'] = $user['mobile'];
+
+       $ret['nickname'] = $user['nickname'];
+       $ret['birthday'] = $user['birthday'];
+       $ret['sex'] = $user['sex'];
+
+       $ret['headurl'] = $user['avatar'];
+       $ret['tokenlife'] = 1;
+
+       $ret['wechat'] = $user['weixin'];
+       $ret['qq'] = $user['qq'];
+       $ret['city'] = $user['city'];
+        //todo
+       $ret['signture'] = $user['introduce'];
+       $ret['coins'] = 10;
+
+       $ret['email'] = $user['email'];
+       $ret['collegeid'] = $user['school_id'];
+
+       $ret['identifier'] = $user['im_account'];
+
+       $ret['userSig'] = $user['userSig'];
         //返回信息
         $data = [
             'Code'=>'0',
             'Msg'=>'操作成功',
-            // 'Data'=>$ret,
+            'Data'=>$ret,
             'Success'=>true
         ];
 
