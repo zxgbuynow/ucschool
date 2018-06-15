@@ -3956,7 +3956,7 @@ class Index
         //更新群公告表
         $group = db('toplearning_chat_group')->where(['txgroupid'=>$groupId])->find();
         if (db('toplearning_chat_group_notice')->where(['group_id'=>$group['id']])->find()&&isset($json['groupCurrentBulletin'])) {
-            db('toplearning_chat_group_notice')->where(['group_id'=>$group['ud']])->update(['content'=>$json['groupCurrentBulletin']]);
+            db('toplearning_chat_group_notice')->where(['group_id'=>$group['id']])->update(['content'=>$json['groupCurrentBulletin']]);
         }else{
             if (isset($json['groupCurrentBulletin'])) {
                 $data['group_id'] = $group['id'];
