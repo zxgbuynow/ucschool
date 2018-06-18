@@ -1622,7 +1622,7 @@ class Index
             if($res['code'] != 0){
                 return $this->error('更新图片失败');
             }
-            $data['picture'] = json_encode(['l'=>$res['path'],'m'=>$res['path'],'s'=>$res['path']]);
+            $data['picture'] = json_encode(['l'=>'http://'.$_SERVER['HTTP_HOST'].$res['path'],'m'=>'http://'.$_SERVER['HTTP_HOST'].$res['path'],'s'=>'http://'.$_SERVER['HTTP_HOST'].$res['path']]);
         }
 
 
@@ -1894,7 +1894,7 @@ class Index
             if($res['code'] != 0){
                 return $this->error('更新图片失败');
             }
-            $data['picture'] = json_encode(['l'=>$res['path'],'m'=>$res['path'],'s'=>$res['path']]);
+            $data['picture'] = json_encode(['l'=>'http://'.$_SERVER['HTTP_HOST'].$res['path'],'m'=>'http://'.$_SERVER['HTTP_HOST'].$res['path'],'s'=>'http://'.$_SERVER['HTTP_HOST'].$res['path']]);
         }
 
 
@@ -2933,7 +2933,7 @@ class Index
                 return $this->error('更新图片失败');
 
             }
-            $data['picture'] = json_encode(['l'=>$res['path'],'m'=>$res['path'],'s'=>$res['path']]);
+            $data['picture'] = json_encode(['l'=>'http://'.$_SERVER['HTTP_HOST'].$res['path'],'m'=>'http://'.$_SERVER['HTTP_HOST'].$res['path'],'s'=>'http://'.$_SERVER['HTTP_HOST'].$res['path']]);
         }
 
         $data['user_id'] = $token_uid;
@@ -3766,10 +3766,10 @@ class Index
             @$data['sex'] = trim($json['sex']);
             @$data['city'] = trim($json['city']);
             @$data['phone'] = trim($json['phone']);
-            @$data['wechat'] = trim($json['wechat']);
+            @$data['weixin'] = trim($json['wechat']);
             @$data['qq'] = trim($json['qq']);
             @$data['email'] = trim($json['email']);
-            @$data['IndividualResume'] = trim($json['IndividualResume']);
+            @$data['introduce'] = trim($json['IndividualResume']);
 
             if(!empty($json['head'])){
                 $file = "/tmp/".time().rand(0,10000).".png";
@@ -3781,7 +3781,7 @@ class Index
                 if($res['code'] != 0){
                     return $this->error('更新图片失败');
                 }
-                $data['avatar'] = json_encode(['l'=>$res['path'],'m'=>$res['path'],'s'=>$res['path']]);
+                $data['avatar'] = json_encode(['l'=>'http://'.$_SERVER['HTTP_HOST'].$res['path'],'m'=>'http://'.$_SERVER['HTTP_HOST'].$res['path'],'s'=>'http://'.$_SERVER['HTTP_HOST'].$res['path']]);
             }
 
         }
@@ -3800,7 +3800,7 @@ class Index
         $map['user_id'] = $token_uid;
         $user = db('toplearning_login')->where($map)->find();
 
-        
+        $ret['token'] = $token;
 
 
         //用户类型
