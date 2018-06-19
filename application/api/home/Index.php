@@ -179,7 +179,7 @@ class Index
        $ret['wechat'] = $user['weixin'];
        $ret['qq'] = $user['qq'];
        // $ret['city'] = $user['city'];
-       $ret['city']  = db('toplearning_district_dictionary')->where(['district_id'=>$user['city']])->value('district_name').','.db('toplearning_district_dictionary')->where(['district_id'=>$user['province']])->value('district_name');
+       $ret['city']  = db('toplearning_district_dictionary')->where(['district_id'=>$user['province']])->value('district_name').','.db('toplearning_district_dictionary')->where(['district_id'=>$user['city']])->value('district_name');
         //todo
        $ret['signture'] = $user['introduce'];
        $ret['coins'] = 10;
@@ -447,7 +447,7 @@ class Index
         $ret['qq'] = $user['qq'];
         // $ret['city'] = $user['city'];
 
-        $ret['city']  = db('toplearning_district_dictionary')->where(['district_id'=>$user['city']])->value('district_name').','.db('toplearning_district_dictionary')->where(['district_id'=>$user['province']])->value('district_name');
+        $ret['city']  = db('toplearning_district_dictionary')->where(['district_id'=>$user['province']])->value('district_name').','.db('toplearning_district_dictionary')->where(['district_id'=>$user['city']])->value('district_name');
         
         //todo
         $ret['signture'] = $user['introduce'];
@@ -3827,7 +3827,7 @@ class Index
        $ret['qq'] = $user['qq'];
        // $ret['city'] = $user['city'];
        //"city":"北京市，东城区"
-       $ret['city']  = db('toplearning_district_dictionary')->where(['district_id'=>$user['city']])->value('district_name').','.db('toplearning_district_dictionary')->where(['district_id'=>$user['province']])->value('district_name');
+       $ret['city']  = db('toplearning_district_dictionary')->where(['district_id'=>$user['province']])->value('district_name').','.db('toplearning_district_dictionary')->where(['district_id'=>$user['city']])->value('district_name');
        // $ret['city'] = array(
        //  'cityId'=>$user['city'],
        //  'provinceId'=>$user['province'],
