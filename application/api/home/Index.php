@@ -3764,7 +3764,8 @@ class Index
             @$data['nickname'] = trim($json['nickname']);
             @$data['birthday'] = trim($json['birthday']);
             @$data['sex'] = trim($json['sex']);
-            @$data['city'] = trim($json['city']);
+            @$data['province'] = trim($json['provinceId']);
+            @$data['city'] = trim($json['cityId']);
             @$data['phone'] = trim($json['phone']);
             @$data['weixin'] = trim($json['wechat']);
             @$data['qq'] = trim($json['qq']);
