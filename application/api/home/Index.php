@@ -3565,7 +3565,7 @@ class Index
             // $ret[$key]['actualite'] = $group['group_name'];
 
             // $r = db('toplearning_chat_record')->where(['group_id'=>$value['group_id']])->order('id DESC')->find();
-            $ret[$key]['msg'] = "";
+            $ret[$key]['msg'] = $value['NextMsgSeq'];
             $ret[$key]['data'] = date("m月d日",$value['LastMsgTime']);
             $ret[$key]['unreadMsgNumber'] = $value['SelfInfo']['UnreadMsgNum'];
             
