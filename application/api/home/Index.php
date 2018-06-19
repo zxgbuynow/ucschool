@@ -3989,14 +3989,15 @@ class Index
 
         $p = db('toplearning_district_dictionary')->where(['level'=>1])->select();
         
+        $ret = array();
         foreach ($p as $key => $value) {
-            $p[$key]['provinceName'] = $value['district_name'];
-            $p[$key]['provinceId'] = $value['district_id'];
+            $ret[$key]['provinceName'] = $value['district_name'];
+            $ret[$key]['provinceId'] = $value['district_id'];
         $c = db('toplearning_district_dictionary')->where(['fid'=>$value['district_id']])->select();
             if ($c) {
                 foreach ($c as $k => $v) {
-                    $p[$key]['cityList'][$k]['cityName'] = $v['district_name'];
-                    $p[$key]['cityList'][$k]['cityId'] = $v['district_id'];
+                    $ret[$key]['cityList'][$k]['cityName'] = $v['district_name'];
+                    $ret[$key]['cityList'][$k]['cityId'] = $v['district_id'];
                     // $d = db('toplearning_district_dictionary')->where(['fid'=>$v['district_id']])->select();
                     // if ($d) {
                     //     foreach ($c as $k1 => $v1) {
@@ -4012,7 +4013,7 @@ class Index
         $data = [
             'Code'=>'0',
             'Msg'=>'操作成功',
-            'Data'=>$p,
+            'Data'=>$ret,
             'Success'=>true
         ];
 
