@@ -1622,7 +1622,7 @@ class Index
             if($res['code'] != 0){
                 return $this->error('更新图片失败');
             }
-            $data['picture'] = json_encode(['l'=>'http://'.$_SERVER['HTTP_HOST'].$res['path'],'m'=>'http://'.$_SERVER['HTTP_HOST'].$res['path'],'s'=>'http://'.$_SERVER['HTTP_HOST'].$res['path']]);
+            $data['picture'] = json_encode(['l'=>'http://139.196.20.81:88/'.$res['path'],'m'=>'http://139.196.20.81:88/'.$res['path'],'s'=>'http://139.196.20.81:88/'.$res['path']]);
         }
 
 
@@ -1894,7 +1894,7 @@ class Index
             if($res['code'] != 0){
                 return $this->error('更新图片失败');
             }
-            $data['picture'] = json_encode(['l'=>'http://'.$_SERVER['HTTP_HOST'].$res['path'],'m'=>'http://'.$_SERVER['HTTP_HOST'].$res['path'],'s'=>'http://'.$_SERVER['HTTP_HOST'].$res['path']]);
+            $data['picture'] = json_encode(['l'=>'http://139.196.20.81:88/'.$res['path'],'m'=>'http://139.196.20.81:88/'.$res['path'],'s'=>'http://139.196.20.81:88/'.$res['path']]);
         }
 
 
@@ -2933,7 +2933,7 @@ class Index
                 return $this->error('更新图片失败');
 
             }
-            $data['picture'] = json_encode(['l'=>'http://'.$_SERVER['HTTP_HOST'].$res['path'],'m'=>'http://'.$_SERVER['HTTP_HOST'].$res['path'],'s'=>'http://'.$_SERVER['HTTP_HOST'].$res['path']]);
+            $data['picture'] = json_encode(['l'=>'http://139.196.20.81:88/'.$res['path'],'m'=>'http://139.196.20.81:88/'.$res['path'],'s'=>'http://139.196.20.81:88/'.$res['path']]);
         }
 
         $data['user_id'] = $token_uid;
@@ -3781,7 +3781,7 @@ class Index
                 if($res['code'] != 0){
                     return $this->error('更新图片失败');
                 }
-                $data['avatar'] = json_encode(['l'=>'http://'.$_SERVER['HTTP_HOST'].$res['path'],'m'=>'http://'.$_SERVER['HTTP_HOST'].$res['path'],'s'=>'http://'.$_SERVER['HTTP_HOST'].$res['path']]);
+                $data['avatar'] = json_encode(['l'=>'http://139.196.20.81:88/'.$res['path'],'m'=>'http://139.196.20.81:88/'.$res['path'],'s'=>'http://139.196.20.81:88/'.$res['path']]);
             }
 
         }
