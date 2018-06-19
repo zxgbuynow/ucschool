@@ -3976,6 +3976,49 @@ class Index
 
         return json($data);
     }
+
+    /**
+     * [gitCityList 地区]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function gitCityList($params)
+    {
+        //param
+        $token = trim($params['token']);
+
+        $p = db('toplearning_district_dictionary')->where(['level'=>1])->select();
+        
+        foreach ($p as $key => $value) {
+            $p[$key]['provinceName'] = $value['district_name'];
+            $p[$key]['provinceId'] = $value['district_id'];
+        $c = db('toplearning_district_dictionary')->where(['fid'=>$value['district_id']])->select();
+            if ($c) {
+                foreach ($c as $k => $v) {
+                    $p[$key]['cityList'][$k]['cityName'] = $v['district_name'];
+                    $p[$key]['cityList'][$k]['cityId'] = $v['district_id'];
+                    $d = db('toplearning_district_dictionary')->where(['fid'=>$v['district_id']])->select();
+                    if ($d) {
+                        foreach ($c as $k1 => $v1) {
+                            $p[$key]['cityList'][$k]['classifyList'][$k1]['classifyName'] = $v1['district_name'];
+                            $p[$key]['cityList'][$k]['classifyList'][$k1]['classifyId'] = $v1['district_id'];
+                        }
+                    }
+                }
+            }
+        }
+
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$p,
+            'Success'=>true
+        ];
+
+        return json($data);   
+    }
+
     /**
      * [groupMemberList  5.  登录]
      * @param  [type] $params [description]
