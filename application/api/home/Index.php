@@ -3821,7 +3821,14 @@ class Index
 
        $ret['wechat'] = $user['weixin'];
        $ret['qq'] = $user['qq'];
-       $ret['city'] = $user['city'];
+       // $ret['city'] = $user['city'];
+
+       $ret['city'] = array(
+        'cityId'=>$user['city'],
+        'provinceId'=>$user['province'],
+        'cityName'=>db('toplearning_district_dictionary')->where(['district_id'=>$user['city']])->value('district_name'),
+        'provinceName'=>db('toplearning_district_dictionary')->where(['district_id'=>$user['province']])->value('district_name'),
+       );
         //todo
        $ret['signture'] = $user['introduce'];
        $ret['coins'] = 10;
