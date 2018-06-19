@@ -3568,7 +3568,7 @@ class Index
             //群消息
             $immsg  =  $this->getGroupLastMg(['groupId'=>$value['GroupId']]);
 
-            $ret[$key]['msg'] = $immsg?$immsg['MsgBody'][0]['MsgContent']['Data']:'';
+            $ret[$key]['msg'] = $immsg?$immsg[0]['MsgBody'][0]['MsgContent']['Text']:'';
             $ret[$key]['data'] = date("m月d日",$value['LastMsgTime']);
             $ret[$key]['unreadMsgNumber'] = $value['SelfInfo']['UnreadMsgNum'];
             
