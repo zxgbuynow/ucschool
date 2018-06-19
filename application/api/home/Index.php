@@ -453,6 +453,9 @@ class Index
 
         $ret['userSig'] = $user['userSig'];
 
+        $ret['email'] = $user['email'];
+        $ret['collegeid'] = $user['school_id'];
+
         //todo
         $ret['signture'] = $user['introduce'];
         $ret['coins'] = 10;
