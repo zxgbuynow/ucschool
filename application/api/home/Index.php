@@ -3997,13 +3997,13 @@ class Index
                 foreach ($c as $k => $v) {
                     $p[$key]['cityList'][$k]['cityName'] = $v['district_name'];
                     $p[$key]['cityList'][$k]['cityId'] = $v['district_id'];
-                    $d = db('toplearning_district_dictionary')->where(['fid'=>$v['district_id']])->select();
-                    if ($d) {
-                        foreach ($c as $k1 => $v1) {
-                            $p[$key]['cityList'][$k]['classifyList'][$k1]['classifyName'] = $v1['district_name'];
-                            $p[$key]['cityList'][$k]['classifyList'][$k1]['classifyId'] = $v1['district_id'];
-                        }
-                    }
+                    // $d = db('toplearning_district_dictionary')->where(['fid'=>$v['district_id']])->select();
+                    // if ($d) {
+                    //     foreach ($c as $k1 => $v1) {
+                    //         $p[$key]['cityList'][$k]['classifyList'][$k1]['classifyName'] = $v1['district_name'];
+                    //         $p[$key]['cityList'][$k]['classifyList'][$k1]['classifyId'] = $v1['district_id'];
+                    //     }
+                    // }
                 }
             }
         }
