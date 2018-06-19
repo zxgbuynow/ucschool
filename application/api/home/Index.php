@@ -3565,7 +3565,10 @@ class Index
             // $ret[$key]['actualite'] = $group['group_name'];
 
             // $r = db('toplearning_chat_record')->where(['group_id'=>$value['group_id']])->order('id DESC')->find();
-            $ret[$key]['msg'] = $value['NextMsgSeq'];
+            //群消息
+            $immsg  =  $this->getGroupLastMg(['groupId'=>$value['GroupId']]);
+
+            $ret[$key]['msg'] = $immsg?$immsg['MsgBody'][0]['MsgContent']['Data']:'';
             $ret[$key]['data'] = date("m月d日",$value['LastMsgTime']);
             $ret[$key]['unreadMsgNumber'] = $value['SelfInfo']['UnreadMsgNum'];
             
@@ -4564,6 +4567,29 @@ function passkey(){
         $resp = curlRequest($url,$params);
         $resp = json_decode($resp,true);
         return $resp;
+
+
+    }
+
+    function getGroupLastMg($data){
+        $userSig = $this->getUserSign();
+        $url = "https://console.tim.qq.com/v4/group_open_http_svc/group_msg_get_simple?usersig=".$userSig."&identifier=admin&sdkappid=1400099084&random=".rand(100000,999999)."&contenttype=json";
+
+        //groupName groupActualite groupCurrentBulletin groupId
+        
+        $params = [
+            "GroupId"=> $data['groupId'], // 要修改哪个群的基础资料（必填）
+            "ReqMsgNumber"=> 1, // 群名称（填）
+        ];
+        
+        $params = json_encode($params);
+        $resp = curlRequest($url,$params);
+        $resp = json_decode($resp,true);
+        if($resp['ActionStatus'] != "OK"){
+            return [];
+        }else{
+            return $resp['RspMsgList'];
+        }
 
 
     }
