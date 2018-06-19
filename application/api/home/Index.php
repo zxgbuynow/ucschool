@@ -448,7 +448,11 @@ class Index
         // $ret['city'] = $user['city'];
 
         $ret['city']  = db('toplearning_district_dictionary')->where(['district_id'=>$user['province']])->value('district_name').','.db('toplearning_district_dictionary')->where(['district_id'=>$user['city']])->value('district_name');
-        
+
+        $ret['identifier'] = $user['im_account'];
+
+        $ret['userSig'] = $user['userSig'];
+
         //todo
         $ret['signture'] = $user['introduce'];
         $ret['coins'] = 10;
