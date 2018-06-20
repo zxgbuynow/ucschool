@@ -3576,7 +3576,7 @@ class Index
             //群公告
             $lastmsg = '';
             if ($immsg&&isset($immsg[0]['MsgBody']['MsgGroupNewInfo'])) {
-                $lastmsg = $immsg[0]['MsgBody']['MsgGroupNewInfo']['GroupNotification'];
+                $lastmsg = isset($immsg[0]['MsgBody']['MsgGroupNewInfo']['GroupNotification'])?$immsg[0]['MsgBody']['MsgGroupNewInfo']['GroupNotification']:'';
             }
             if ($immsg&&isset($immsg[0]['MsgBody'][0]['MsgContent'])) {
                if ($immsg[0]['MsgBody'][0]['MsgType']=='TIMTextElem') {
