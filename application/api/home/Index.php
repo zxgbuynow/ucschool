@@ -3776,7 +3776,7 @@ class Index
         $data = [
             'Code'=>'0',
             'Msg'=>'操作成功',
-            // 'Data'=>$ret,
+            'Data'=>['GroupId'=>$resp['GroupId']],
             'Success'=>true
         ];
 
