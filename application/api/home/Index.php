@@ -3391,8 +3391,14 @@ class Index
         // $sc = db('toplearning_school')->where(['school_id'=>$schoolId])->find();//学校
 
         if ($nt) {
+            //限定购买人数
+            if ($nt['order_num']>= $nt['student_num']) {
+                return $this->error('课程已购完');
+            }
             $t = db('toplearning_login')->where(['user_id'=>$nt['teacher_user_id']])->find();//教师
         }
+        
+        
         //查看U豆
         //通过老师查找课程学院ID
         @$school_id = $nt['school_id'];
@@ -4016,6 +4022,32 @@ class Index
     }
 
     /**
+     * [groupNotice 系统通知]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function groupNotice($params)
+    {
+        $groupId = trim($params['groupId']);
+        $className = trim($params['className']);
+
+        if (!$groupId||!$className) {
+            return $this->error('groupId 参数缺失');
+        }
+
+        //sendGroupNotice
+        $this->sendGroupNotice(['groupId'=>$groupId,'className'=>$className]);
+
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+    /**
      * [gitCityList 地区]
      * @param  [type] $params [description]
      * @return [type]         [description]
@@ -4608,6 +4640,28 @@ function passkey(){
             }else{
                 return [];
             }
+        }
+
+
+    }
+
+    function sendGroupNotice($data){
+        $userSig = $this->getUserSign();
+        $url = "https://console.tim.qq.com/v4/group_open_http_svc/send_group_system_notification?usersig=".$userSig."&identifier=admin&sdkappid=1400099084&random=".rand(100000,999999)."&contenttype=json";
+
+        
+        $params = [
+            "GroupId"=> $data['groupId'], // 要修改哪个群的基础资料（必填）
+            "Content"=> '欢迎加入“'.$data['className'].'”课程讨论群', // 系统通知内容
+        ];
+        
+        $params = json_encode($params);
+        $resp = curlRequest($url,$params);
+        $resp = json_decode($resp,true);
+        if($resp['ActionStatus'] != "OK"){
+            return true;
+        }else{
+            return false;
         }
 
 

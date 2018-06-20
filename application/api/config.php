@@ -60,6 +60,7 @@ return [
         'addCurrentBulletin'=>'class.addCurrentBulletin',
         'cleanUpChatRecords'=>'class.cleanUpChatRecords',
         'groupCreate'=>'class.groupCreate',
+        'groupNotice'=>'class.groupNotice',
         'gitCityList'=>'class.gitCityList',
         // 'ulogin'=>'class.login',
 
