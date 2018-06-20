@@ -4603,7 +4603,11 @@ function passkey(){
         if($resp['ActionStatus'] != "OK"){
             return [];
         }else{
-            return $resp['RspMsgList'];
+            if (!empty($resp['RspMsgList'])) {
+               return  $resp['RspMsgList'];
+            }else{
+                return [];
+            }
         }
 
 
