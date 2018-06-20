@@ -3567,8 +3567,23 @@ class Index
             // $r = db('toplearning_chat_record')->where(['group_id'=>$value['group_id']])->order('id DESC')->find();
             //群消息
             $immsg  =  $this->getGroupLastMg(['groupId'=>$value['GroupId']]);
+            //群公告
+            $lastmsg = '';
+            if ($immsg&&isset($immsg[0]['MsgBody']['MsgGroupNewInfo'])) {
+                $lastmsg = $immsg[0]['MsgBody']['MsgGroupNewInfo']['GroupNotification'];
+            }
+            if ($immsg&&isset($immsg[0]['MsgBody'][0]['MsgContent'])) {
+               if ($immsg[0]['MsgBody'][0]['MsgType']=='TIMTextElem') {
+                   $lastmsg = $immsg[0]['MsgBody'][0]['MsgContent']['Text'];
+               }
 
-            $ret[$key]['msg'] = $immsg?$immsg[0]['MsgBody'][0]['MsgContent']['Text']:'';
+               if ($immsg[0]['MsgBody'][0]['MsgType']=='TIMCustomElem') {
+                   $lastmsg = $immsg[0]['MsgBody'][0]['MsgContent']['Data'];
+               }
+               
+            }
+            @$ret[$key]['msg'] = $lastmsg;
+
             $ret[$key]['data'] = date("m月d日",$value['LastMsgTime']);
             $ret[$key]['unreadMsgNumber'] = $value['SelfInfo']['UnreadMsgNum'];
             
