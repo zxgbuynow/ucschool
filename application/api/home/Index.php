@@ -1864,8 +1864,8 @@ class Index
         //params
         $token = trim($params['token']);
         $courseid = trim($params['courseid']);
-
-        db('toplearning_net_material')->where(['net_material_id'=>$courseid])->update(['release_status'=>1,'reviewed_status'=>1]);
+        
+        db('toplearning_net_material')->where(['net_material_id'=>$courseid])->update(['release_status'=>1,'reviewed_status'=>3]);
 
         $info = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->find();
 
