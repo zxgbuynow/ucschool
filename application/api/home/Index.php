@@ -21,6 +21,20 @@ class Index
     public function getFileBase(){
         return "http://139.196.20.81:88/";
     }
+
+
+    public function isNeedReview($user_id,$school_id){
+        $allow = db("toplearning_school")->where(['school_id'=>$school_id])->value("allow");
+        if($allow == 0){
+            return true;
+        }else if($allow == 1){
+            return false;
+        }else{
+            $tallow = db("toplearning_school_teacher")->where(['school_id'=>$school_id,'user_id'=>$user_id])->value("tallow");
+            return $tallow ==0;
+        }
+    }
+
     public function index()
     {
         $request = Request::instance();
@@ -1681,16 +1695,53 @@ class Index
         $data['school_id'] = $college;
         $data['release_status'] = 1;
         $data['reviewed_status'] = 0;
-        
+
+
+
+
+
+
+        $need_review = $this->isNeedReview($token_uid,$college);
+
+        if(!$need_review) {
+            $data['reviewed_status'] = 3;
+        }
         if(!empty($courseid)){
             $insertid = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->update($data);
         }else{
+
             $insertid = db('toplearning_net_material')->insert($data);
         }
         if ($insertid === false) {
             return $this->error('保存失败');
         }
         $net_material_id = !empty($courseid)?$courseid:Db::name('toplearning_net_material')->getLastInsID();
+
+        if(!$need_review){
+
+            if(empty($courseid)){
+                $userinfo = db("toplearning_login")->where(['user_id'=>$token_uid])->find();
+                $resp = $this->groupCreate([
+                    'group_type'=>"Private",
+                    'group_name'=>$data['title'],
+                    'owner_id'=>$userinfo['im_account'],
+                    'lesson_id'=>$net_material_id,
+                    'user_id'=>$token_uid,
+                ]);
+//                $resp = json_decode($resp->output(),true);
+                $resp = $resp->getData();
+                if($resp['Code'] != 0 ){
+                    db("toplearning_net_material")->where(['net_material_id'=>$net_material_id])->delete();
+                    return $this->error("创建课程失败");
+                }
+            }
+
+
+
+        }
+
+
+
         //课程保存 处理课节
         $classTypeList = $json['classTypeList'];
         $save = array();
@@ -1967,6 +2018,9 @@ class Index
 
             $net_material_id = Db::name('toplearning_net_material')->getLastInsID();
         }
+
+
+
 
         if ($res === false) {
             return $this->error('保存失败');
@@ -3800,20 +3854,20 @@ class Index
 
  
          if(empty($params['group_name'])){
-            return $this->error("参数不对");
+            return $this->error("group_name参数不对");
         }
         if(empty($params['group_type'])){
-            return $this->error("参数不对");
+            return $this->error("group_type参数不对");
         }
         if(empty($params['owner_id'])){
-            return $this->error("参数不对");
+            return $this->error("owner_id参数不对");
         }
 
         if(empty($params['lesson_id'])){
-           return  $this->error("参数不对");
+           return  $this->error("lesson_id参数不对");
         }
         if(empty($params['user_id'])){
-           return  $this->error("参数不对");
+           return  $this->error("user_id参数不对");
         }
 
 
