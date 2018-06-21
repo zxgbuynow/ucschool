@@ -4696,6 +4696,7 @@ function passkey(){
         $params = json_encode($params);
         $resp = curlRequest($url,$params);
         $resp = json_decode($resp,true);
+        return $resp;
     }
 
     function uPgroupInfo($data){
