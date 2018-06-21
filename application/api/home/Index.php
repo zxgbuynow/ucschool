@@ -3680,10 +3680,13 @@ class Index
         $ret = array();
         foreach ($im_groups as $key => $value) {
 
+            $group = db("toplearning_chat_group")->where(['txgroupid'=>$value['GroupId']])->find();
+            if(empty($group)){
+                continue;
+            }
             $ret[$key]['groupId'] = $value['GroupId'];
             $ret[$key]['groupName'] = $value['Name'];
 
-            $group = db("toplearning_chat_group")->where(['txgroupid'=>$value['GroupId']])->find();
             $owner_name = db("toplearning_login")->where(['user_id'=>$group['user_id']])->value('nickname');
 
             $ret[$key]['groupOwnerName'] = $owner_name;
@@ -3725,6 +3728,8 @@ class Index
 
 
         }
+
+        $ret = array_merge($ret,[]);
 
         $identifier = db("toplearning_login")->where(['user_id'=>$token_uid])->value('im_account');
         $userSig =  $this->getUserSign($identifier);
