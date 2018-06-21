@@ -1701,11 +1701,7 @@ class Index
 
 
 
-        $need_review = $this->isNeedReview($token_uid,$college);
 
-        if(!$need_review) {
-            $data['reviewed_status'] = 3;
-        }
         if(!empty($courseid)){
             $insertid = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->update($data);
         }else{
@@ -1717,28 +1713,7 @@ class Index
         }
         $net_material_id = !empty($courseid)?$courseid:Db::name('toplearning_net_material')->getLastInsID();
 
-        if(!$need_review){
 
-            if(empty($courseid)){
-                $userinfo = db("toplearning_login")->where(['user_id'=>$token_uid])->find();
-                $resp = $this->groupCreate([
-                    'group_type'=>"Private",
-                    'group_name'=>$data['title'],
-                    'owner_id'=>$userinfo['im_account'],
-                    'lesson_id'=>$net_material_id,
-                    'user_id'=>$token_uid,
-                ]);
-//                $resp = json_decode($resp->output(),true);
-                $resp = $resp->getData();
-                if($resp['Code'] != 0 ){
-                    db("toplearning_net_material")->where(['net_material_id'=>$net_material_id])->delete();
-                    return $this->error("创建课程失败");
-                }
-            }
-
-
-
-        }
 
 
 
@@ -1864,8 +1839,39 @@ class Index
         //params
         $token = trim($params['token']);
         $courseid = trim($params['courseid']);
-        
-        db('toplearning_net_material')->where(['net_material_id'=>$courseid])->update(['release_status'=>1,'reviewed_status'=>3]);
+        $token_uid = $this->decrypt($token);
+
+
+        $courseInfo = db("toplearning_net_material")->where(['net_material_id'=>$courseid])->find();
+        $school_id = $courseInfo['school_id'];
+        $review = 1;
+        $release = 0;
+        $need_review = $this->isNeedReview($token_uid,$school_id);
+
+
+
+        if(!$need_review){
+            $review = 3;
+            $release = 1;
+                 $userinfo = db("toplearning_login")->where(['user_id'=>$token_uid])->find();
+                $resp = $this->groupCreate([
+                    'group_type'=>"Private",
+                    'group_name'=>$courseInfo['title'],
+                    'owner_id'=>$userinfo['im_account'],
+                    'lesson_id'=>$courseInfo['net_material_id'],
+                    'user_id'=>$token_uid,
+                ]);
+//                $resp = json_decode($resp->output(),true);
+                $resp = $resp->getData();
+                if($resp['Code'] != 0 ){
+                     return $this->error("发布失败");
+                }
+
+        }
+
+
+
+        db('toplearning_net_material')->where(['net_material_id'=>$courseid])->update(['release_status'=>$release,'reviewed_status'=>$review]);
 
         $info = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->find();
 
