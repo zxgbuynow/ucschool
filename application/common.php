@@ -1479,4 +1479,34 @@ if (!function_exists('generate_rand_str')) {
 
 }
 
+
+function generate_size($size,$digits=2){
+         $unit= array('','K','M','G','T','P');
+        $base= 1024;
+        $i = floor(log($size,$base));
+        $n = count($unit);
+        if($i >= $n){
+            $i=$n-1;
+        }
+        return round($size/pow($base,$i),$digits).' '.$unit[$i] . 'B';
+ }
+
+function hashdb($userid){
+         $table = "toplearning_filesystem_";
+         $table .=substr($userid,strlen($userid)-1);
+         return db($table);
+
+}
+
+
+function generate_img_path($path,$size = "m"){
+    if(empty($path)) return "";
+    return "http://139.196.20.81:88/".json_decode($path,true)[$size];
+}
+
+
+
+
+
+
 }

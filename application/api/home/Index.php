@@ -1,6 +1,7 @@
 <?php
 namespace app\api\home;
 
+use think\Exception;
 use \think\Request;
 use \think\Db;
 use think\Model;
@@ -12,6 +13,14 @@ use think\Session;
  */
 class Index
 {
+
+
+
+
+
+    public function getFileBase(){
+        return "http://139.196.20.81:88/";
+    }
     public function index()
     {
         $request = Request::instance();
@@ -64,6 +73,9 @@ class Index
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         $output = curl_exec($curl);
         curl_close($curl);
+
+        error_log(date("Y-m-d H:i:s")."uploadfile resp:".$output,3,ROOT_PATH."/fileUpload.log");
+
         return json_decode($output,true);
 
 
@@ -173,7 +185,7 @@ class Index
        $ret['birthday'] = $user['birthday'];
        $ret['sex'] = $user['sex'];
 
-       $ret['headurl'] = $user['avatar'];
+       $ret['headurl'] = generate_img_path($user['avatar']);
        $ret['tokenlife'] = 1;
 
        $ret['wechat'] = $user['weixin'];
@@ -440,7 +452,7 @@ class Index
         $ret['birthday'] = $user['birthday'];
         $ret['sex'] = $user['sex'];
 
-        $ret['headurl'] = $user['avatar'];
+        $ret['headurl'] = generate_img_path($user['avatar']);
         $ret['tokenlife'] = 1;
         
         $ret['wechat'] = $user['weixin'];
@@ -954,7 +966,7 @@ class Index
         $ret = [];
         if ($value) {
             $ret['courseid'] = $value['net_material_id'];
-            $ret['image'] = $value['picture'];
+            $ret['image'] = generate_img_path($value['picture'],"l");
             $ret['title'] = $value['title'];
             $ret['college'] = $value['school_name'];
             $ret['MonthlyPitchNumber'] = $value['month_lessons'];
@@ -1010,7 +1022,7 @@ class Index
             $ret['courseid'] = $info['net_material_id'];
             $ret['desc'] = $info['aintroduce'];
             $ret['teacherName'] = $info['nickname'];
-            $ret['teacherHead'] = $info['avatar'];
+            $ret['teacherHead'] = generate_img_path($info['avatar']);
             $ret['teacherPersent'] = $info['lintroduce'];
             $ret['teachingOutline'] = [];
 
@@ -1111,7 +1123,7 @@ class Index
         foreach ($teachers as $key => $value) {
             $ret[$key]['courseid'] = $value['net_material_id'];
             $ret[$key]['title'] = $value['title'];
-            $ret[$key]['image'] = $value['picture'];
+            $ret[$key]['image'] = generate_img_path($value['picture']);
             $ret[$key]['price'] = $value['price'];
             $ret[$key]['buycount'] = $value['order_num'];
             // $ret[$key]['teacher'] = '';
@@ -1260,7 +1272,7 @@ class Index
            $info = db('toplearning_net_material')->where(['del'=>0,'user_id'=>$token_uid])->select();
            foreach ($info as $key => $value) {
             $ret[$key]['courseid'] = $value['net_material_id'];
-            @$ret[$key]['image'] = json_decode($value['picture'],true)['m'];
+            @$ret[$key]['image'] = generate_img_path($value['picture']);
             $ret[$key]['type'] = $value['type'];
             $ret[$key]['title'] = $value['title'];
                 // $college = db('toplearning_school')->where(['school_id'=>$value['school_id']])->column('school_name');
@@ -1303,7 +1315,7 @@ class Index
         $info = db('toplearning_net_material')->alias('a')->field('a.*,s.*')->join('toplearning_student_material s','a.net_material_id = s.material_id')->where(['a.del'=>0,'s.user_id'=>$token_uid])->select();
         foreach ($info as $key => $value) {
             $ret[$key]['courseid'] = $value['net_material_id'];
-            $ret[$key]['image'] = $value['picture'];
+            $ret[$key]['image'] = generate_img_path($value['picture']);
             $ret[$key]['type'] = $value['lession_status'];
             $ret[$key]['title'] = $value['title'];
             $ret[$key]['type'] = $value['lession_status'];
@@ -1506,7 +1518,7 @@ class Index
         foreach ($info as $key => $value) {
             $ret[$key]['courseid'] = $value['net_material_id'];
             $ret[$key]['name'] = $value['title'];
-            @$ret[$key]['image'] = json_decode($value['picture'],true)['m'];
+            @$ret[$key]['image'] = generate_img_path($value['picture']);
             $ret[$key]['total'] = $value['total_lessons'];
         }
         //返回信息
@@ -1623,17 +1635,22 @@ class Index
         // }
 
 
-        if(!empty($params['head'])){
+//        var_dump($params['head']) ;
+
+        if(!empty($json['head'])){
             $file = "/tmp/".time().rand(0,10000).".png";
-            $r = file_put_contents($file, base64_decode($params['head']));//返回的是字节数
+            $r = file_put_contents($file, base64_decode($json['head']));//返回的是字节数
             if(!$r){
                 return $this->error('图片格式错误');
             }
             $res = $this->uploadFile($file,"png");
+            @unlink($file);
+//            var_dump($res);
             if($res['code'] != 0){
                 return $this->error('更新图片失败');
             }
-            $data['picture'] = json_encode(['l'=>'http://139.196.20.81:88/'.$res['path'],'m'=>'http://139.196.20.81:88/'.$res['path'],'s'=>'http://139.196.20.81:88/'.$res['path']]);
+
+            $data['picture'] = json_encode(['l'=>$res['path'],'m'=>$res['path'],'s'=>$res['path']]);
         }
 
 
@@ -1724,19 +1741,28 @@ class Index
                 $f = Db::name('toplearning_class_festival')->getLastInsID();
             }
 
-            db("toplearning_teacher_prepare")->where(['class_id'=>$f])->delete();
-            foreach ($value['coursewareIdList'] as $k => $v) {
-                $cid = $v['coursewareid'];
-                $in = Db::name('toplearning_teacher_prepare')->where(['prepare_id'=>$cid])->find();
-                $s = $in;
-                unset($s['prepare_id']);
-                unset($s['class_id']);
-                unset($s['create_time']);
-                $s['class_id'] = $f;
-                $s['create_time'] = time();
-                @db('toplearning_teacher_prepare')->insert($s);
-
-            }
+//            db("toplearning_teacher_prepare")->where(['class_id'=>$f])->delete();
+//            foreach ($value['coursewareIdList'] as $k => $v) {
+//                $cid = $v['coursewareid'];
+//                $in = Db::name('toplearning_teacher_prepare')->where(['prepare_id'=>$cid])->find();
+//                $s = $in;
+//                unset($s['prepare_id']);
+//                unset($s['class_id']);
+//                unset($s['create_time']);
+//                $s['class_id'] = $f;
+//                $s['create_time'] = time();
+//                @db('toplearning_teacher_prepare')->insert($s);
+//
+//            }
+                        db("toplearning_class_prepare")->where(['class_id'=>$f])->delete();
+                        foreach ($value['coursewareIdList'] as $k => $v) {
+            db("toplearning_class_prepare")->insert([
+                        'class_id'=>$f,
+                        'course_id'=>$net_material_id,
+                        'file_id'=>$v['coursewareid'],
+                        'user_id'=>$token_uid
+                    ]);
+                        }
         }
         if(!empty($class_ids)){
             db("toplearning_class_festival")->where("class_id in (".implode(",",$class_ids).")")->delete();
@@ -1845,15 +1871,19 @@ class Index
         //通过token获取 uid
         $token_uid = $this->decrypt($token);
 
-        $info = db('toplearning_teacher_prepare')->where(['user_id'=>$token_uid])->select();
+
+
+
+//        $info = db('toplearning_teacher_prepare')->where(['user_id'=>$token_uid])->select();
+        $info = hashdb($token_uid)->where(['user_id'=>$token_uid])->order("create_time desc")->select();
 
         $ret = array();
         foreach ($info as $key => $value) {
-            $ret[$key]['coursewareid'] = $value['prepare_id'];
-            $ret[$key]['name'] = $value['unit_name'];
-            $ret[$key]['size'] = $value['size'];
+            $ret[$key]['coursewareid'] = $value['id'];
+            $ret[$key]['name'] = $value['filename'];
+            $ret[$key]['size'] = generate_size($value['filesize']);
             $ret[$key]['time'] = $value['create_time'];
-            $ret[$key]['address'] = $value['prepare_file'];
+            $ret[$key]['address'] = $value['path'];
         }
         
         //返回信息
@@ -1895,17 +1925,18 @@ class Index
         
 
 
-        if(!empty($params['head'])){
+        if(!empty($json['head'])){
             $file = "/tmp/".time().rand(0,10000).".png";
-            $r = file_put_contents($file, base64_decode($params['head']));//返回的是字节数
+            $r = file_put_contents($file, base64_decode($json['head']));//返回的是字节数
             if(!$r){
                 return $this->error('图片格式错误');
             }
             $res = $this->uploadFile($file,"png");
+            @unlink($file);
             if($res['code'] != 0){
                 return $this->error('更新图片失败');
             }
-            $data['picture'] = json_encode(['l'=>'http://139.196.20.81:88/'.$res['path'],'m'=>'http://139.196.20.81:88/'.$res['path'],'s'=>'http://139.196.20.81:88/'.$res['path']]);
+            $data['picture'] = json_encode(['l'=>$res['path'],'m'=>$res['path'],'s'=>$res['path']]);
         }
 
 
@@ -2103,40 +2134,43 @@ class Index
 
     }
 
-    /**
-     * [getCoursewaredataList 15.   查看课件列表]
-     * @param  [type] $params [description]
-     * @return [type]         [description]
-     */
-    public function getCoursewaredataList($params)
-    {
-        //params
-        $token = trim($params['token']);
-        $courseid = trim($params['courseid']);
-        
-
-        $info = db('toplearning_teacher_prepare')->where(['class_id'=>$courseid])->select();
-
-        $ret = array();
-        foreach ($info as $key => $value) {
-            $ret[$key]['coursewareid'] = $value['prepare_id'];
-            $ret[$key]['name'] = $value['unit_name'];
-            $ret[$key]['size'] = $value['size'];
-            $ret[$key]['time'] = $value['create_time'];
-            $ret[$key]['address'] = $value['prepare_file'];
-        }
-
-        
-        //返回信息
-        $data = [
-            'Code'=>'0',
-            'Msg'=>'操作成功',
-            'Data'=>$ret,
-            'Success'=>true
-        ];
-
-        return json($data);
-    }
+//    /**
+//     * [getCoursewaredataList 15.   查看课件列表]
+//     * @param  [type] $params [description]
+//     * @return [type]         [description]
+//     */
+//    public function getCoursewaredataList($params)
+//    {
+//        //params
+//        $token = trim($params['token']);
+//        $courseid = trim($params['courseid']);
+//
+//
+//
+//
+//        db("toplearning_class_festival")->where("")
+//        $info = db('toplearning_teacher_prepare')->where(['class_id'=>$courseid])->select();
+//
+//        $ret = array();
+//        foreach ($info as $key => $value) {
+//            $ret[$key]['coursewareid'] = $value['prepare_id'];
+//            $ret[$key]['name'] = $value['unit_name'];
+//            $ret[$key]['size'] = $value['size'];
+//            $ret[$key]['time'] = $value['create_time'];
+//            $ret[$key]['address'] = $value['prepare_file'];
+//        }
+//
+//
+//        //返回信息
+//        $data = [
+//            'Code'=>'0',
+//            'Msg'=>'操作成功',
+//            'Data'=>$ret,
+//            'Success'=>true
+//        ];
+//
+//        return json($data);
+//    }
 
     /**
      * [getExamList 16. 考试列表 TODO]
@@ -2348,7 +2382,7 @@ class Index
             $coursearr = array();
             if ($course) {
                 foreach ($course as $key => $value) {
-                    $coursearr[$key]['courseHeadUrl'] = $value['picture'];
+                    $coursearr[$key]['courseHeadUrl'] = generate_img_path($value['picture']);
                     $coursearr[$key]['courseName'] = $value['title'];
                     $coursearr[$key]['courseNum'] = $value['price'];
                     $coursearr[$key]['purchaseNumber'] = $value['order_num'];
@@ -2401,7 +2435,7 @@ class Index
         
         $ret['courseid'] = $info['net_material_id'];
 
-        @$ret['image'] = json_decode($info['picture'],true)['l'];
+        @$ret['image'] = generate_img_path($info['picture'],"l");
         $ret['title'] = $info['title'];
         @$ret['college'] = db('toplearning_school')->where(['school_id'=>$info['school_id']])->column('school_name')?db('toplearning_school')->where(['school_id'=>$info['school_id']])->column('school_name')[0]:'';
         $ret['type'] = db("toplearning_course_type")->where(['type_id'=>$info['course_type']])->value("type_name");
@@ -2476,6 +2510,8 @@ class Index
         //params
 
         $token = trim($params['token']);
+        $token_uid = $this->decrypt($token);
+
         $courseid = trim($params['courseid']);
         $json_arr = $params['json']?json_decode($params['json'],true):[];
         if(empty($json_arr)){
@@ -2520,20 +2556,32 @@ class Index
 
                 $class_id = Db::name('toplearning_class_festival')->getLastInsID();
 
-                db("toplearning_teacher_prepare")->where(['class_id'=>$class_id])->delete();
-                
-                foreach ($json['coursewareIdList'] as $k => $v) {
-                    $cid = $v['coursewareid'];
-                    $in = Db::name('toplearning_teacher_prepare')->where(['prepare_id'=>$cid])->find();
-                    $s = $in;
-                    unset($s['prepare_id']);
-                    unset($s['class_id']);
-                    unset($s['create_time']);
-                    $s['class_id'] = $class_id;
-                    $s['create_time'] = time();
-                    @db('toplearning_teacher_prepare')->insert($s);
+//                db("toplearning_teacher_prepare")->where(['class_id'=>$class_id])->delete();
+//
+//                foreach ($json['coursewareIdList'] as $k => $v) {
+//                    $cid = $v['coursewareid'];
+//                    $in = Db::name('toplearning_teacher_prepare')->where(['prepare_id'=>$cid])->find();
+//                    $s = $in;
+//                    unset($s['prepare_id']);
+//                    unset($s['class_id']);
+//                    unset($s['create_time']);
+//                    $s['class_id'] = $class_id;
+//                    $s['create_time'] = time();
+//                    @db('toplearning_teacher_prepare')->insert($s);
+//
+//                }
 
+                db("toplearning_class_prepare")->where(['class_id'=>$class_id])->delete();
+                foreach ($value['coursewareIdList'] as $k => $v) {
+                    db("toplearning_class_prepare")->insert([
+                        'class_id'=>$f,
+                        'course_id'=>$courseid,
+                        'file_id'=>$v['coursewareid'],
+                        'user_id'=>$token_uid
+                    ]);
                 }
+
+
             }
         }
         // $ret = array('courseid'=>intval($courseid));
@@ -2583,6 +2631,7 @@ class Index
         //params
 
         $token = trim($params['token']);
+        $token_uid = $this->decrypt($token);
         $courseid = trim($params['courseid']);
         $lessonid = trim($params['lessonid']);
         $json = $params['json']?json_decode($params['json'],true):[];
@@ -2621,20 +2670,30 @@ class Index
 
 
 
-            db("toplearning_teacher_prepare")->where(['class_id'=>$lessonid])->delete();
-            
-            foreach ($json['coursewareIdList'] as $k => $v) {
-                $cid = $v['coursewareid'];
-                $in = Db::name('toplearning_teacher_prepare')->where(['prepare_id'=>$cid])->find();
-                $s = $in;
-                unset($s['prepare_id']);
-                unset($s['class_id']);
-                unset($s['create_time']);
-                $s['class_id'] = $lessonid;
-                $s['create_time'] = time();
-                @db('toplearning_teacher_prepare')->insert($s);
-
+//            db("toplearning_teacher_prepare")->where(['class_id'=>$lessonid])->delete();
+//
+//            foreach ($json['coursewareIdList'] as $k => $v) {
+//                $cid = $v['coursewareid'];
+//                $in = Db::name('toplearning_teacher_prepare')->where(['prepare_id'=>$cid])->find();
+//                $s = $in;
+//                unset($s['prepare_id']);
+//                unset($s['class_id']);
+//                unset($s['create_time']);
+//                $s['class_id'] = $lessonid;
+//                $s['create_time'] = time();
+//                @db('toplearning_teacher_prepare')->insert($s);
+//
+//            }
+            db("toplearning_class_prepare")->where(['class_id'=>$lessonid])->delete();
+            foreach ($value['coursewareIdList'] as $k => $v) {
+                db("toplearning_class_prepare")->insert([
+                    'class_id'=>$f,
+                    'course_id'=>$courseid,
+                    'file_id'=>$v['coursewareid'],
+                    'user_id'=>$token_uid
+                ]);
             }
+
 
             db('toplearning_class_festival')->where(['material_id'=>$courseid,'class_id'=>$lessonid])->update($save);
         }
@@ -2804,7 +2863,7 @@ class Index
         
         $ret['courseid'] = $info['net_material_id'];
 
-        @$ret['image'] =    json_decode($info['picture'],true)['l'];
+        @$ret['image'] =    generate_img_path($info['picture'],"l");
         ;
         $ret['title'] = $info['title'];
         $ret['college'] = db('toplearning_school')->where(['school_id'=>$info['school_id']])->column('school_name')?db('toplearning_school')->where(['school_id'=>$info['school_id']])->column('school_name')[0]:'';
@@ -2944,7 +3003,7 @@ class Index
                 return $this->error('更新图片失败');
 
             }
-            $data['picture'] = json_encode(['l'=>'http://139.196.20.81:88/'.$res['path'],'m'=>'http://139.196.20.81:88/'.$res['path'],'s'=>'http://139.196.20.81:88/'.$res['path']]);
+            $data['picture'] = json_encode(['l'=>$res['path'],'m'=>$res['path'],'s'=>$res['path']]);
         }
 
         $data['user_id'] = $token_uid;
@@ -2985,31 +3044,43 @@ class Index
     {
         //params
         $lessonid = trim($params['lessonid']);
-        $courseid = trim($params['courseid']);
+//        $courseid = trim($params['courseid']);
         @$size = trim($params['size']);
         @$page = trim($params['page']);
 
         $page = $page ==''?0:$page;
         $size = $size == ''?10:$size;
 
-        $limit = $page*$size;
-        $info = db('toplearning_teacher_prepare')->where(['class_id'=>$lessonid])->limit($limit, $size)->select();
 
 
-        $ret = array();
-        foreach ($info as $key => $value) {
-            $ret[$key]['coursewareid'] = $value['prepare_id'];
-            $ret[$key]['name'] = $value['unit_name'];
-            $ret[$key]['size'] = $value['size'];
-            $ret[$key]['time'] = $value['create_time'];
-            $ret[$key]['address'] = $value['prepare_file'];
+
+        $courseware = db("toplearning_class_festival")->where(['class_id'=>$lessonid])->value('courseware');
+
+
+
+        $list = [];
+
+
+        try{
+            $courseware = unserialize($courseware);
+            foreach($courseware as $item){
+                $list[] = [
+                    'coursewareid'=>$item['coursewareid'],
+                    'name'=>$item['name'],
+                    'size'=>$item['size'],
+                    'time'=>$item['time'],
+                    'address'=>$this->getFileBase().$item['address'],
+                ];
+            }
+        }catch(Exception $e){
+
         }
 
         //返回信息
         $data = [
             'Code'=>'0',
             'Msg'=>'操作成功',
-            'Data'=>$ret,
+            'Data'=>$list,
             'Success'=>true
         ];
 
@@ -3239,7 +3310,7 @@ class Index
             foreach ($info as $key => $value) {
                 $ret[$key]['courseid'] =$value['net_material_id'];
                 $ret[$key]['title'] =$value['title'];
-                $ret[$key]['image'] =$value['picture'];
+                $ret[$key]['image'] =generate_img_path($value['picture']);
                 $ret[$key]['price'] =$value['price'];
                 $ret[$key]['buycount'] =$value['order_num'];
                 @$ret[$key]['teacher'] = db('toplearning_login')->where(['user_id'=>$value['teacher_user_id']])->column('nickname')[0]; ;
@@ -3347,7 +3418,7 @@ class Index
         foreach ($info as $key => $value) {
             $ret[$key]['courseid'] =$value['net_material_id'];
             $ret[$key]['title'] =$value['title'];
-            $ret[$key]['image'] =$value['picture'];
+            $ret[$key]['image'] =generate_img_path($value['picture']);
             $ret[$key]['price'] =$value['price'];
             $ret[$key]['buycount'] =$value['order_num'];
             @$ret[$key]['teacher'] = db('toplearning_login')->where(['user_id'=>$value['teacher_user_id']])->column('nickname')[0];
@@ -3631,8 +3702,8 @@ class Index
         $info = db('toplearning_chat_group_user')->alias('a')->join('toplearning_login r','a.user_id = r.user_id')->join('toplearning_chat_group g','a.group_id = g.id')->where(['g.txgroupid'=>$groupId])->select();
         $ret = [];
         foreach ($info as $key => $value) {
-            $ret[$key]['name'] = $value['nickname'];
-            $ret[$key]['head'] = $value['avatar'];
+            $ret[$key]['name'] = !empty($value['nickname'])?$value['nickname']:$value['mobile'];
+            $ret[$key]['head'] = generate_img_path($value['avatar']);
         }
         //返回信息
         $data = [
@@ -3814,10 +3885,11 @@ class Index
                     return $this->error('图片格式错误');
                 }
                 $res = $this->uploadFile($file,"png");
+                @unlink($file);
                 if($res['code'] != 0){
                     return $this->error('更新图片失败');
                 }
-                $data['avatar'] = json_encode(['l'=>'http://139.196.20.81:88/'.$res['path'],'m'=>'http://139.196.20.81:88/'.$res['path'],'s'=>'http://139.196.20.81:88/'.$res['path']]);
+                $data['avatar'] = json_encode(['l'=>$res['path'],'m'=>$res['path'],'s'=>$res['path']]);
             }
 
         }
@@ -3830,11 +3902,29 @@ class Index
             // return $this->error('更新用户失败！');
         }
 
+
+
         $ret = array();
 
         //是否存在
         $map['user_id'] = $token_uid;
         $user = db('toplearning_login')->where($map)->find();
+
+        $resp = $this->modifyUser([
+            'account'=>$user['im_account'],
+            'item'=>[
+                ['Tag'=>'Tag_Profile_IM_Nick','Value'=>$user['nickname']],
+                ['Tag'=>'Tag_Profile_IM_Image','Value'=>generate_img_path($user['avatar'])],
+                ['Tag'=>'Tag_Profile_IM_Gender','Value'=>$user['sex']==0?"Gender_Type_Male":($user['sex']==1?"Gender_Type_Female":"Gender_Type_Unknown")],
+            ]
+        ]);
+
+        if($resp['ActionStatus'] != "OK"){
+            return $this->error($resp['ErrorInfo']);
+        }
+
+
+
 
         $ret['token'] = $token;
 
@@ -3851,7 +3941,7 @@ class Index
        $ret['birthday'] = $user['birthday'];
        $ret['sex'] = $user['sex'];
 
-       $ret['headurl'] = $user['avatar'];
+       $ret['headurl'] = generate_img_path($user['avatar']);
        $ret['tokenlife'] = 1;
 
        $ret['wechat'] = $user['weixin'];
@@ -4591,6 +4681,20 @@ function passkey(){
 
 
         return $resp;
+    }
+
+
+    function modifyUser($data){
+        $userSig = $this->getUserSign();
+        $url = "https://console.tim.qq.com/v4/profile/portrait_set?usersig=".$userSig."&identifier=admin&sdkappid=1400099084&random=".rand(100000,999999)."&contenttype=json";
+        $params = [
+            "From_Account"=>$data['account'],
+    "ProfileItem"=>$data['item']
+        ];
+
+        $params = json_encode($params);
+        $resp = curlRequest($url,$params);
+        $resp = json_decode($resp,true);
     }
 
     function uPgroupInfo($data){
