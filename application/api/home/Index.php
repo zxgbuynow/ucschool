@@ -3919,7 +3919,6 @@ class Index
                 ['Tag'=>'Tag_Profile_IM_Gender','Value'=>$user['sex']==0?"Gender_Type_Male":($user['sex']==1?"Gender_Type_Female":"Gender_Type_Unknown")],
             ]
         ]);
-
         if($resp['ActionStatus'] != "OK"){
             return $this->error($resp['ErrorInfo']);
         }
@@ -4692,7 +4691,7 @@ function passkey(){
             "From_Account"=>$data['account'],
     "ProfileItem"=>$data['item']
         ];
-
+//        var_dump($userSig,$params);
         $params = json_encode($params);
         $resp = curlRequest($url,$params);
         $resp = json_decode($resp,true);
