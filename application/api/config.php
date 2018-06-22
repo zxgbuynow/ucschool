@@ -56,6 +56,7 @@ return [
         'LaunchAGroupChat'=>'class.LaunchAGroupChat',
 
         'GroupList'=>'class.GroupList',
+        'getGroupDetails'=>'class.getGroupDetails',
         'groupMemberList'=>'class.groupMemberList',
         'addCurrentBulletin'=>'class.addCurrentBulletin',
         'cleanUpChatRecords'=>'class.cleanUpChatRecords',

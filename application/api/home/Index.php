@@ -7,6 +7,7 @@ use \think\Db;
 use think\Model;
 use think\helper\Hash;
 use think\Session;
+
 /**
  * 前台首页控制器
  * @package app\index\controller
@@ -319,7 +320,7 @@ class Index
         //     $this->error('同步注册腾讯IM失败');
         // }
 
-        $resp = $this->createUser([
+        $resp = IMUtil::getInstance()->createUser([
             'account'=>$data['mobile'],
             'name'=>$data['realname'],
             'avatar'=>"",
@@ -333,7 +334,7 @@ class Index
 
 
         $data['im_account'] = $data['mobile'];
-        $data['userSig'] = $this->getUserSign($data['mobile']);//Hashtable.php
+        $data['userSig'] = IMUtil::getInstance()->getUserSign($data['mobile']);//Hashtable.php
         
 
         //插入数据
@@ -400,7 +401,7 @@ class Index
 
 
 
-        $resp = $this->createUser([
+        $resp = IMUtil::getInstance()->createUser([
             'account'=>$params['mobile'],
             'name'=>$params['nickname'],
             'avatar'=>"",
@@ -417,7 +418,7 @@ class Index
 
 
                 $save['im_account'] = $params['mobile'];
-        $save['userSig'] = $this->getUserSign($params['mobile']);
+        $save['userSig'] = IMUtil::getInstance()->getUserSign($params['mobile']);
 
         //返回信息
         $data = [
@@ -3618,7 +3619,7 @@ class Index
 
         // $rs = $this->tenxunim($post);
 
-        $resp = $this->addGroupMember([
+        $resp = IMUtil::getInstance()->addGroupMember([
             'groupid'=>$chatGroup['txgroupid'],
             'account'=>$user['im_account']
         ]);
@@ -3674,7 +3675,51 @@ class Index
 
         return json($data);
     }
+
+
+
+
     //-----------U信------
+
+    /**
+     * [ContactList 群组详情]
+     * @param [type] $params [description]
+     */
+    public function getGroupDetails($params)
+    {
+        $token = trim($params['token']);
+        $token_uid = $this->decrypt($token);
+        $group_id = trim($params['groupId']);
+        $im_group = IMUtil::getInstance()->getGroupDetail($group_id);
+        $group = db("toplearning_chat_group")->where(['txgroupid'=>$group_id])->find();
+        $owner = db("toplearning_login")->where(['user_id'=>$group['user_id']])->find();
+        $course = db("toplearning_net_material")->field("net_material_id,title")->where(['net_material_id'=>$group['lesson_id']])->find();
+
+        $return = [];
+//        echo "<pre>";
+//        var_dump($im_group);
+        $return['groupId'] = $group_id;
+        $return['groupName'] = $im_group['Name'];
+        $return['groupOwnerName'] = $owner['nickname']?$owner['nickname']:$owner['mobile'];
+        $return['isGroup'] = $token_uid == $owner['user_id'];
+        $return['groupHead'] = $im_group['FaceUrl'];
+
+
+        $return['actualite'] = $im_group['Introduction'];
+        $return['currentBulletin'] = $im_group['Notification'];
+        $return['courseid'] = $course['net_material_id'];
+        $return['courseName'] = $course['title'];
+        $return['num'] = $im_group['MemberNum'];
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$return,
+            'Success'=>true
+        ];
+
+        return json($data);
+
+    }
     /**
      * [ContactList 群聊列表]
      * @param [type] $params [description]
@@ -3687,7 +3732,7 @@ class Index
         //
         $token_uid = $this->decrypt($token);
 
-        $im_groups  =  $this->getUserGroupList($token_uid);
+        $im_groups  =  IMUtil::getInstance()->getUserGroupList($token_uid);
         // $info = db('toplearning_chat_group')->alias('a')->field('a.*,a.user_id as auid,u.*,r.*')->join('toplearning_chat_group_user u','a.id = u.group_id')->join('toplearning_chat_record r','a.id = r.group_id')->where(['r.user_id'=>$token_uid])->group('r.group_id')->order('r.id DESC')->select();
         // $info = db('toplearning_chat_group')->alias('a')->field('a.*,a.user_id as auid,u.*')->join('toplearning_chat_group_user u','a.id = u.group_id')->where(['u.user_id'=>$token_uid])->select();
         // echo db('toplearning_chat_group')->getlastsql();exit;
@@ -3715,7 +3760,7 @@ class Index
 
             // $r = db('toplearning_chat_record')->where(['group_id'=>$value['group_id']])->order('id DESC')->find();
             //群消息
-            $immsg  =  $this->getGroupLastMg(['groupId'=>$value['GroupId']]);
+            $immsg  =  IMUtil::getInstance()->getGroupLastMg(['groupId'=>$value['GroupId']]);
             //群公告
             $lastmsg = '';
             if ($immsg&&isset($immsg[0]['MsgBody']['MsgGroupNewInfo'])) {
@@ -3747,7 +3792,7 @@ class Index
         $ret = array_merge($ret,[]);
 
         $identifier = db("toplearning_login")->where(['user_id'=>$token_uid])->value('im_account');
-        $userSig =  $this->getUserSign($identifier);
+        $userSig =  IMUtil::getInstance()->getUserSign($identifier);
         
         //返回信息
         $data = [
@@ -3804,7 +3849,7 @@ class Index
 
         $token_uid = $this->decrypt($token);
 
-        $data['group_id'] = $group_id;
+        $data['group_id'] = $groupId;
         $data['content'] = $msg;
         $data['user_id'] = $token_uid;
         db('toplearning_chat_group_notice')->insert($data);
@@ -3892,7 +3937,7 @@ class Index
 
 
 
-        $resp = $this->createGroup([
+        $resp = IMUtil::getInstance()->createGroup([
             'name'=>$params['group_name'],
             'type'=>$params['group_type'],
             'user_id'=>$params['user_id']
@@ -3985,7 +4030,7 @@ class Index
         $map['user_id'] = $token_uid;
         $user = db('toplearning_login')->where($map)->find();
 
-        $resp = $this->modifyUser([
+        $resp = IMUtil::getInstance()->modifyUser([
             'account'=>$user['im_account'],
             'item'=>[
                 ['Tag'=>'Tag_Profile_IM_Nick','Value'=>$user['nickname']],
@@ -4146,7 +4191,7 @@ class Index
         $json = json_decode($params['json'],true);
         //群信息 groupName groupActualite groupCurrentBulletin
         if ($json) {
-            $resp = $this->uPgroupInfo([
+            $resp = IMUtil::getInstance()->uPgroupInfo([
                 'groupId'=>$groupId,
                 'groupName'=>isset($json['groupName'])?$json['groupName']:'',
                 'groupActualite'=>isset($json['groupActualite'])?$json['groupActualite']:'',
@@ -4200,7 +4245,7 @@ class Index
         }
 
         //sendGroupNotice
-        $this->sendGroupNotice(['groupId'=>$groupId,'className'=>$className]);
+        IMUtil::getInstance()->sendGroupNotice(['groupId'=>$groupId,'className'=>$className]);
 
         //返回信息
         $data = [
@@ -4673,217 +4718,15 @@ function passkey(){
 
 
 
-    function getUserSign($user = "admin"){
-        $cache = cache("userSig".$user);
-        if(empty($cache)){
-            import('tls.TLSSig', EXTEND_PATH);
-            $tls =  \TLSSigAPI::getInstance();
-            $cache = $tls->genSig($user);
-            cache("userSig".$user,$cache,604800);
-        }
-        return $cache;
-
-    }  
-
-
-
-
-
-    function createGroup($data){
-
-        $userSig = $this->getUserSign();
-        $url = "https://console.tim.qq.com/v4/group_open_http_svc/create_group?usersig=".$userSig."&identifier=admin&sdkappid=1400099084&random=".rand(100000,999999)."&contenttype=json";
-        $account = db("toplearning_login")->where(['user_id'=>$data['user_id']])->value("im_account");
-        $params = [
-             "Owner_Account"=> $account, // 群主的UserId（选填）
-            "Type"=> !empty($data['type'])?$data['type']:"Public", // 群组类型：Private/Public/ChatRoom/AVChatRoom/BChatRoom（必填）
-            "Name"=> $data['name'] // 群名称（必填）
-        ];
-        // var_dump($params);
-        $params = json_encode($params);
-        $resp = curlRequest($url,$params);
-        $resp = json_decode($resp,true);
 
 
 
 
 
 
-        return $resp;
-
-
-    }
-
-    function addGroupMember($data){
-          $userSig = $this->getUserSign();
-        $url = "https://console.tim.qq.com/v4/group_open_http_svc/add_group_member?usersig=".$userSig."&identifier=admin&sdkappid=1400099084&random=".rand(100000,999999)."&contenttype=json";
-        $params = [
-             "GroupId"=>$data['groupid'],
-   "MemberList"=>[['Member_Account'=>$data['account']]]
-        ];
- 
-
-
-        $params = json_encode($params);
-        $resp = curlRequest($url,$params);
-        $resp = json_decode($resp,true);
 
 
 
 
-
-
-        return $resp;
-    }
-
-    function createUser($data){
-              $userSig = $this->getUserSign();
-        $url = "https://console.tim.qq.com/v4/im_open_login_svc/account_import?usersig=".$userSig."&identifier=admin&sdkappid=1400099084&random=".rand(100000,999999)."&contenttype=json";
-        $params = [
-             "Identifier"=>$data['account'],
-   "Nick"=>$data['name'],
-   "FaceUrl"=>$data['avatar']
-        ];
-
-        $params = json_encode($params);
-        $resp = curlRequest($url,$params);
-        $resp = json_decode($resp,true);
-
-
-
-
-
-
-        return $resp;
-    }
-
-
-    function modifyUser($data){
-        $userSig = $this->getUserSign();
-        $url = "https://console.tim.qq.com/v4/profile/portrait_set?usersig=".$userSig."&identifier=admin&sdkappid=1400099084&random=".rand(100000,999999)."&contenttype=json";
-        $params = [
-            "From_Account"=>$data['account'],
-    "ProfileItem"=>$data['item']
-        ];
-//        var_dump($userSig,$params);
-        $params = json_encode($params);
-        $resp = curlRequest($url,$params);
-        $resp = json_decode($resp,true);
-        return $resp;
-    }
-
-    function uPgroupInfo($data){
-        $userSig = $this->getUserSign();
-        $url = "https://console.tim.qq.com/v4/group_open_http_svc/modify_group_base_info?usersig=".$userSig."&identifier=admin&sdkappid=1400099084&random=".rand(100000,999999)."&contenttype=json";
-
-        //groupName groupActualite groupCurrentBulletin groupId
-        
-        $params = [
-            "GroupId"=> $data['groupId'], // 要修改哪个群的基础资料（必填）
-            "Name"=> $data['groupName'], // 群名称（填）
-            "Introduction"=> $data['groupActualite'], // 群简介（选填）
-            "Notification"=> $data['groupCurrentBulletin'], // 群公告（选填）
-        ];
-        foreach ($params as $key => $value) {
-            if (empty($value)) {
-                unset($params[$key]);
-            }
-        }
-        $params = json_encode($params);
-        $resp = curlRequest($url,$params);
-        $resp = json_decode($resp,true);
-        return $resp;
-
-
-    }
-
-    function getGroupLastMg($data){
-        $userSig = $this->getUserSign();
-        $url = "https://console.tim.qq.com/v4/group_open_http_svc/group_msg_get_simple?usersig=".$userSig."&identifier=admin&sdkappid=1400099084&random=".rand(100000,999999)."&contenttype=json";
-
-        //groupName groupActualite groupCurrentBulletin groupId
-        
-        $params = [
-            "GroupId"=> $data['groupId'], // 要修改哪个群的基础资料（必填）
-            "ReqMsgNumber"=> 1, // 群名称（填）
-        ];
-        
-        $params = json_encode($params);
-        $resp = curlRequest($url,$params);
-        $resp = json_decode($resp,true);
-        if($resp['ActionStatus'] != "OK"){
-            return [];
-        }else{
-            if (!empty($resp['RspMsgList'])) {
-               return  $resp['RspMsgList'];
-            }else{
-                return [];
-            }
-        }
-
-
-    }
-
-    function sendGroupNotice($data){
-        $userSig = $this->getUserSign();
-        $url = "https://console.tim.qq.com/v4/group_open_http_svc/send_group_system_notification?usersig=".$userSig."&identifier=admin&sdkappid=1400099084&random=".rand(100000,999999)."&contenttype=json";
-
-        
-        $params = [
-            "GroupId"=> $data['groupId'], // 要修改哪个群的基础资料（必填）
-            "Content"=> '欢迎加入“'.$data['className'].'”课程讨论群', // 系统通知内容
-        ];
-        
-        $params = json_encode($params);
-        $resp = curlRequest($url,$params);
-        $resp = json_decode($resp,true);
-        if($resp['ActionStatus'] != "OK"){
-            return true;
-        }else{
-            return false;
-        }
-
-
-    }
-
-
-    function getUserGroupList($userid){
-        $userSig = $this->getUserSign();
-        $url = "https://console.tim.qq.com/v4/group_open_http_svc/get_joined_group_list?usersig=".$userSig."&identifier=admin&sdkappid=1400099084&random=".rand(100000,999999)."&contenttype=json";
-        $account = db("toplearning_login")->where(['user_id'=>$userid])->value("im_account");
-        $params = [
-            'Member_Account'=>$account,
-            'ResponseFilter'=>[
-                'GroupBaseInfoFilter'=>[
-                   "Type",
-                   "Name",
-                   "Introduction",
-                   "Notification",
-                   "FaceUrl",
-                   "CreateTime",
-                   "Owner_Account",
-                   "LastInfoTime",
-                   "LastMsgTime",
-                   "NextMsgSeq",
-                   "MemberNum",
-                   "MaxMemberNum",
-                   "ApplyJoinOption",
-                   "ShutUpAllMember"
-
-               ],
-               'SelfInfoFilter'=>[
-                'UnreadMsgNum'
-            ]
-        ]
-    ];
-
-    $params = json_encode($params);
-    $resp = curlRequest($url,$params);
-    $resp = json_decode($resp,true);
-    if($resp['ActionStatus'] != "OK"){
-        return [];
-    }else{
-        return $resp['GroupIdList'];
-    }
 }
-}
+
