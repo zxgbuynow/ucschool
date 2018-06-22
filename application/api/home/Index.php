@@ -717,13 +717,13 @@ class Index
         $rs = array();
         $rs['collegeid'] = $ret['school_id'];
         $rs['title'] = $ret['school_name'];
-        $rs['introduce'] = $ret['school_profile'];
+        $rs['introduce'] =db("toplearning_school_extend")->where(['school_id'=>$ret['school_id'],'type'=>0])->value("content");
 
         $rs['achievement'] = array();
         // $rs['achtitle'] = '';
         // $rs['achdesc'] = '';
         // $rs['achimages'] = '';
-        $rs['number'] = $ret['license_num'];
+        $rs['number'] = $ret['uid_num'];
         $rs['isfocus'] = 0;
         $rs['collegeimg'] = $ret['logo'];
 
@@ -743,17 +743,20 @@ class Index
         // }
 
         //成果
-        $sc = db('toplearning_school_extend')->where(['school_id'=>$collegeid])->select();
+        $sc = db('toplearning_school_extend')->where(['school_id'=>$collegeid,'type'=>2,'del'=>0])->select();
         $scarr = array();
         foreach ($sc as $key => $value) {
            $scarr[$key]['achtitle'] = $value['title'];
            $scarr[$key]['achdesc'] = $value['content'];
-           $imgs = explode(',',$value['achimages']);
-           $imgar = array();
-           foreach ($imgs as $k => $v) {
-             $imgar[$k]['image'] = $v;
-         }
-         $scarr[$key]['achimages'] = $imgar;
+
+            $imgar = [];
+            $paths = db("toplearning_school_media")->where(['extend_id'=>$value['extend_id'],'del'=>0])->column("media_path");
+            foreach($paths as $path){
+                $imgar[] = [
+                    'image'=>generate_img_path($path,"l")
+                ];
+            }
+            $scarr[$key]['achimages'] = $imgar;
      }
      $rs['achievement'] = $scarr;
 
@@ -860,12 +863,12 @@ class Index
         if ($school) {
             $ret['collegeid'] = $school['school_id'];
             $ret['title'] = $school['school_name'];
-            $ret['introduce'] = $school['school_profile'];
+            $ret['introduce'] = db("toplearning_school_extend")->where(['school_id'=>$school['school_id'],'type'=>0])->value("content");;
 
             $ret['achievement'] = array();
-            $ret['number'] = $school['license_num'];//学院号
+            $ret['number'] = $school['uid_num'];//学院号
             $ret['isfocus'] = 0;
-            $ret['collegeimg'] = $school['logo'];
+            $ret['collegeimg'] = generate_img_path($school['logo']);
             $amap['type'] = 2;
             $amap['del'] = 0;
             $amap['source_id'] = $school['school_id'];
@@ -881,20 +884,23 @@ class Index
                 }
             }
             //成果
-            $sc = db('toplearning_school_extend')->where(['school_id'=>$school['school_id']])->select();
+            $sc = db('toplearning_school_extend')->where(['school_id'=>$school['school_id'],'type'=>2,'del'=>0])->select();
             $scarr = array();
             foreach ($sc as $key => $value) {
                $scarr[$key]['achtitle']=$value['title'];
                $scarr[$key]['achdesc']=$value['content'];
-               // $scarr[$key]['achimages']= $value['achimages'];
-               $imgs = explode(',',$value['achimages']);
-               $imgar = array();
-               foreach ($imgs as $k => $v) {
-                 $imgar[$k]['image'] = $v;
-             }
-             $scarr[$key]['achimages'] = $imgar;
-         }
-         $ret['achievement'] = $scarr;
+                $imgar = [];
+               $paths = db("toplearning_school_media")->where(['extend_id'=>$value['extend_id'],'del'=>0])->column("media_path");
+                foreach($paths as $path){
+                    $imgar[] = [
+                        'image'=>generate_img_path($path,"l")
+                    ];
+                }
+//                $scarr[$key]['achimages'] = $imgar;
+
+
+            }
+         $ret['achievement'] = $imgar;
      }
 
 
@@ -1036,7 +1042,7 @@ class Index
         if ($info) {
             $ret['courseid'] = $info['net_material_id'];
             $ret['desc'] = $info['aintroduce'];
-            $ret['teacherName'] = $info['nickname'];
+            $ret['teacherName'] = $info['realname'];
             $ret['teacherHead'] = generate_img_path($info['avatar']);
             $ret['teacherPersent'] = $info['lintroduce'];
             $ret['teachingOutline'] = [];
@@ -1064,9 +1070,9 @@ class Index
         $token = trim($params['token']);
         $courseid = trim($params['courseid']);
 
-        $map['a.net_material_id'] = $courseid;
+        $map['f.material_id'] = $courseid;
         $map['f.del'] = 0;
-        $info = db('toplearning_net_material')->alias('a')->join('toplearning_class_festival f','a.net_material_id = f.material_id','LEFT')->where($map)->select();
+        $info = db('toplearning_class_festival')->alias('f')->where($map)->order("f.stage_start")->select();
         $ret = array();
         foreach ($info as $key => $value) {
             $ret[$key]['lessonsId'] = $value['class_id'];
@@ -1398,7 +1404,7 @@ class Index
         //通过token获取 uid
         $token_uid = $this->decrypt($token);
 
-        $school_ids = db("toplearning_school_teacher")->where(['user_id'=>$token_uid])->column("school_id");
+        $school_ids = db("toplearning_school_teacher")->where(['user_id'=>$token_uid,'is_working'=>0,'del'=>0])->column("school_id");
         $school_ids = $school_ids?$school_ids:[];
         if(!in_array("7",$school_ids)){
             array_unshift($school_ids, 7);
@@ -1580,7 +1586,7 @@ class Index
         $map['material_id'] = $lessonsid;
         // $info = db('toplearning_exam')->alias('a')->join('toplearning_do_exam_time t','a.exam_id = t.exam_id')->where(['a.exam_id'=>$examid])->select();
         // $info = db('toplearning_class_festival')->alias('a')->join('toplearning_media t','a.material_id = t.type_id','LEFT')->where($map)->select();
-        $info = db('toplearning_class_festival')->where($map)->select();
+        $info = db('toplearning_class_festival')->where($map)->order("stage_start")->select();
 
         $ret = array();
         $i =1 ;
@@ -2503,7 +2509,7 @@ class Index
         $ret['commonPitchNumber'] = db('toplearning_class_festival')->where(['material_id'=>$info['net_material_id']])->count();
 
         //课时 
-        $lesson =  db('toplearning_class_festival')->where(['del'=>0,'material_id'=>$courseid])->select();
+        $lesson =  db('toplearning_class_festival')->where(['del'=>0,'material_id'=>$courseid])->order("stage_start asc")->select();
         $rs = array();
         $i = 1;
         foreach ($lesson as $key => $value) {
@@ -3124,7 +3130,7 @@ class Index
 
 
 
-        $courseware = db("toplearning_class_festival")->where(['class_id'=>$lessonid])->value('courseware');
+        $courseware = db("toplearning_class_festival")->where(['class_id'=>$lessonid])->order("stage_start")->value('courseware');
 
 
 
@@ -3476,11 +3482,11 @@ class Index
         if (isset($params['msg'])) {
             $map['title'] = array('like','%'.$params['msg'].'%');
         }
-
         // $map['lession_status'] = 1;//2，录制课程不出现在搜索课程范围内 后台沟通后去掉
 
         $map['type'] = 1;
         $map['reviewed_status'] = 3;
+        $map['del'] = 0;
         $info = db('toplearning_net_material')->where($map)
         ->limit($page*$size,$size)
         ->select();
@@ -3731,60 +3737,92 @@ class Index
         // $userid = trim($params['userid']);
         //
         $token_uid = $this->decrypt($token);
-
         $im_groups  =  IMUtil::getInstance()->getUserGroupList($token_uid);
         // $info = db('toplearning_chat_group')->alias('a')->field('a.*,a.user_id as auid,u.*,r.*')->join('toplearning_chat_group_user u','a.id = u.group_id')->join('toplearning_chat_record r','a.id = r.group_id')->where(['r.user_id'=>$token_uid])->group('r.group_id')->order('r.id DESC')->select();
         // $info = db('toplearning_chat_group')->alias('a')->field('a.*,a.user_id as auid,u.*')->join('toplearning_chat_group_user u','a.id = u.group_id')->where(['u.user_id'=>$token_uid])->select();
         // echo db('toplearning_chat_group')->getlastsql();exit;
+//        $ids = [];
+//        foreach ($im_groups as $key => $value) {
+//            $ids[] = $value['GroupId'];
+//        }
 
+//        $group_ids = db("toplearning_chat_group_user")->where(['user_id'=>$token_uid])->group("group_id")->column("group_id");
+//        $groups = db("toplearning_chat_group")->where('id in ('.implode(",",$group_ids).')');
+//        $ret = [];
+//        foreach($groups as $group){
+//            $course_name = db("toplearning_net_material")->where(['net_material_id'=>$group['lesson_id']])->value("title");
+//            $ret[] = [
+//                'groupId'=>$group['txgroupid'],
+//                'courseName'=>$course_name,
+////                'groupName'=>$group['group_name']
+//            ];
+//        }
+
+
+//
         $ret = array();
         foreach ($im_groups as $key => $value) {
+//            $group = null;
+//            foreach($groups as $g){
+//                if($value['GroupId'] == $g['txgroupid']){
+//                    $group = $g;
+//                }
+//            }
+//            var_dump("111111111111111111111111111111111.");
+//            var_dump(microtime());
+            $group = db("toplearning_chat_group")->field("user_id,lesson_id")->where(['txgroupid'=>$value['GroupId']])->find();
+//            var_dump(microtime());
+//            if(empty($group)){
+//                continue;
+//            }
 
-            $group = db("toplearning_chat_group")->where(['txgroupid'=>$value['GroupId']])->find();
-            if(empty($group)){
-                continue;
-            }
+//            var_dump(microtime());
+            $ret[$key]['courseName'] = db("toplearning_net_material")->where(['net_material_id'=>$group['lesson_id']])->value("title");
+//            var_dump(microtime());
+//            if(empty($ret[$key]['courseName'])){
+//                continue;
+//            }
             $ret[$key]['groupId'] = $value['GroupId'];
             $ret[$key]['groupName'] = $value['Name'];
 
-            $owner_name = db("toplearning_login")->where(['user_id'=>$group['user_id']])->value('nickname');
+//            var_dump(microtime());
+//            $owner_name = db("toplearning_login")->where(['user_id'=>$group['user_id']])->value('nickname');
+//            var_dump(microtime());
 
-            $ret[$key]['groupOwnerName'] = $owner_name;
-            $ret[$key]['isGroup'] = $token_uid == $group['user_id'];
+//            $ret[$key]['groupOwnerName'] = $owner_name;
+//            $ret[$key]['isGroup'] = $token_uid == $group['user_id'];
             $ret[$key]['groupHead'] = $value['FaceUrl'];
-            // @$ret[$key]['currentBulletin'] = db('toplearning_chat_group_notice')->where(['group_id'=>$group['id']])->value('content');
-            @$ret[$key]['courseName'] = db('toplearning_net_material')->where(['net_material_id'=>$group['lesson_id']])->value('title');
+//             @$ret[$key]['currentBulletin'] = db('toplearning_chat_group_notice')->where(['group_id'=>$group['id']])->value('content');
             $ret[$key]['currentBulletin'] = $value['Notification'];
             $ret[$key]['actualite'] = $value['Introduction'];
-            // $ret[$key]['actualite'] = $group['group_name'];
+//             $ret[$key]['actualite'] = $group['group_name'];
 
-            // $r = db('toplearning_chat_record')->where(['group_id'=>$value['group_id']])->order('id DESC')->find();
-            //群消息
-            $immsg  =  IMUtil::getInstance()->getGroupLastMg(['groupId'=>$value['GroupId']]);
+//             $r = db('toplearning_chat_record')->where(['group_id'=>$value['group_id']])->order('id DESC')->find();
+//            群消息
+//            $immsg  =  IMUtil::getInstance()->getGroupLastMg(['groupId'=>$value['GroupId']]);
             //群公告
-            $lastmsg = '';
-            if ($immsg&&isset($immsg[0]['MsgBody']['MsgGroupNewInfo'])) {
-                $lastmsg = isset($immsg[0]['MsgBody']['MsgGroupNewInfo']['GroupNotification'])?$immsg[0]['MsgBody']['MsgGroupNewInfo']['GroupNotification']:'';
-            }
-            if ($immsg&&isset($immsg[0]['MsgBody'][0]['MsgContent'])) {
-               if ($immsg[0]['MsgBody'][0]['MsgType']=='TIMTextElem') {
-                   $lastmsg = $immsg[0]['MsgBody'][0]['MsgContent']['Text'];
-               }
-
-               if ($immsg[0]['MsgBody'][0]['MsgType']=='TIMCustomElem') {
-                   $lastmsg = $immsg[0]['MsgBody'][0]['MsgContent']['Data'];
-               }
-               
-            }
-            @$ret[$key]['msg'] = $lastmsg;
+//            $lastmsg = '';
+//            if ($immsg&&isset($immsg[0]['MsgBody']['MsgGroupNewInfo'])) {
+//                $lastmsg = isset($immsg[0]['MsgBody']['MsgGroupNewInfo']['GroupNotification'])?$immsg[0]['MsgBody']['MsgGroupNewInfo']['GroupNotification']:'';
+//            }
+//            if ($immsg&&isset($immsg[0]['MsgBody'][0]['MsgContent'])) {
+//               if ($immsg[0]['MsgBody'][0]['MsgType']=='TIMTextElem') {
+//                   $lastmsg = $immsg[0]['MsgBody'][0]['MsgContent']['Text'];
+//               }
+//
+//               if ($immsg[0]['MsgBody'][0]['MsgType']=='TIMCustomElem') {
+//                   $lastmsg = $immsg[0]['MsgBody'][0]['MsgContent']['Data'];
+//               }
+//
+//            }
+//            @$ret[$key]['msg'] = $lastmsg;
             $ret[$key]['num'] = $value['MemberNum'];
             $ret[$key]['data'] = date("m月d日",$value['LastMsgTime']);
             $ret[$key]['unreadMsgNumber'] = $value['SelfInfo']['UnreadMsgNum'];
             
             
             $ret[$key]['courseid'] = $group['lesson_id'];
-            $ret[$key]['courseName'] = db("toplearning_net_material")->where(['net_material_id'=>$group['lesson_id']])->value("title");
-            
+
 
 
         }
@@ -3937,10 +3975,14 @@ class Index
 
 
 
+        $picture = db("toplearning_net_material")->where(['net_material_id'=>$params['lesson_id']])->value("picture");
+        $picture = generate_img_path($picture);
+
         $resp = IMUtil::getInstance()->createGroup([
             'name'=>$params['group_name'],
             'type'=>$params['group_type'],
-            'user_id'=>$params['user_id']
+            'user_id'=>$params['user_id'],
+            'head'=>$picture
         ]);
         if($resp['ActionStatus'] != "OK"){
             return $this->error($resp['ErrorInfo']);
@@ -4718,15 +4760,24 @@ function passkey(){
 
 
 
+    public function removeGroup($params)
+    {
+        if (empty($params['courseid'])) {
+            return $this->error("课程id不能为空");
+        }
+        $group_id = db("toplearning_chat_group")->where(['lesson_id'=>$params['courseid']])->value('txgroupid');
+        $resp = IMUtil::getInstance()->removeGroup($group_id);
+
+        $data = [
+            'Code' => $resp['ActionStatus'] == "OK" ? "0" : 1,
+            'Msg' => $resp['ActionStatus'] == "OK" ?"OK":$resp['ErrorInfo'],
+            'Success' => $resp['ActionStatus'] == "OK"
+        ];
+
+        return json($data);
 
 
-
-
-
-
-
-
-
+    }
 
 }
 

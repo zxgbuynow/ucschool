@@ -55,7 +55,8 @@ class IMUtil
         $params = [
              "Owner_Account"=> $account, // 群主的UserId（选填）
             "Type"=> !empty($data['type'])?$data['type']:"Public", // 群组类型：Private/Public/ChatRoom/AVChatRoom/BChatRoom（必填）
-            "Name"=> $data['name'] // 群名称（必填）
+            "Name"=> $data['name'], // 群名称（必填）
+            "FaceUrl"=>$data['head']
         ];
         // var_dump($params);
         $params = json_encode($params);
@@ -227,19 +228,22 @@ class IMUtil
         $url = "https://console.tim.qq.com/v4/group_open_http_svc/get_joined_group_list?usersig=".$userSig."&identifier=admin&sdkappid=1400099084&random=".rand(100000,999999)."&contenttype=json";
         $account = db("toplearning_login")->where(['user_id'=>$userid])->value("im_account");
         $params = [
+
+            "Limit"=>100,
+            "Offset"=>0 ,
             'Member_Account'=>$account,
             'ResponseFilter'=>[
                 'GroupBaseInfoFilter'=>[
-                   "Type",
+//                   "Type",
                    "Name",
                    "Introduction",
                    "Notification",
                    "FaceUrl",
                    "CreateTime",
-                   "Owner_Account",
-                   "LastInfoTime",
+//                   "Owner_Account",
+//                   "LastInfoTime",
                    "LastMsgTime",
-                   "NextMsgSeq",
+//                   "NextMsgSeq",
                    "MemberNum",
                    "MaxMemberNum",
                    "ApplyJoinOption",
@@ -260,5 +264,22 @@ class IMUtil
     }else{
         return $resp['GroupIdList'];
     }
+}
+
+
+
+public function removeGroup($group_id){
+
+    $userSig = $this->getUserSign();
+    $url = "https://console.tim.qq.com/v4/group_open_http_svc/destroy_group?usersig=".$userSig."&identifier=admin&sdkappid=1400099084&random=".rand(100000,999999)."&contenttype=json";
+    $params = [
+        'GroupId'=>$group_id,
+    ];
+
+    $params = json_encode($params);
+    $resp = curlRequest($url,$params);
+    $resp = json_decode($resp,true);
+    return $resp;
+
 }
 }

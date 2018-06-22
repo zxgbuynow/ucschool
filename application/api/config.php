@@ -96,8 +96,8 @@ return [
         'seacherCourse'=>'exam.seacherCourse',
         'buyNowCourse'=>'exam.buyNowCourse',
         'CourseCollection'=>'exam.CourseCollection',
-        'tenxunim'=>'tenxunim'
-
+        'tenxunim'=>'tenxunim',
+        'removeGroup'=>'back.removeGroup'
 
         
     ],
