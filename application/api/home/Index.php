@@ -884,13 +884,13 @@ class Index
                 }
             }
             //成果
-            $sc = db('toplearning_school_extend')->where(['school_id'=>$school['school_id'],'type'=>2,'del'=>0])->select();
-            $scarr = array();
-            foreach ($sc as $key => $value) {
-               $scarr[$key]['achtitle']=$value['title'];
-               $scarr[$key]['achdesc']=$value['content'];
+            $sc = db('toplearning_school_extend')->where(['school_id'=>$school['school_id'],'type'=>0,'del'=>0])->find();
+            // $scarr = array();
+            // foreach ($sc as $key => $value) {
+               // $scarr[$key]['achtitle']=$value['title'];
+               // $scarr[$key]['achdesc']=$value['content'];
                 $imgar = [];
-               $paths = db("toplearning_school_media")->where(['extend_id'=>$value['extend_id'],'del'=>0])->column("media_path");
+               $paths = db("toplearning_school_media")->where(['extend_id'=>$sc['extend_id'],'del'=>0])->column("media_path");
                 foreach($paths as $path){
                     $imgar[] = [
                         'image'=>generate_img_path($path,"l")
@@ -899,7 +899,7 @@ class Index
 //                $scarr[$key]['achimages'] = $imgar;
 
 
-            }
+            // }
          $ret['achievement'] = $imgar;
      }
 
