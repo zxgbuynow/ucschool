@@ -1283,7 +1283,7 @@ class Index
         $user = db('toplearning_login')->where(['user_id'=>$token_uid])->find();
         $ret = array();
         if ($user&& $user['group_id']==3) {//laoshi
-           $info = db('toplearning_net_material')->where(['del'=>0,'user_id'=>$token_uid])->select();
+           $info = db('toplearning_net_material')->where(['del'=>0,'user_id'=>$token_uid])->order(" FIELD(`reviewed_status`, 0,2,1,3),modify_time desc")->select();
            foreach ($info as $key => $value) {
             $ret[$key]['courseid'] = $value['net_material_id'];
             @$ret[$key]['image'] = generate_img_path($value['picture']);
@@ -1326,7 +1326,7 @@ class Index
 
 
     }else{
-        $info = db('toplearning_net_material')->alias('a')->field('a.*,s.*')->join('toplearning_student_material s','a.net_material_id = s.material_id')->where(['a.del'=>0,'s.user_id'=>$token_uid])->select();
+        $info = db('toplearning_net_material')->alias('a')->field('a.*,s.*')->join('toplearning_student_material s','a.net_material_id = s.material_id')->where(['a.del'=>0,'s.user_id'=>$token_uid])->order(" FIELD(`a.reviewed_status`, 0,2,1,3),a.modify_time desc")->select();
         foreach ($info as $key => $value) {
             $ret[$key]['courseid'] = $value['net_material_id'];
             $ret[$key]['image'] = generate_img_path($value['picture']);
@@ -1466,53 +1466,70 @@ class Index
 
         return json($data);
     }
-
-    /**
-     * [addlessons 5.   新增课节 ]
-     * @param  [type] $params [description]
-     * @return [type]         [description]
-     */
-    public function addlessons($params)
-    {
-         //params
-        $token = trim($params['token']);
-        $courseid = trim($params['courseid']);
-        $title = trim($params['title']);
-        $way = trim($params['way']);
-        $time = trim($params['time']);
-        $guide = trim($params['guide']);
-        $coursewarename = trim($params['coursewarename']);
-        $courseware = trim($params['courseware']);
-        $video = trim($params['video']);
-
-
-        //通过token获取 uid
-        $token_uid = $this->decrypt($token);
-
-        $data['material_id'] = $courseid;
-        $data['class_name'] = $title;
-        $data['status'] = $way;
-        $data['stage_start'] = strtotime($time);
-        $data['guide'] = $guide;
-        $data['coursewarename'] = $coursewarename;
-        $data['courseware'] = $courseware;
-        $data['video'] = $video;
-
-        if (!db('toplearning_class_festival')->insert($data)) {
-            $this->error('新增失败');
-        }
-        $ret = array();
-
-        //返回信息
-        $data = [
-            'Code'=>'0',
-            'Msg'=>'操作成功',
-            'Data'=>1,
-            'Success'=>true
-        ];
-
-        return json($data);
-    }
+//
+//    /**
+//     * [addlessons 5.   新增课节 ]
+//     * @param  [type] $params [description]
+//     * @return [type]         [description]
+//     */
+//    public function addlessons($params)
+//    {
+//         //params
+//        $token = trim($params['token']);
+//        $courseid = trim($params['courseid']);
+//        $title = trim($params['title']);
+//        $way = trim($params['way']);
+//        $time = trim($params['time']);
+//        $guide = trim($params['guide']);
+//        $coursewarename = trim($params['coursewarename']);
+//        $courseware = trim($params['courseware']);
+//        $video = trim($params['video']);
+//
+//
+//        //通过token获取 uid
+//        $token_uid = $this->decrypt($token);
+//
+//        $data['material_id'] = $courseid;
+//        $data['class_name'] = $title;
+//        $data['status'] = $way;
+//        $data['stage_start'] = strtotime($time);
+//        $data['guide'] = $guide;
+//        $data['coursewarename'] = $coursewarename;
+//        $data['courseware'] = $courseware;
+//        $data['video'] = $video;
+//
+//        if (!db('toplearning_class_festival')->insert($data)) {
+//            $this->error('新增失败');
+//        }
+//
+//
+//        $f = Db::name('toplearning_class_festival')->getLastInsID();
+//
+////        db("toplearning_class_prepare")->where(['class_id'=>$f])->delete();
+////        foreach ($value['coursewareIdList'] as $k => $v) {
+////            db("toplearning_class_prepare")->insert([
+////                'class_id'=>$f,
+////                'course_id'=>$courseid,
+////                'file_id'=>$v['coursewareid'],
+////                'user_id'=>$token_uid
+////            ]);
+////        }
+//
+//
+//
+//        db("toplearning_net_material")->where(['net_material_id'=>$courseid])->update(['modify_time'=>date("Y-m-d H:i:s")]);
+//        $ret = array();
+//
+//        //返回信息
+//        $data = [
+//            'Code'=>'0',
+//            'Msg'=>'操作成功',
+//            'Data'=>1,
+//            'Success'=>true
+//        ];
+//
+//        return json($data);
+//    }
 
     /**
      * [getRecordedCourseList 6.    课程列表]
@@ -1526,7 +1543,7 @@ class Index
 
         $token_uid = $this->decrypt($token);
 
-        $info = db('toplearning_net_material')->where(['del'=>0,'user_id'=>$token_uid,'release_status'=>1])->select();
+        $info = db('toplearning_net_material')->where(['del'=>0,'user_id'=>$token_uid,'reviewed_status'=>3])->select();
 
         $ret = array();
         foreach ($info as $key => $value) {
@@ -1693,7 +1710,7 @@ class Index
         $data['teacher_user_id'] = $token_uid;
         $data['teacher_id'] = db('toplearning_teacher')->where(['user_id'=>$token_uid])->column('teacher_id')?db('toplearning_teacher')->where(['user_id'=>$token_uid])->column('teacher_id')[0]:'';
         $data['school_id'] = $college;
-        $data['release_status'] = 1;
+//        $data['release_status'] = 1;
         $data['reviewed_status'] = 0;
 
 
@@ -1703,6 +1720,7 @@ class Index
 
 
         if(!empty($courseid)){
+            $data['modify_time'] = date("Y-m-d H:i:s");
             $insertid = db('toplearning_net_material')->where(['net_material_id'=>$courseid])->update($data);
         }else{
 
@@ -2010,13 +2028,14 @@ class Index
         $data['introduce'] = $desc;
         $data['share'] = $share;
         $data['add_time'] = date('Y-m-d H:i:s',time());
-        $data['release_status'] = "1";
+//        $data['release_status'] = "1";
         $data['reviewed_status'] = "3";//审核通过了
         //toplearning_micro_class
         $data['total_lessons'] = count($json['classFestivalList']);
         $data['release'] = count($json['classFestivalList']);
         if(!empty($json['courseid'])){
             $net_material_id = $json['courseid'];
+            $data['modify_time'] = date("Y-m-d H:i:s");
             $res =    db('toplearning_net_material')->where(['net_material_id'=>$net_material_id])->update($data);
 
         }else{            
@@ -2087,6 +2106,15 @@ class Index
 
 
 
+            db("toplearning_class_prepare")->where(['class_id'=>$f])->delete();
+            foreach ($value['coursewareList'] as $k => $v) {
+                db("toplearning_class_prepare")->insert([
+                    'class_id'=>$f,
+                    'course_id'=>$net_material_id,
+                    'file_id'=>$v['coursewareid'],
+                    'user_id'=>$token_uid
+                ]);
+            }
 
 
 
@@ -2115,48 +2143,6 @@ class Index
         return json($data);
     }
 
-    /**
-     * [addweikelessons 13. 新增微课课节]
-     * @param  [type] $params [description]
-     * @return [type]         [description]
-     */
-    public function addweikelessons($params)
-    {
-        //params
-        $token = trim($params['token']);
-
-        $courseid = trim($params['courseid']);
-        $title = trim($params['title']);
-        $guide = trim($params['guide']);
-        $coursewarename = trim($params['coursewarename']);
-        $courseware = trim($params['courseware']);
-
-
-        //通过token获取 uid
-        $token_uid = $this->decrypt($token);
-
-        $data['material_id'] = $courseid;
-        $data['class_name'] = $title;
-        $data['guide'] = $guide;
-        $data['coursewarename'] = $coursewarename;
-        $data['courseware'] = $courseware;
-
-        if (!db('toplearning_class_festival')->insert($data)) {
-            $this->error('新增失败');
-        }
-        db("toplearning_net_material")->where(['net_material_id'=>$courseid])->update(['release'=>['exp', 'release+1']]);
-
-        $ret = array();
-        //返回信息
-        $data = [
-            'Code'=>'0',
-            'Msg'=>'操作成功',
-            'Data'=>1,
-            'Success'=>true
-        ];
-
-        return json($data);
-    }
 
     /**
      * [getpaynumberlist 14.    购买人数列表]
@@ -2614,6 +2600,7 @@ class Index
 
                 db('toplearning_class_festival')->insert($save);
 
+
                 $class_id = Db::name('toplearning_class_festival')->getLastInsID();
 
 //                db("toplearning_teacher_prepare")->where(['class_id'=>$class_id])->delete();
@@ -2632,9 +2619,9 @@ class Index
 //                }
 
                 db("toplearning_class_prepare")->where(['class_id'=>$class_id])->delete();
-                foreach ($value['coursewareIdList'] as $k => $v) {
+                foreach ($json['coursewareIdList'] as $k => $v) {
                     db("toplearning_class_prepare")->insert([
-                        'class_id'=>$f,
+                        'class_id'=>$class_id,
                         'course_id'=>$courseid,
                         'file_id'=>$v['coursewareid'],
                         'user_id'=>$token_uid
@@ -2644,6 +2631,7 @@ class Index
 
             }
         }
+        db("toplearning_net_material")->where(['net_material_id'=>$courseid])->update(['modify_time'=>date("Y-m-d H:i:s")]);
         // $ret = array('courseid'=>intval($courseid));
 
         //返回信息
@@ -2669,6 +2657,8 @@ class Index
         $lessonid = trim($params['lessonid']);
 
         db('toplearning_class_festival')->where(['material_id'=>$courseid,'class_id'=>$lessonid])->update(['del'=>1]);
+        db("toplearning_class_prepare")->where(['class_id'=>$lessonid])->delete();
+        db("toplearning_net_material")->where(['net_material_id'=>$courseid])->update(['modify_time'=>date("Y-m-d H:i:s")]);
 
         //返回信息
         $data = [
@@ -2745,9 +2735,9 @@ class Index
 //
 //            }
             db("toplearning_class_prepare")->where(['class_id'=>$lessonid])->delete();
-            foreach ($value['coursewareIdList'] as $k => $v) {
+            foreach ($json['coursewareIdList'] as $k => $v) {
                 db("toplearning_class_prepare")->insert([
-                    'class_id'=>$f,
+                    'class_id'=>$lessonid,
                     'course_id'=>$courseid,
                     'file_id'=>$v['coursewareid'],
                     'user_id'=>$token_uid
@@ -2757,6 +2747,7 @@ class Index
 
             db('toplearning_class_festival')->where(['material_id'=>$courseid,'class_id'=>$lessonid])->update($save);
         }
+        db("toplearning_net_material")->where(['net_material_id'=>$courseid])->update(['modify_time'=>date("Y-m-d H:i:s")]);
         $ret = array('courseid'=>intval($courseid));
         //返回信息
         $data = [
@@ -2782,6 +2773,9 @@ class Index
         $lessonid = trim($params['lessonid']);
 
         db('toplearning_class_festival')->where(['material_id'=>$courseid,'class_id'=>$lessonid])->update(['del'=>1]);
+        db('toplearning_class_prepare')->where(['class_id'=>$lessonid])->delete();
+
+        db("toplearning_net_material")->where(['net_material_id'=>$courseid])->update(['modify_time'=>date("Y-m-d H:i:s")]);
 
         //返回信息
         $data = [
@@ -2803,6 +2797,7 @@ class Index
     {
         //params
         $token = trim($params['token']);
+        $token_uid = $this->decrypt($token);
         $courseid = trim($params['courseid']);
         $lessonid = trim($params['lessonid']);
         $json = $params['json']?json_decode($params['json'],true):[];
@@ -2841,7 +2836,21 @@ class Index
              //课件
             $save['courseware'] = serialize($json['coursewareList']);
             db('toplearning_class_festival')->where(['material_id'=>$courseid,'class_id'=>$lessonid])->update($save);
+
+            db("toplearning_class_prepare")->where(['class_id'=>$lessonid])->delete();
+            foreach ($json['coursewareList'] as $k => $v) {
+                db("toplearning_class_prepare")->insert([
+                    'class_id'=>$lessonid,
+                    'course_id'=>$courseid,
+                    'file_id'=>$v['coursewareid'],
+                    'user_id'=>$token_uid
+                ]);
+            }
+
+
+
         }
+        db("toplearning_net_material")->where(['net_material_id'=>$courseid])->update(['modify_time'=>date("Y-m-d H:i:s")]);
         $ret = array('courseid'=>intval($courseid));
         //返回信息
         $data = [
