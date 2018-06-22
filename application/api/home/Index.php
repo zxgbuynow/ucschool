@@ -1326,7 +1326,7 @@ class Index
 
 
     }else{
-        $info = db('toplearning_net_material')->alias('a')->field('a.*,s.*')->join('toplearning_student_material s','a.net_material_id = s.material_id')->where(['a.del'=>0,'s.user_id'=>$token_uid])->order(" FIELD(`a.reviewed_status`, 0,2,1,3),a.modify_time desc")->select();
+        $info = db('toplearning_net_material')->alias('a')->field('a.*,s.*')->join('toplearning_student_material s','a.net_material_id = s.material_id')->where(['a.del'=>0,'s.user_id'=>$token_uid])->order(" FIELD(a.reviewed_status, 0,2,1,3),a.modify_time desc")->select();
         foreach ($info as $key => $value) {
             $ret[$key]['courseid'] = $value['net_material_id'];
             $ret[$key]['image'] = generate_img_path($value['picture']);
