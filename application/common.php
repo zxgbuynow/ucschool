@@ -1504,8 +1504,15 @@ function generate_img_path($path,$size = "m"){
     return "http://139.196.20.81:88/".json_decode($path,true)[$size];
 }
 
-
-
+    function create_uuid($prefix = ""){    //可以指定前缀
+        $str = md5(uniqid(mt_rand(), true));
+        $uuid  = substr($str,0,8);
+        $uuid .= substr($str,8,4);
+        $uuid .= substr($str,12,4);
+        $uuid .= substr($str,16,4);
+        $uuid .= substr($str,20,12);
+        return $prefix . $uuid;
+    }
 
 
 

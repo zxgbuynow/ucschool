@@ -993,7 +993,7 @@ class Index
             $ret['MonthlyPitchNumber'] = $value['month_lessons'];
             $ret['CommonPitchNumber'] = db('toplearning_class_festival')->where(['material_id'=>$value['net_material_id']])->count();
             $ret['type'] = $value['course_type'];
-            @$ret['typeName'] = db('toplearning_course_type')->where(['type_id'=>$value['course_type']])->column('type_name')[0];
+            @$ret['typeName'] = db('toplearning_subject_dictionary')->where(['subject_id'=>$value['course_type']])->value('subject_name');
             $ret['keyword'] = $value['tags'];
             $ret['price'] = $value['price'];
             $ret['paynumber'] = $value['order_num'];
@@ -1075,6 +1075,7 @@ class Index
         $info = db('toplearning_class_festival')->alias('f')->where($map)->order("f.stage_start")->select();
         $ret = array();
         foreach ($info as $key => $value) {
+            $ret[$key]['roomNumber'] = $value['room_number'];
             $ret[$key]['lessonsId'] = $value['class_id'];
             $ret[$key]['name'] = $value['class_name'];
             // $ret[$key]['time'] = date('Y-m-d H:i',strtotime($value['stage_start'])).'-'.date('H:i',strtotime($value['stage_end'])) ;
@@ -1196,6 +1197,7 @@ class Index
         if ($user&& $user['group_id']==3) {//laoshi
 
             foreach ($info as $key => $value) {
+                $ret[$key]['roomNumber'] = $value['room_number'];
                 $ret[$key]['courseid'] = $value['material_id'];
                 $ret[$key]['courseName'] = $value['title'];
                 $ret[$key]['lessonsId'] = $value['class_id'];
@@ -1259,7 +1261,6 @@ class Index
                 $ret[$key]['complete'] = 20;//TODO                
 
             }
-
         }
         $data = [        //返回信息
 
@@ -1455,13 +1456,13 @@ class Index
         //params
         $token = trim($params['token']);
 
-        $info = db('toplearning_course_type')->where(['del'=>0])->select();
-        
+        $info = db('toplearning_subject_dictionary')->where(['del'=>0])->select();
+
         $ret = array();
 
         foreach ($info as $key => $value) {
-            $ret[$key]['typeid'] = $value['type_id'];
-            $ret[$key]['name'] = $value['type_name'];
+            $ret[$key]['typeid'] = $value['subject_id'];
+            $ret[$key]['name'] = $value['subject_name'];
         }
         //返回信息
         $data = [
@@ -1550,7 +1551,7 @@ class Index
 
         $token_uid = $this->decrypt($token);
 
-        $info = db('toplearning_net_material')->where(['del'=>0,'user_id'=>$token_uid,'reviewed_status'=>3])->select();
+        $info = db('toplearning_net_material')->where(['del'=>0,'user_id'=>$token_uid,'reviewed_status'=>3,'lession_status'=>2])->select();
 
         $ret = array();
         foreach ($info as $key => $value) {
@@ -1788,6 +1789,7 @@ class Index
 
 
             }else{
+                $save['room_number'] = create_uuid();
                 db('toplearning_class_festival')->insert($save);
                 $f = Db::name('toplearning_class_festival')->getLastInsID();
             }
@@ -2029,6 +2031,7 @@ class Index
         // $data['lession_img'] = $image;
         $data['course_type']  = trim($json['typeid']);
         $data['type'] = 2;
+        $data['type_from'] = 2;//from APP
         $data['lesson_type'] = 2;
         $data['lession_status'] = 2;
         $data['keyword'] = $keyword;
@@ -2107,6 +2110,7 @@ class Index
 
 
             }else{
+                $save['room_number'] = create_uuid();
                 db('toplearning_class_festival')->insert($save);
                 $f = Db::name('toplearning_class_festival')->getLastInsID();
             }
@@ -2172,8 +2176,9 @@ class Index
 
         foreach ($info as $key => $value) {
             $ret[$key]['userid'] = $value['user_id'];
-            $ret[$key]['name'] = $value['nickname'];
-            @$ret[$key]['image'] = db('toplearning_login')->where(['user_id'=>$value['user_id']])->column('avatar')[0];
+            $user = db('toplearning_login')->field("avatar,nickname,mobile")->where(['user_id'=>$value['user_id']])->find();
+             $ret[$key]['name'] = $user['nickname'];
+            @$ret[$key]['image'] = generate_img_path($user['avatar']);
         }
         //返回信息
         $data = [
@@ -2491,7 +2496,7 @@ class Index
         @$ret['image'] = generate_img_path($info['picture'],"l");
         $ret['title'] = $info['title'];
         @$ret['college'] = db('toplearning_school')->where(['school_id'=>$info['school_id']])->column('school_name')?db('toplearning_school')->where(['school_id'=>$info['school_id']])->column('school_name')[0]:'';
-        $ret['type'] = db("toplearning_course_type")->where(['type_id'=>$info['course_type']])->value("type_name");
+        $ret['type'] = db('toplearning_subject_dictionary')->where(['subject_id'=>$info['course_type']])->value('subject_name');
         $ret['keyword'] = $info['tags'];
         $ret['price'] = $info['price'];
         $ret['paynumber'] = $info['order_num'];
@@ -2513,6 +2518,7 @@ class Index
         $rs = array();
         $i = 1;
         foreach ($lesson as $key => $value) {
+            $rs[$key]['roomNumber'] = $value['room_number'];
             $rs[$key]['lessonid'] = $value['class_id'];
             $rs[$key]['index'] = $i;
             $rs[$key]['guide'] = $value['guide'];
@@ -2605,6 +2611,7 @@ class Index
                 $save['courseware'] = serialize($json['coursewareIdList']);
 
 
+                $save['room_number'] = create_uuid();
                 db('toplearning_class_festival')->insert($save);
 
 
@@ -2943,7 +2950,7 @@ class Index
         ;
         $ret['title'] = $info['title'];
         $ret['college'] = db('toplearning_school')->where(['school_id'=>$info['school_id']])->column('school_name')?db('toplearning_school')->where(['school_id'=>$info['school_id']])->column('school_name')[0]:'';
-        $ret['type'] = db("toplearning_course_type")->where(['type_id'=>$info['course_type']])->value("type_name");
+        $ret['type'] = db('toplearning_subject_dictionary')->where(['subject_id'=>$info['course_type']])->value('subject_name');
         $ret['keyword'] = $info['keyword'];
 
         $ret['share'] = $info['share'];
@@ -2957,6 +2964,8 @@ class Index
         $rs = array();
         $i = 1;
         foreach ($lesson as $key => $value) {
+            $rs[$key]['roomNumber'] = $value['room_number'];
+
             $rs[$key]['lessonid'] = $value['class_id'];
             $rs[$key]['index'] = $i;
             $rs[$key]['name'] = $value['class_name'];
