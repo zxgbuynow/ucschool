@@ -173,6 +173,21 @@ class Index
         if (!$user) {
             return $this->error('用户不存在或被禁用！');
         }
+
+        $userSig = IMUtil::getInstance()->getUserSign($user['mobile']);//Hashtable.php
+        if(empty($user['im_account'])){
+
+         $resp = IMUtil::getInstance()->createUser([
+            'account'=>$user['mobile'],
+            'name'=>$user['realname'],
+            'avatar'=>"",
+        ]); 
+          if($resp['ActionStatus'] == "OK"){
+            db("toplearning_login")->where(['user_id'=>$user['user_id']])->update(['im_account'=>$user['mobile'],'userSig'=>$userSig]);
+
+            }
+
+        }
         //密码是否正确
 
         // if (!Hash::check((string)$password, $user['password'])) {
@@ -217,7 +232,7 @@ class Index
        $ret['identifier'] = $user['im_account'];
 
      // $userSig = db('toplearning_login')->where(1)->order('user_id DESC')->value('userSig');
-       @$ret['userSig'] = $user['userSig'];
+       @$ret['userSig'] = $userSig;
 
        $data = [
         'Success'=>true,
@@ -1074,6 +1089,9 @@ class Index
         $map['f.del'] = 0;
         $info = db('toplearning_class_festival')->alias('f')->where($map)->order("f.stage_start")->select();
         $ret = array();
+        $teacher_id = db("toplearning_net_material")->where(['net_material_id'=>$courseid])->value("teacher_id");
+        $teacher = db("toplearning_teacher a")->field("a.teacher_id,b.nickname teacher_name")->join(" toplearning_login b","a.user_id = b.user_id")->where(['a.teacher_id'=>$teacher_id])->find();
+        $index  =1;
         foreach ($info as $key => $value) {
             $ret[$key]['roomNumber'] = $value['room_number'];
             $ret[$key]['lessonsId'] = $value['class_id'];
@@ -1094,16 +1112,18 @@ class Index
             $ret[$key]['lessonWay'] = $value['status'];
             $ret[$key]['guide'] = $value['guide'];
 
-            $ret[$key]['index'] = $value['index'];
+            $ret[$key]['index'] = $index;
 
             $ret[$key]['status'] = (strtotime($value['stage_start'])>time())?'2':(strtotime($value['stage_end'])<time()?'3':'1');
             
-            
+            @$ret[$key]['teacherId'] = $teacher_id;
+        @$ret[$key]['teahcerName'] = $teacher['teacher_name'];
             if ($value['status']==1) {
-                @$ret[$key]['liveAddress'] = $this->is_serialized($value['video'])?unserialize($value['video'])[0]['video']:$value['video'];
+                @$ret[$key]['liveAddress'] = $this->is_serialized($value['video'])?$this->getFileBase().unserialize($value['video'])[0]['video']:$value['video'];
             }else{
-             @$ret[$key]['videoBroadcastAddress'] = $this->is_serialized($value['courseware'])?unserialize($value['courseware'])[0]['address']:$value['courseware'];
+             @$ret[$key]['videoBroadcastAddress'] = $this->is_serialized($value['courseware'])?$this->getFileBase().unserialize($value['courseware'])[0]['address']:$value['courseware'];
          }
+             $index++;
 
      }
         //返回信息
@@ -1157,7 +1177,7 @@ class Index
             $ret[$key]['collegeName'] = $value['school_name'] ;
             
             $ret[$key]['collegeId'] = $value['school_id'];
-            $ret[$key]['teacherId'] = $value['teacher_user_id'];
+            $ret[$key]['teacherId'] = $value['teacher_id'];
 
         }
 
@@ -1192,12 +1212,13 @@ class Index
         // $info = db('toplearning_net_material')->alias('a')->join('toplearning_class_festival f','a.net_material_id = f.material_id','LEFT')->where($map)->select();
         $ret = array();
 
-
+        $index = 1;
         $user = db('toplearning_login')->where(['user_id'=>$map['a.user_id']])->find();
         if ($user&& $user['group_id']==3) {//laoshi
 
             foreach ($info as $key => $value) {
                 $ret[$key]['roomNumber'] = $value['room_number'];
+                $ret[$key]['index'] = $index;
                 $ret[$key]['courseid'] = $value['material_id'];
                 $ret[$key]['courseName'] = $value['title'];
                 $ret[$key]['lessonsId'] = $value['class_id'];
@@ -1218,7 +1239,7 @@ class Index
                 // if ($value['status']==1) {
                 @$ret[$key]['liveAddress'] = $this->is_serialized($value['video'])?unserialize($value['video'])[0]['video']:$value['video'];
                 // }else{
-                @$ret[$key]['videoBroadcastAddress'] = $this->is_serialized($value['courseware'])?unserialize($value['courseware'])[0]['address']:$value['courseware'];
+                @$ret[$key]['videoBroadcastAddress'] = $this->is_serialized($value['courseware'])?$this->getFileBase().unserialize($value['courseware'])[0]['address']:$value['courseware'];
                 // }
 
                 $ret[$key]['lessontime'] = $value['lesson_time'];
@@ -1228,7 +1249,11 @@ class Index
                 $ret[$key]['collegeName'] = $value['school_name'] ;
                 @$ret[$key]['teacherName'] = db('toplearning_login')->where(['user_id'=>$value['teacher_user_id']])->column('nickname')[0];
                 $ret[$key]['collegeId'] = $value['school_id'];
-                $ret[$key]['teacherId'] = $value['teacher_user_id'];
+        $teacher = db("toplearning_teacher a")->field("a.teacher_id,b.nickname teacher_name")->join(" toplearning_login b","a.user_id = b.user_id")->where(['a.teacher_id'=>$value['teacher_id']])->find();
+        
+        @$ret[$key]['teacherId'] = $teacher['teacher_id'];
+        @$ret[$key]['teahcerName'] = $teacher['teacher_name'];
+        $index ++;
             }
 
         }else{
@@ -1236,6 +1261,7 @@ class Index
             $info = db('toplearning_net_material')->alias('a')->field('a.*,s.*,f.*')->join('toplearning_student_material s','a.net_material_id = s.material_id')->join('toplearning_class_festival f','a.net_material_id = f.material_id')->where(['a.del'=>0,'s.user_id'=>$token_uid])->whereTime('f.stage_start', 'today')->select();
             foreach ($info as $key => $value) {
                 $ret[$key]['courseid'] = $value['net_material_id'];
+                $ret[$key]['index'] = $index;
                 $ret[$key]['courseName'] = $value['title'];
                 $ret[$key]['lessonsId'] = $value['class_id'];
                 $ret[$key]['lessonsName'] = $value['class_name'];
@@ -1257,9 +1283,12 @@ class Index
                 $ret[$key]['collegeName'] = $value['school_name'] ;
                 @$ret[$key]['teacherName'] = db('toplearning_login')->where(['user_id'=>$value['teacher_user_id']])->column('nickname')[0];
                 $ret[$key]['collegeId'] = $value['school_id'];
-                $ret[$key]['teacherId'] = $value['teacher_user_id'];
-                $ret[$key]['complete'] = 20;//TODO                
+                 $ret[$key]['complete'] = 20;//TODO                
+                 $teacher = db("toplearning_teacher a")->field("a.teacher_id,b.nickname teacher_name")->join(" toplearning_login b","a.user_id = b.user_id")->where(['a.teacher_id'=>$value['teacher_id']])->find();
+        @$ret[$key]['teacherId'] = $teacher['teacher_id'];
+        @$ret[$key]['teahcerName'] = $teacher['teacher_name'];
 
+        $index ++;
             }
         }
         $data = [        //返回信息
@@ -1325,7 +1354,7 @@ class Index
             $ret[$key]['collegeName'] = $value['school_name'] ;
             $ret[$key]['teacherName'] = $user['nickname'];
             $ret[$key]['collegeId'] = $value['school_id'];
-            $ret[$key]['teacherId'] = $value['teacher_user_id'];
+            $ret[$key]['teacherId'] = $value['teacher_id'];
 
 
             // $ret[$key]['type'] = $value['lession_status'];
@@ -1370,7 +1399,7 @@ class Index
             $ret[$key]['collegeName'] = $value['school_name'] ;
             @$ret[$key]['teacherName'] = db('toplearning_login')->where(['user_id'=>$value['teacher_user_id']])->column('nickname')[0];
             $ret[$key]['collegeId'] = $value['school_id'];
-            $ret[$key]['teacherId'] = $value['teacher_user_id'];
+            $ret[$key]['teacherId'] = $value['teacher_id'];
 
 
             $ret[$key]['complete'] = 20;//TODO
@@ -1588,7 +1617,9 @@ class Index
         // $info = db('toplearning_exam')->alias('a')->join('toplearning_do_exam_time t','a.exam_id = t.exam_id')->where(['a.exam_id'=>$examid])->select();
         // $info = db('toplearning_class_festival')->alias('a')->join('toplearning_media t','a.material_id = t.type_id','LEFT')->where($map)->select();
         $info = db('toplearning_class_festival')->where($map)->order("stage_start")->select();
-
+$teacher_id = db("toplearning_net_material")->where(['net_material_id'=>$lessonsid])->value("teacher_id");
+        $teacher = db("toplearning_teacher a")->field("a.teacher_id,b.nickname teacher_name")->join(" toplearning_login b","a.user_id = b.user_id")->where(['a.teacher_id'=>$teacher_id])->find();
+        
         $ret = array();
         $i =1 ;
         foreach ($info as $key => $value) {
@@ -1607,7 +1638,8 @@ class Index
             $ret[$key]['endTime'] = date('H:i',strtotime($value['stage_end']));
 
             $ret[$key]['lessontime'] = $value['lesson_time'];
-
+            @$ret[$key]['teacherId'] = $teacher_id;
+        @$ret[$key]['teahcerName'] = $teacher['teacher_name'];
             // $video = unserialize($value['video']);
 
             $ret[$key]['video'] = $this->is_serialized($value['video'])?unserialize($value['video']):$value['video'];
@@ -1906,7 +1938,7 @@ class Index
         
         $ret['courseid'] = $info['net_material_id'];
 
-        $ret['image'] = $info['picture'];
+        $ret['image'] = generate_img_path($info['picture']);
         $ret['title'] = $info['title'];
         $ret['college'] = $info['create_name'];
         $ret['type'] = $info['type'];
@@ -1967,7 +1999,7 @@ class Index
             $ret[$key]['name'] = $value['filename'];
             $ret[$key]['size'] = generate_size($value['filesize']);
             $ret[$key]['time'] = $value['create_time'];
-            $ret[$key]['address'] = $value['path'];
+            $ret[$key]['address'] = $this->getFileBase().$value['path'];
         }
         
         //返回信息
@@ -2025,7 +2057,9 @@ class Index
 
 
 
-
+$data['teacher_user_id'] = $token_uid;
+        $data['teacher_id'] = db('toplearning_teacher')->where(['user_id'=>$token_uid])->column('teacher_id')?db('toplearning_teacher')->where(['user_id'=>$token_uid])->column('teacher_id')[0]:'';
+        
         $data['user_id'] = $token_uid;
         $data['title'] = $title;
         // $data['lession_img'] = $image;
@@ -2292,8 +2326,13 @@ class Index
 
         foreach ($info as $key => $value) {
             $ret[$key]['userid']= $value['user_id'];
-            $ret[$key]['name']= db('toplearning_login')->where(['user_id'=>$value['user_id']])->column('nickname')?db('toplearning_login')->where(['exam_id'=>$value['user_id']])->column('nickname')[0]:'';
-            $ret[$key]['image']= db('toplearning_login')->where(['user_id'=>$value['user_id']])->column('avatar')?db('toplearning_login')->where(['exam_id'=>$value['user_id']])->column('avatar')[0]:'';
+            $user = db('toplearning_login')->field("nickname,mobile,avatar")->where(['user_id'=>$value['user_id']])->find();
+            $name = $user['nickanme']?$user['nickname']:$user['mobile'];
+
+            $ret[$key]['name']= $name;
+            $avatar = $user['avatar'];
+            $avatar = $avatar?generate_img_path($avatar):"";
+            $ret[$key]['image']= $avatar;
         }
         
         //返回信息
@@ -2380,11 +2419,12 @@ class Index
         $rs['totalscore'] = @number_format($totalscore/$count,1);
         foreach ($info as $key => $value) {
             $ret[$key]['userid'] = $value['user_Id'];
-            @$ret[$key]['username'] = db('toplearning_login')->where(['user_id'=>$value['user_Id']])->column('nickname')[0];
+            $user = db('toplearning_login')->field("nickname,mobile,avatar")->where(['user_id'=>$value['user_Id']])->find();
+            @$ret[$key]['username'] = $user['nickname']?$user['nickname']:$user['mobile'];
             $ret[$key]['time'] = $value['create_time'];
             $ret[$key]['content'] = $value['appraise_name'];
             $ret[$key]['score'] = number_format($value['score'],1);
-            $ret[$key]['hade'] = db('toplearning_login')->where(['user_id'=>$value['user_Id']])->column('avatar')[0];
+            $ret[$key]['hade'] = $user['avatar']?generate_img_path($user['avatar']):"";
         }
         
         $rs['courseEvaluationlist'] = $ret;
@@ -2422,7 +2462,7 @@ class Index
         // echo db('toplearning_login')->getlastsql();exit;
         $ret = array();
         if ($info) {
-            $ret['headurl'] = $info['avatar'];
+            $ret['headurl'] = generate_img_path($info['avatar']);
             $ret['name'] = $info['nickname'];
             $ret['score'] = $info['persent'];//TODO
             $ret['school'] = $info['school_name'];
@@ -2451,7 +2491,7 @@ class Index
                     $coursearr[$key]['collegeName'] = $value['school_name'] ;
                     
                     $coursearr[$key]['collegeId'] = $value['school_id'];
-                    $coursearr[$key]['teacherId'] = $value['teacher_user_id'];
+                    $coursearr[$key]['teacherId'] = $value['teacher_id'];
 
                 }
                 $ret['correlatedCurriculumList'] = $coursearr;
@@ -2505,6 +2545,8 @@ class Index
 
         $ret['total'] = $info['total_lessons'];
 
+        $teacher = db("toplearning_teacher a")->field("a.teacher_id,b.nickname teacher_name")->join(" toplearning_login b","a.user_id = b.user_id")->where(['a.teacher_id'=>$info['teacher_id']])->find();
+    
         //新加
         $ret['collegeId'] = $info['school_id'];
         $ret['typeId'] = $info['course_type'];
@@ -2530,7 +2572,8 @@ class Index
             $rs[$key]['lessonWay'] = $value['status'];
             $rs[$key]['completion'] = '10%';//TODO
 
-
+    @$rs[$key]['teacherId'] = $teacher['teacher_id'];
+        @$rs[$key]['teahcerName'] = $teacher['teacher_name'];
             $rs[$key]['year'] = date('Y',strtotime($value['stage_start']));
             $rs[$key]['month'] = date('m',strtotime($value['stage_start']));
             $rs[$key]['day'] = date('d',strtotime($value['stage_start']));
@@ -2538,8 +2581,8 @@ class Index
             $rs[$key]['status'] = (strtotime($value['stage_start'])>time())?'2':(strtotime($value['stage_end'])<time()?'3':'1');
 
             //liveAddress |videoBroadcastAddress 
-            @$rs[$key]['liveAddress'] = $this->is_serialized($value['video'])?unserialize($value['video'])[0]['video']:$value['video'];
-            @$rs[$key]['videoBroadcastAddress'] = $this->is_serialized($value['courseware'])?unserialize($value['courseware'])[0]['address']:$value['courseware'];
+            @$rs[$key]['liveAddress'] = $this->is_serialized($value['video'])?$this->getFileBase().unserialize($value['video'])[0]['video']:$value['video'];
+            @$rs[$key]['videoBroadcastAddress'] = $this->is_serialized($value['courseware'])?$this->getFileBase().unserialize($value['courseware'])[0]['address']:$value['courseware'];
 
             $rs[$key]['video'] = $this->is_serialized($value['video'])?unserialize($value['video']):$value['video'];
             $rs[$key]['coursewareIdList'] = $this->is_serialized($value['courseware'])?unserialize($value['courseware']):$value['courseware'];
@@ -3364,7 +3407,7 @@ class Index
         foreach ($exam as $key => $value) {
             $user = db("toplearning_login")->field("realname,avatar")->where(['user_id'=>$value['user_id']])->find();
             $ret[$key]['name'] = $user['realname'];
-            $ret[$key]['head'] = json_decode($user['avatar'],true)['m'];
+            $ret[$key]['head'] = generate_img_path($user['avatar']);
             $ret[$key]['rollUp'] = $value['is_submit'] == 1?true:false;
         }
         //返回信息
@@ -3511,7 +3554,7 @@ class Index
             $ret[$key]['collegeName'] = $value['school_name'] ;
             @$ret[$key]['teacherName'] = db('toplearning_login')->where(['user_id'=>$value['teacher_user_id']])->column('nickname')[0];
             $ret[$key]['collegeId'] = $value['school_id'];
-            $ret[$key]['teacherId'] = $value['teacher_user_id'];
+            $ret[$key]['teacherId'] = $value['teacher_id'];
         }
         
         //返回信息
@@ -3591,8 +3634,7 @@ class Index
         $data['teacher_id'] = $nt['teacher_id'];
         $data['teacher_user_id'] = $nt['teacher_user_id'];
         $data['teacher_name'] = $t['nickname'];
-        $data['create_time'] = time();
-
+ 
         db('toplearning_order')->insert($data);
 
         //学生关联表
@@ -4153,24 +4195,28 @@ class Index
     {   
         //param
         $token = trim($params['token']);
-        $userid = trim($params['userid']);
+        // $userid = trim($params['userid']);
         $token_uid = $this->decrypt($token);
 
         $info  = db('toplearning_order')->where(['user_id'=>$token_uid])->select();
         $ret = array();
         $m = array();
         foreach ($info as $key => $value) {
-            $cdate = date('Y-m',strtotime($value['create_time']));
+            $pay['id'] = $value['order_id'];
+            $cdate = date('Y年m月',strtotime($value['create_time']));
+            if(date("Ym",strtotime($value['create_time'])) == date("Ym")){
+                $cdate = "本月";
+            }
             array_push($m, date('Y-m',strtotime($value['create_time'])));
             //商品信息
             $goods = db('toplearning_net_material')->where(['net_material_id'=>$value['net_material_id']])->find();
-            @$pay['headUrl'] = $goods['picture'];
+            @$pay['headUrl'] = generate_img_path($goods['picture']);
             @$pay['Name'] = $goods['title'];
             @$pay['absteact'] = $goods['introduce'];
             @$pay['nun'] = '-￥'.$goods['price'];
 
             $pay['modeOfPayment'] = 'U豆支付';
-            $pay['data'] = date('m d H:i',strtotime($value['create_time']));
+            $pay['data'] = date('m.d H:i',strtotime($value['create_time']));
             $ret['paymentList'][$cdate][] = $pay;
         }
         $nowdate = date('Y-m',time());
