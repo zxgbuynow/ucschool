@@ -1644,6 +1644,9 @@ $teacher_id = db("toplearning_net_material")->where(['net_material_id'=>$lessons
 
             $ret[$key]['video'] = $this->is_serialized($value['video'])?unserialize($value['video']):$value['video'];
             $ret[$key]['coursewareIdList'] = $this->is_serialized($value['courseware'])?unserialize($value['courseware']):$value['courseware'];
+            foreach($ret[$key]['coursewareIdList'] as &$courseware){
+                // $courseware['address'] = $this->getFileBase(). $courseware['address'];
+            }
             $i++;
         }
         //返回信息
@@ -1999,7 +2002,8 @@ $teacher_id = db("toplearning_net_material")->where(['net_material_id'=>$lessons
             $ret[$key]['name'] = $value['filename'];
             $ret[$key]['size'] = generate_size($value['filesize']);
             $ret[$key]['time'] = $value['create_time'];
-            $ret[$key]['address'] = $this->getFileBase().$value['path'];
+            $ret[$key]['address'] = $value['path'];
+            $ret[$key]['preview'] = $this->getFileBase().$value['path'];
         }
         
         //返回信息
@@ -2356,17 +2360,21 @@ $data['teacher_user_id'] = $token_uid;
         //params
         $token = trim($params['token']);
         $courseid = trim($params['courseid']);
+        $token_uid = $this->encrypt($token);
 
 
-        $info = db('toplearning_learn_situation')->where(['class_id'=>$courseid])->select();
+        $info = db('toplearning_learn_situation')->field("*,sum(learn_duration) sum")->where(['class_id'=>$courseid,"user_id"=>$token_uid])->group("user_id")->order("id asc")->select();
 
         $ret = array();
         foreach ($ret as $key => $value) {
             $ret[$key]['userid'] =   $value['user_id'];
-            $ret[$key]['name'] =  db('toplearning_login')->where(['user_id'=>$value['user_id']])->column('nickname')?db('toplearning_login')->where(['user_id'=>$value['user_id']])->column('nickname')[0]:'';
-            $ret[$key]['time'] =  $value['learn_start_time'];
-            $ret[$key]['totaltime'] =  ceil((strtotime($value['learn_end_time'])-strtotime($value['learn_start_time']))/(24*60)) ;
-            $ret[$key]['completion'] =  $value['learn_result'];
+            $ret[$key]['name'] =  db('toplearning_login')->where(['user_id'=>$value['user_id']])->value('nickname');
+            $ret[$key]['time'] = date("Y-m-d H:i",strtotime( $value['learn_start_time']));
+            $duration = floatval(sprintf($value['sum']/60,"%.2f"));
+            $ret[$key]['totaltime'] =  $duration;
+            $total = db("toplearning_class_festival")->where(['class_id'=>$value['class_id']])->value("lesson_time");
+            $ret[$key]['completion'] =  $value['sum']/$total>1?100:sprintf($value['sum']/$total,"%.2f");
+            $ret[$key]['completion']  .= "%";
         }
         
         //返回信息
@@ -2421,9 +2429,9 @@ $data['teacher_user_id'] = $token_uid;
             $ret[$key]['userid'] = $value['user_Id'];
             $user = db('toplearning_login')->field("nickname,mobile,avatar")->where(['user_id'=>$value['user_Id']])->find();
             @$ret[$key]['username'] = $user['nickname']?$user['nickname']:$user['mobile'];
-            $ret[$key]['time'] = $value['create_time'];
+            $ret[$key]['time'] = date("Y-m-d H:i",strtotime($value['create_time']));
             $ret[$key]['content'] = $value['appraise_name'];
-            $ret[$key]['score'] = number_format($value['score'],1);
+            $ret[$key]['score'] = floatval($value['score']);
             $ret[$key]['hade'] = $user['avatar']?generate_img_path($user['avatar']):"";
         }
         
@@ -2586,7 +2594,9 @@ $data['teacher_user_id'] = $token_uid;
 
             $rs[$key]['video'] = $this->is_serialized($value['video'])?unserialize($value['video']):$value['video'];
             $rs[$key]['coursewareIdList'] = $this->is_serialized($value['courseware'])?unserialize($value['courseware']):$value['courseware'];
-
+             foreach($rs[$key]['coursewareIdList'] as &$courseware){
+                $courseware['address'] = $this->getFileBase(). $courseware['address'];
+            }
             $i++;
         }
         $ret['classTypeList'] = $rs;
@@ -3027,6 +3037,9 @@ $data['teacher_user_id'] = $token_uid;
 // var_dump($value['courseware']);
             $rs[$key]['coursewareList'] = unserialize($value['courseware']);
 
+            foreach($rs[$key]['coursewareList'] as &$courseware){
+               @$courseware['address'] = $this->getFileBase(). $courseware['address'];
+            }
             $rs[$key] = array_merge($rs[$key],unserialize($value['video']));
 
 
@@ -3082,7 +3095,7 @@ $data['teacher_user_id'] = $token_uid;
         $msg = trim($params['msg']);
 
         $data['appraise_name'] = $msg?$msg:'讲得非常好';
-        $data['create_time']  = time();
+        $data['create_time']  = date("Y-m-d H:i:s");
         $data['class_id'] = $lessonid;
         $data['score'] = $evaluateNum;
         $data['user_Id'] = $this->decrypt($token);
@@ -3222,19 +3235,24 @@ $data['teacher_user_id'] = $token_uid;
     public function learningSituationList($params)
     {
         //params
-        $lessonid = trim($params['lessonid']);
-        $courseid = trim($params['courseid']);
+        @$lessonid = trim($params['lessonid']);
+        @$courseid = trim($params['courseid']);
         @$size = trim($params['size']);
         @$page = trim($params['page']);
-
+ 
         $page = $page ==''?0:$page;
         $size = $size == ''?10:$size;
 
         $limit = $page*$size;
 
-        $info = db('toplearning_learn_situation')->where(['class_id'=>$lessonid])->limit($limit, $size)->select();
 
 
+
+
+
+        // $info = db('toplearning_learn_situation')->where(['class_id'=>$lessonid])->limit($limit, $size)->select();
+
+        $info = db('toplearning_learn_situation')->field("*,sum(learn_duration) sum")->where(['class_id'=>$lessonid])->group("user_id")->order("id asc")->limit($limit, $size)->select();
         $ret = array();
         // foreach ($ret as $key => $value) {
         //     $ret[$key]['userid'] =   $value['user_id'];
@@ -3246,8 +3264,13 @@ $data['teacher_user_id'] = $token_uid;
 
         foreach ($info as $key => $value) {
             $ret[$key]['time'] = date('Y-m-d H:i',strtotime($value['learn_start_time']));
-            $ret[$key]['lengthTime'] =  ceil((strtotime($value['learn_end_time'])-strtotime($value['learn_start_time']))/(24*60)) ;
-            $ret[$key]['totalCompletionRate'] = $value['learn_result'].'%';
+             $length = $value['sum']/60;
+            $ret[$key]['lengthTime'] =  floatval(sprintf($length,"%.2f"));
+            $ret[$key]['name'] = db("toplearning_login")->where(['user_id'=>$value['user_id']])->value("nickname");
+            $total = db("toplearning_class_festival")->where(['class_id'=>$value['class_id']])->value("lesson_time");
+            $ret[$key]['completion'] =  $value['sum']/$total>1?100:sprintf($value['sum']/$total,"%.2f");
+
+             $ret[$key]['completion'] .= '%';
         }
 
         //返回信息
@@ -3275,25 +3298,26 @@ $data['teacher_user_id'] = $token_uid;
 
         //计算出开结时间
         $now = time();
-        $data['learn_start_time'] = date('Y-m-d H:i',strtotime(ceil($now-$endTime)));
-        $data['learn_end_time'] = date('Y-m-d H:i',strtotime(ceil($now+$endTime)));
+        $data['learn_start_time'] = date('Y-m-d H:i:s',ceil($now-$endTime));
+        $data['learn_end_time'] = date('Y-m-d H:i:s',$now);
         //取出该课节时长 计算完成度
         $lessiontime = 0;
         @$lessiontime = db('toplearning_class_festival')->where(['class_id'=>$lessonid])->column('lesson_time')[0];
 
-        $data['learn_result'] = ceil(($endTime/$lessiontime*10)*100);
+        $data['learn_duration'] = $endTime;
 
         $token_uid = $this->decrypt($token);
         $data['user_id'] = $token_uid;
 
         //是否有该课节学习记录 有更新
-        if (db('toplearning_learn_situation')->where(['class_id'=>$lessonid])->find()) {
+        // if (db('toplearning_learn_situation')->where(['class_id'=>$lessonid])->find()) {
 
-            db('toplearning_learn_situation')->where(['class_id'=>$lessonid])->update($data);
-        }else{
+            // db('toplearning_learn_situation')->where(['class_id'=>$lessonid])->update($data);
+        // }else{
             $data['class_id'] = $lessonid;
+            $data['course_id'] = $courseid;
             db('toplearning_learn_situation')->insert($data);
-        }
+        // }
         
         // $info = db('toplearning_learn_situation')->where(['class_id'=>$courseid])->select();
 
