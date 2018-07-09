@@ -11,9 +11,9 @@ return [
     ],
     'param'=>[
         'login'=>[
-            'phone'=>['valid'=>true],
-            'password'=>['valid'=>true],
-            'type'=>['valid'=>true]
+            'login_name'=>['valid'=>true],
+            'login_password'=>['valid'=>true],
+            'deviceid'=>['valid'=>true]
         ],
     ]
 ];
