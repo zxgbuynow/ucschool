@@ -120,6 +120,28 @@ class Index
     }
 
     /**
+     * [memberinfo 会员信息]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function memberinfo($params)
+    {
+        //参数手机号，密码
+        $phone = trim($params['account']);
+
+        $ret = db('member')->where('username'=>$phone)->find();
+        unset($ret['password']);
+
+        $data = [
+            'Success'=>true,
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret
+        ];
+        return json($data);
+    }
+
+    /**
      * [story 故事列表]
      * @param  [type] $params [description]
      * @return [type]         [description]
