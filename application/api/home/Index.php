@@ -109,7 +109,7 @@ class Index
             unset($ret['password']);
         }
 
-                
+        $ret['accessToken'] = md5($ret['id']);
         $data = [
             'Success'=>true,
             'Code'=>'0',
