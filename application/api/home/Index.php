@@ -129,7 +129,7 @@ class Index
         //参数手机号，密码
         $phone = trim($params['account']);
 
-        $ret = db('member')->where('username'=>$phone)->find();
+        $ret = db('member')->where(['username'=>$phone])->find();
         unset($ret['password']);
 
         $data = [
