@@ -18,40 +18,32 @@
     <ul class="question-list">
       <li>
         <h5>1.本店进货金额：</h5>
-        <ul>
-          <li>
-            <label>
-              <input type="radio" name="question_1" />
-              <p>A. 500~800元</p>
-            </label>
-            <label>
-              <input type="radio" name="question_1" />
-              <p>B. 800元以上</p>
-            </label>
-          </li>
-        </ul>
+        <div class="input">
+            <input type="number" name="question_1" value="" placeholder="输入您店铺的进货金额"/>
+            <span class="add-on">RMB</span>
+        </div>  
       </li>
       <li>
         <h5>2.本次获得的赠品：</h5>
         <ul>
           <li>
             <label>
-              <input type="radio" name="question_2" />
-              <p>A. 公牛无线小魔方插座（U9B122S）</p>
+              <input type="radio" name="question_2" value="A"/>
+              <p>A. 公牛有线小魔方插座（UUB122s）</p>
             </label>
             <label>
-              <input type="radio" name="question_2" />
+              <input type="radio" name="question_2" value="B"/>
               <p>B. 公牛机械式定时器插座（GND-2）</p>
             </label>
             <label>
-              <input type="radio" name="question_2" />
-              <p>B. 没有获得赠品</p>
+              <input type="radio" name="question_2" value="C"/>
+              <p>C. 没有获得赠品</p>
             </label>
           </li>
         </ul>
       </li>
     </ul>
-    <a href="{:url('Index/info')}" class="btn">确 定</a>
+    <a href="javascript:;" class="btn next">确 定</a>
   </div>
   <script type="text/javascript" src="__HOME_JS__/jquery.min.js"></script>
   <script type="text/javascript" src="__HOME_JS__/rem.js"></script>
@@ -60,7 +52,27 @@
       $(".question-list input").change(function () {
         $(":checked").parent().addClass("checked").siblings().removeClass("checked");
       });
+
+      $(".next").click(function () {
+        var question_1 = $("input[name='question_1']").val();
+        var question_2 = $("input[name='question_2']:checked").val();
+        if (!question_1) {
+          alert('请填写金额');return false;
+        }
+
+        if (!question_2) {
+          alert('请选择答案');return false;
+        }
+        localStorage.setItem("question_1",question_1);
+        localStorage.setItem("question_2",question_2);
+
+        setTimeout(function (argument) {
+         window.location.href = "{:url('Index/info')}";
+        },1000)
+      })
+
     });
+
   </script>
 </body>
 

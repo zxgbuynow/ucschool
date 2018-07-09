@@ -40,7 +40,9 @@ class Index extends Home
             $save['username'] = $param['username'];
             $save['shopname'] = $param['shopname'];
             $save['location'] = $param['location'];
-            $save['market'] = $param['market'];
+            $save['q1'] = $param['q1'];
+            $save['q2'] = $param['q2'];
+            // $save['market'] = $param['market'];
             $save['create_time'] = time();
 
             db('question')->insert($save);

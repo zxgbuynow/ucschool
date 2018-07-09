@@ -66,6 +66,20 @@ class Config
             // 前台IMG目录
             '__HOME_IMG__'  => PUBLIC_PATH. 'static/home/img',
 
+            // 前台CSS目录
+            '__WALL_CSS__'  => PUBLIC_PATH. 'static/wall/css',
+            // 前台JS目录
+            '__WALL_JS__'   => PUBLIC_PATH. 'static/wall/js',
+            // 前台IMG目录
+            '__WALL_IMG__'  => PUBLIC_PATH. 'static/wall/img',
+
+            // 前台CSS目录
+            '__PLUG_CSS__'  => PUBLIC_PATH. 'static/plug/css',
+            // 前台JS目录
+            '__PLUG_JS__'   => PUBLIC_PATH. 'static/plug/js',
+            // 前台IMG目录
+            '__PLUG_IMG__'  => PUBLIC_PATH. 'static/plug/img',
+
             // mobile CSS目录
             '__M_CSS__'  => PUBLIC_PATH. 'static/mobile/css',
             // mobile JS目录

@@ -1,0 +1,333 @@
+html {
+  font-size: 100px;
+}
+body {
+  background: #008c3e;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
+  overflow: hidden;
+  font-family: "miscrosoft yahei", "微软雅黑", tahoma, arial, "Hiragino Sans GB", sans-serif;
+  color: #fff;
+  position: relative;
+}
+html,
+form {
+  height: 100%;
+}
+/* common */
+* {
+  margin: 0;
+  padding: 0;
+}
+a {
+  color: #fff;
+  text-decoration: none;
+  outline: none;
+}
+a:hover,
+a:focus {
+  color: #fac40f;
+}
+.clearfix:before,
+.clearfix:after {
+  content: " ";
+  display: table;
+}
+.clearfix:after {
+  clear: both;
+}
+.has-bottom {
+  padding-bottom: 0.5rem;
+}
+.container {
+  background: url(../images/gn_logo.png) no-repeat 0.3rem top;
+  background-size: 0.94rem;
+  height: 100%;
+  margin: 0 auto;
+  font-size: 0.14rem;
+  overflow: auto;
+  box-sizing: border-box;
+  text-align: center;
+  padding-top: 0.7rem;
+  position: relative;
+}
+li,
+ul {
+  list-style: none;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+h3 {
+  font-size: 0.16rem;
+}
+::-webkit-input-placeholder {
+  color: #afafaf;
+}
+.pace-wrapper {
+  position: relative;
+  top: 45%;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #00bf55;
+  height: 0.1rem;
+  width: 70%;
+  margin: auto;
+  overflow: hidden;
+}
+.pace {
+  background-color: #008c3e;
+  height: 100%;
+  position: fixed;
+  width: 100%;
+  z-index: 2000;
+  top: 0px;
+  font-size: 0.14rem;
+}
+.pace::before {
+  content: "页面在玩命加载中,请稍候...";
+  position: absolute;
+  top: 38%;
+  width: 100%;
+  text-align: center;
+}
+.pace .pace-progress {
+  box-sizing: border-box;
+  background-clip: padding-box;
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  display: block;
+  position: absolute;
+  right: 100%;
+  width: 100%;
+  height: 100%;
+  background: #fbc511;
+}
+.pace:after {
+  content: attr(data-progress-text);
+  display: block;
+  text-align: center;
+  width: 100%;
+  font-size: 0.12rem;
+  color: #fff;
+  position: absolute;
+  top: 49%;
+  font-weight: bold;
+}
+.pace.pace-inactive {
+  display: none;
+}
+.note {
+  position: fixed;
+  bottom: 3%;
+  width: 1.16rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.btn {
+  background: #fbc511;
+  border: none;
+  color: #008c3e;
+  padding: 0 0.5rem;
+  font-weight: bold;
+  font-size: 0.21rem;
+  display: inline-block;
+  margin: 0.27rem auto 0.2rem;
+  border-radius: 0.45rem;
+  line-height: 0.45rem;
+  height: 0.45rem;
+  -webkit-appearance: none;
+}
+.btn:hover,
+.btn:active {
+  background: #eeb804;
+  color: #008c3e;
+}
+.btn-big {
+  font-size: 0.25rem;
+}
+.step {
+  position: fixed;
+  top: 0.21rem;
+  right: 0.26rem;
+  color: #fbc511;
+  font-size: 0.09rem;
+  display: inline-block;
+  line-height: 1;
+  text-transform: uppercase;
+}
+.step span {
+  display: block;
+}
+.step .top {
+  color: rgba(251, 197, 17, 0.6);
+  font-size: 0.14rem;
+}
+.step .top b {
+  color: #fbc511;
+  font-size: 0.21rem;
+  font-weight: bold;
+}
+.step .top i {
+  font-size: 0.21rem;
+  font-style: normal;
+  font-family: serif;
+}
+.input-wrap {
+  margin: 0.2rem 0.32rem 0;
+}
+.input-wrap .item-input {
+  border-radius: 0.4rem;
+  width: 100%;
+  height: 0.4rem;
+  box-sizing: border-box;
+  padding: 0.05rem 0.06rem 0.05rem 0.45rem;
+  margin: 0 auto 0.06rem;
+  position: relative;
+  background: #fff url("../images/icons.png") no-repeat 0.05rem 0.05rem;
+  background-size: 0.3rem;
+}
+.input-wrap .item-input .select_box {
+  top: 0.08rem;
+  right: 0.12rem;
+}
+.input-wrap .item-input .select::after {
+  content: "";
+}
+.input-wrap .item-input input,
+.input-wrap .item-input select {
+  width: 100%;
+  height: 100%;
+  line-height: 100%;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  font-size: 0.14rem;
+  position: relative;
+  -webkit-appearance: none;
+}
+.input-wrap .item-input input:active,
+.input-wrap .item-input select:active {
+  outline: none;
+}
+.input-wrap .item-input.name {
+  background-position: 0.05rem -0.41rem;
+}
+.input-wrap .item-input.mobile {
+  background-position: 0.05rem -0.88rem;
+}
+.input-wrap .item-input.location {
+  background-position: 0.05rem -1.33rem;
+}
+.input-wrap .item-input.market {
+  background-position: 0.05rem -1.79rem;
+}
+.question-list {
+  text-align: left;
+}
+.question-list h5 {
+  font-size: 0.18rem;
+  color: #009a41;
+}
+.question-list input {
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
+  font-size: 0.15rem;
+  color: #009a41;
+  font-weight: bold;
+}
+.question-list input::-webkit-input-placeholder {
+  font-size: 0.14rem;
+}
+.question-list input:focus,
+.question-list input:active {
+  outline: none;
+  border-color: #008c3e;
+}
+.question-list .input {
+  position: relative;
+  margin: .04rem 0 0.1rem;
+}
+.question-list .input input {
+  padding: 0.05rem 0.56rem 0.02rem 0;
+  line-height: 0.4rem;
+  width: 100%;
+  font-size: 0.24rem;
+}
+.question-list .input .add-on {
+  position: absolute;
+  right: 0;
+  font-size: 0.24rem;
+  bottom: 0.05rem;
+  color: #008c3e;
+}
+.question-list > li {
+  background: #fff;
+  border-radius: 0.05rem;
+  box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.2);
+  margin: 0.09rem 0.14rem;
+  padding: 0.17rem 0.2rem;
+  color: #666;
+  font-size: 0.15rem;
+}
+.question-list > li li {
+  padding: 0.08rem 0;
+  font-weight: bold;
+}
+.question-list > li li .right {
+  float: right;
+}
+.question-list > li li .right input {
+  width: 0.6rem;
+  text-align: center;
+}
+.page-main {
+  position: relative;
+  padding-top: 0;
+  background: url("../images/bg.png") no-repeat 0 0;
+  background-size: 100% 100%;
+}
+.page-main img {
+  display: block;
+}
+.page-main .bg {
+  max-width: 100%;
+  max-height: 75%;
+  margin: 0 auto;
+}
+.page-main .btn {
+  position: absolute;
+  bottom: 13%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.info {
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 0.2rem;
+}
+@media screen and (orientation: landscape) {
+  .note {
+    width: 0.5rem;
+  }
+  .pace::before {
+    top: 30%;
+  }
+  .pace::after {
+    top: 54%;
+  }
+  .container {
+    padding-bottom: 0.1rem;
+  }
+  .page-main .btn {
+    font-size: 0.12rem;
+    padding: 0 0.18rem;
+    height: 0.2rem;
+    line-height: 0.2rem;
+  }
+}

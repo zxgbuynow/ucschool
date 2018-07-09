@@ -34,15 +34,17 @@
         <div class="item-input mobile">
           <input type="tel" id="phone" name="phone" datatype="m" nullmsg="请填写联系电话" placeholder="联系电话" errormsg="联系电话格式不对" />
         </div>
-        <div class="item-input location select">
-          <input type="text" placeholder="店铺地址" datatype="*" id="location" name="location" readonly="" nullmsg="请填写店铺地址"/>
+        <div class="item-input market select">
+          <input type="text" placeholder="所在市场" datatype="*" id="location" name="location" readonly="" nullmsg="请填写所在市场"/>
           <a class="select_box">
             <label class="arr"></label>
           </a>
         </div>
-        <div class="item-input market">
-          <input type="text" name="market" id="market" placeholder="所在市场" datatype="*" nullmsg="请填写所在市场"/>
+        <div class="item-input market" style="display: none;">
+          <!-- <input type="text" name="market" id="market" placeholder="所在市场" datatype="*" nullmsg="请填写所在市场"/> -->
         </div>
+        <input type="hidden" name="q1" id="q1" value="" >
+        <input type="hidden" name="q2" id="q2" value="" >
         <a href="javascript:;" class="btn" id="submit-btn">提 交</a>
       </div>
     </div>
@@ -54,7 +56,14 @@
   <script src="__HOME_JS__/regionsObject2.js"></script>
   <script src="__HOME_JS__/cityPicker.js"></script>
   <script type="text/javascript">
-      
+  $(function () {
+    var q1 = localStorage["question_1"];
+    var q2 = localStorage["question_2"];
+    console.log(q1);
+    console.log(q2);
+    $('#q1').val(q1);
+    $('#q2').val(q2);
+  })
   $("#info_form").Validform({
     btnSubmit:"#submit-btn", 
     tiptype:1, 
@@ -65,6 +74,15 @@
     showAllError:false,
     postonce:true,
     ajaxPost:true,
+    beforeSubmit:function(curform){
+      var q1 = localStorage["question_1"];
+      var q2 = localStorage["question_2"];
+      if(q1==="undefined"||q2==="undefined") {
+        alert('请先选择答案');
+        return false;
+      }
+
+    },
     callback:function(data){
       console.log(data);
       if (data.status=='y') {

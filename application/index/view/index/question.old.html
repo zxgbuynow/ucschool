@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>公牛赠品核销问卷调查</title>
+  <link rel="stylesheet" type="text/css" href="__HOME_CSS__/main.css">
+</head>
+
+<body>
+  <div class="container page-question">
+    <h3>请根据实际进货金额与获得赠品选择</h3>    
+    <div class="step"><span class="top"><b>1</b>  <i>/</i>2</span><span>STEPS</span></div>
+    <ul class="question-list">
+      <li>
+        <h5>1.本店进货金额：</h5>
+        <ul>
+          <li>
+            <label>
+              <input type="radio" name="question_1" value="A"/>
+              <p>A. 500~800元</p>
+            </label>
+            <label>
+              <input type="radio" name="question_1" value="B"/>
+              <p>B. 800元以上</p>
+            </label>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <h5>2.本次获得的赠品：</h5>
+        <ul>
+          <li>
+            <label>
+              <input type="radio" name="question_2" value="A" />
+              <p>A. 公牛无线小魔方插座（U9B122S）</p>
+            </label>
+            <label>
+              <input type="radio" name="question_2" value="B" />
+              <p>B. 公牛机械式定时器插座（GND-2）</p>
+            </label>
+            <label>
+              <input type="radio" name="question_2" value="C" />
+              <p>C. 没有获得赠品</p>
+            </label>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <a href="javascript:;" class="btn next">确 定</a>
+  </div>
+  <script type="text/javascript" src="__HOME_JS__/jquery.min.js"></script>
+  <script type="text/javascript" src="__HOME_JS__/rem.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $(".question-list input").change(function () {
+        $(":checked").parent().addClass("checked").siblings().removeClass("checked");
+      });
+
+      $(".next").click(function () {
+        var question_1 = $("input[name='question_1']:checked").val();
+        var question_2 = $("input[name='question_2']:checked").val();
+        if (!question_1||!question_2) {
+          alert('请选择答案');return false;
+        }
+        localStorage.setItem("question_1",question_1);
+        localStorage.setItem("question_2",question_2);
+
+        setTimeout(function (argument) {
+         window.location.href = "{:url('Index/info')}";
+        },1000)
+      })
+
+    });
+
+  </script>
+</body>
+
+</html>

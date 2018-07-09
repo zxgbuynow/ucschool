@@ -1,4 +1,4 @@
-/**
+﻿/**
  *
  * cityPicker.js
  * cityPicker is made by Framework picker component which effects like iOS native select.
@@ -51,9 +51,9 @@
 
     // 初始化省市区
     var province = getProvince(regions),
-    city = getCity(regions, '安徽省'),
-    area = getArea(regions, '安徽省', '滁州市');
-    // console.log(getArea(regions, '广东省', '中山市') == 0)
+        city = getCity(regions, '安徽省'),
+        area = getArea(regions, '安徽省', '滁州市');
+    console.log(getArea(regions, '安徽省', '滁州市') == 0)
     var e = new Date();
     console.log(e - s);
     // 保存 picker 选择的省

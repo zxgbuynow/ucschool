@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>公牛赠品核销问卷调查</title>
+  <link rel="stylesheet" type="text/css" href="__HOME_CSS__/style.css">
+  <link rel="stylesheet" href="__WALL_CSS__/citypicker.min.css">
+  <link rel="stylesheet" type="text/css" href="__WALL_CSS__/main.css">
+</head>
+
+<body>
+  <form class="list" id="info_form" method="post" action="{:url('Index/info')}">
+  <div class="container page-question">
+    <h3>分销商信息</h3>
+    <div class="input-wrap">
+      <div class="item-input shop">
+        <input id="shopname" name="shopname" datatype="*" nullmsg="请填写网点名称" type="text" placeholder="网点名称" />
+      </div>
+      <div class="item-input name">
+        <input type="number" placeholder="联系电话" type="tel" id="phone" name="phone" datatype="m" nullmsg="请填写联系电话" errormsg="联系电话格式不对"/>
+      </div>
+      <div class="item-input location select">
+        <input type="text" placeholder="区域：" id="location" name="location" datatype="*" readonly="" nullmsg="请填写所在区域"/>
+        <a class="select_box">
+          <label class="arr"></label>
+        </a>
+      </div>
+      <p>备注：公司将严格保密客户信息</p>
+        <input type="hidden" name="q1" id="q1" value="" >
+        <input type="hidden" name="q2" id="q2" value="" >
+        <input type="hidden" name="q3" id="q3" value="" >
+        <input type="hidden" name="q4" id="q4" value="" >
+      <a href="#" class="btn" id="submit-btn">提 交</a>
+    </div>
+  </div>
+  </form>
+  <script type="text/javascript" src="__WALL_JS__/jquery.min.js"></script>
+  <script type="text/javascript" src="__WALL_JS__/rem.js"></script>
+  <script src="__WALL_JS__/framework7.min.js"></script>
+  <script src="__WALL_JS__/regionsObject2.js"></script>
+  <script src="__WALL_JS__/cityPicker.js"></script>
+  <script type="text/javascript" src="__HOME_JS__/Validform_v5.3.2.js"></script>
+  <script type="text/javascript">
+ $(function () {
+    var q1 = localStorage["question_1"];
+    var q2 = localStorage["question_2"];
+    var q3 = localStorage["question_3"];
+    var q4 = localStorage["question_4"];
+    console.log(q1);
+    console.log(q2);
+    console.log(q3);
+    console.log(q4);
+    $('#q1').val(q1);
+    $('#q2').val(q2);
+    $('#q3').val(q3);
+    $('#q4').val(q4);
+  })
+
+  $("#info_form").Validform({
+    btnSubmit:"#submit-btn", 
+    tiptype:1, 
+    ignoreHidden:false,
+    dragonfly:false,
+    tipSweep:true,
+    label:".label",
+    showAllError:false,
+    postonce:true,
+    ajaxPost:true,
+    beforeSubmit:function(curform){
+      var q1 = localStorage["question_1"];
+      var q2 = localStorage["question_2"];
+      var q3 = localStorage["question_3"];
+      var q4 = localStorage["question_4"];
+      if(q1==="undefined"||(q2==="undefined"&&q3==="undefined"&&q4==="undefined")) {
+        alert('请先选择答案');
+        return false;
+      }
+    },
+    callback:function(data){
+      console.log(data);
+      if (data.status=='y') {
+        alert('提交成功！');
+        setTimeout(function (argument) {
+          window.location.href = "{:url('Index/Index')}";
+        },1000)
+        
+      }
+    }
+  });
+
+  </script>
+</body>
+
+</html>

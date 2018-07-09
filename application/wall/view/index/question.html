@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>公牛赠品核销问卷调查</title>
+  <link rel="stylesheet" type="text/css" href="__WALL_CSS__/main.css">
+</head>
+
+<body>
+  <div class="container page-question">
+    <h3>请根据实际进货金额与获得赠品填写</h3>
+    <!-- <div class="step"><span class="top"><b>1</b>  <i>/</i>2</span><span>STEPS</span></div> -->
+    <ul class="question-list">
+      <li>
+        <h5>1.进货金额：(
+          <input type="number" name="q1" value="" class="input" /> ) 元</h5>
+        <p class="note">填写说明：填写数字即可</p>
+      </li>
+      <li>
+        <h5>2.获得的赠品及数量：</h5>
+        <ul>
+          <li>
+            <input type="checkbox" name="question_2" id="option1" />
+            <label for="option1">公牛尼龙编织安卓数据线（
+              <input type="number" value="" name="q2" class="input" />）个</label>
+          </li>
+          <li>
+            <input type="checkbox" name="question_2" id="option2" />
+            <label for="option2">公牛金属车充（
+              <input type="number" value="" name="q3" class="input" />）个</label>
+          </li>
+          <li>
+            <input type="checkbox" name="question_2" id="option3" />
+            <label for="option3">公牛移动电源（
+              <input type="number" value="" name="q4" class="input" />）个</label>
+          </li>
+        </ul>
+        <p class="note">填写说明：三种赠品前点击“√”选择， 赠品后面填写数字即可</p>
+      </li>
+    </ul>
+    <a href="javascript:;" class="btn next">确 定</a>
+  </div>
+  <script type="text/javascript" src="__WALL_JS__/jquery.min.js"></script>
+  <script type="text/javascript" src="__WALL_JS__/rem.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      
+
+      $(".next").click(function () {
+        var question_1 = $("input[name='q1']").val();
+        var question_2 = $("input[name='q2']").val();
+        var question_3 = $("input[name='q3']").val();
+        var question_4 = $("input[name='q4']").val();
+        console.log(question_1);
+        console.log(question_2);
+        console.log(question_3);
+        console.log(question_4);
+        if (!question_1) {
+          alert('请填写金额');return false;
+        }
+
+        if (!question_2&&!question_3&&!question_4) {
+          alert('请填写数量');return false;
+        }
+        localStorage.setItem("question_1",question_1);
+        localStorage.setItem("question_2",question_2);
+        localStorage.setItem("question_3",question_3);
+        localStorage.setItem("question_4",question_4);
+
+        setTimeout(function (argument) {
+         window.location.href = "{:url('Index/info')}";
+        },1000)
+      })
+
+    });
+
+  </script>
+</body>
+
+</html>

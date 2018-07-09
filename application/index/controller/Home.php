@@ -22,8 +22,8 @@ class Home extends Common
             $this->error('站点已经关闭，请稍后访问~');
         }
         //资源目录
-        // $base_file = $this->request->baseFile();
-        // $base_dir  = rtrim($base_file, 'index.php');
-        // $this->assign('static_dir', $base_dir. 'public/static/');
+        $base_file = $this->request->baseFile();
+        $base_dir  = rtrim($base_file, 'index.php');
+        $this->assign('static_dir', $base_dir. 'public/static/');
     }
 }

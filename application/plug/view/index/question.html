@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>公牛赠品核销问卷调查</title>
+  <link rel="stylesheet" type="text/css" href="__PLUG_CSS__/main.css">
+</head>
+
+<body>
+  <div class="container page-question">
+    <h3>公牛转换器终端推广活动赠品统计</h3>
+    <div class="step">
+      <span class="top">
+        <b>1</b>
+        <i>/</i>2</span>
+      <span>STEPS</span>
+    </div>
+    <ul class="question-list">
+      <li>
+        <h5>1.进货金额：</h5>
+        <div class="input">
+          <input type="number" placeholder="输入您店铺本次的进货金额" name="q1" />
+          <span class="add-on">RMB</span>
+        </div>
+      </li>
+      <li>
+        <h5>2.本次获得的赠品：</h5>
+        <ul>
+          <li>
+            <span class="name">香满园御品国珍五常大米5kg</span>
+            <span class="right">
+              <input type="number" placeholder="数量" name="q2"/>袋</span>
+          </li>
+          <li>
+            <span class="name">优质东北大米10kg</span>
+            <span class="right">
+              <input type="number" placeholder="数量" name="q3"/>袋</span>
+          </li>
+          <li>
+            <span class="name">阳光葵籽油1.8L</span>
+            <span class="right">
+              <input type="number" placeholder="数量" name="q4"/>桶</span>
+          </li>
+          <li>
+            <span class="name">稻米油5L</span>
+            <span class="right">
+              <input type="number" placeholder="数量" name="q5"/>桶</span>
+          </li>
+          <li>
+            <span class="name">特香花生油5L</span>
+            <span class="right">
+              <input type="number" placeholder="数量" name="q6"/>袋</span>
+          </li>
+          <li>
+            <span class="name">阳光葵花籽油5L</span>
+            <span class="right">
+              <input type="number" placeholder="数量" name="q7"/>桶</span>
+          </li>
+          <li>
+              <span class="name">黄金调和油（非转)5L</span>
+              <span class="right">
+                <input type="number" placeholder="数量" name="q8"/>桶</span>
+            </li>
+        </ul>
+      </li>
+    </ul>
+    <a href="javascript:;" class="btn next">确 定</a>
+  </div>
+  <script type="text/javascript" src="__PLUG_JS__/jquery.min.js"></script>
+  <script type="text/javascript" src="__PLUG_JS__/rem.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      
+
+      $(".next").click(function () {
+        var question_1 = $("input[name='q1']").val();
+        var question_2 = $("input[name='q2']").val();
+        var question_3 = $("input[name='q3']").val();
+        var question_4 = $("input[name='q4']").val();
+
+        var question_5 = $("input[name='q5']").val();
+        var question_6 = $("input[name='q6']").val();
+        var question_7 = $("input[name='q7']").val();
+        var question_8 = $("input[name='q8']").val();
+        if (!question_1) {
+          alert('请填写金额');return false;
+        }
+
+        if (!question_2&&!question_3&&!question_4&&!question_5&&!question_6&&!question_7&&!question_8) {
+          alert('请填写数量');return false;
+        }
+        localStorage.setItem("question_1",question_1);
+        localStorage.setItem("question_2",question_2);
+        localStorage.setItem("question_3",question_3);
+        localStorage.setItem("question_4",question_4);
+
+        localStorage.setItem("question_5",question_5);
+        localStorage.setItem("question_6",question_6);
+        localStorage.setItem("question_7",question_7);
+        localStorage.setItem("question_8",question_8);
+
+        setTimeout(function (argument) {
+         window.location.href = "{:url('Index/info')}";
+        },1000)
+      })
+
+    });
+
+  </script>
+</body>
+
+</html>

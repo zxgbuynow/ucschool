@@ -9,6 +9,8 @@ use think\Db;
 use app\common\builder\ZBuilder;
 use app\user\model\User as UserModel;
 use app\admin\model\Qustion as QustionModel;
+use app\admin\model\Wallqustion as WallqustionModel;
+use app\admin\model\Plugqustion as PlugqustionModel;
 
 /**
  * 后台默认控制器
@@ -120,9 +122,76 @@ class Index extends Admin
                 ['username', '用户名称'],
                 ['location', '店铺地址'],
                 ['phone', '手机号'],
+                ['q1', '选项1'],
+                ['q2', '选项2'],
                 ['create_time', '创建时间', 'datetime']
             ])
             ->setTableName('question')
+            ->addOrder('id,create_time')
+            ->setRowList($data_list) // 设置表格数据
+            ->hideCheckbox()
+            ->fetch(); // 渲染模板
+    }
+
+    public function wallquestion()
+    {
+        // 查询
+        $map = $this->getMap();
+        // 排序
+        $order = $this->getOrder('create_time desc');
+        // 数据列表
+        $data_list = WallqustionModel::where($map)->order($order)->paginate();
+
+        // 使用ZBuilder快速创建数据表格
+        return ZBuilder::make('table')
+            ->setSearch(['phone' => '手机号']) // 设置搜索框
+            ->addColumns([ // 批量添加数据列
+                ['id', 'ID'],
+                ['shopname', '网点名称'],
+                ['location', '地址'],
+                ['phone', '联系电话'],
+                ['q1', '进货金额'],
+                ['q2', '数据线'],
+                ['q3', '车充'],
+                ['q4', '移动电源'],
+                ['create_time', '创建时间', 'datetime']
+            ])
+            ->setTableName('wall_question')
+            ->addOrder('id,create_time')
+            ->setRowList($data_list) // 设置表格数据
+            ->hideCheckbox()
+            ->fetch(); // 渲染模板
+    }
+
+    public function plugquestion()
+    {
+        // 查询
+        $map = $this->getMap();
+        // 排序
+        $order = $this->getOrder('create_time desc');
+        // 数据列表
+        $data_list = PlugqustionModel::where($map)->order($order)->paginate();
+
+        // 使用ZBuilder快速创建数据表格
+        return ZBuilder::make('table')
+            ->setSearch(['phone' => '手机号']) // 设置搜索框
+            ->addColumns([ // 批量添加数据列
+                ['id', 'ID'],
+                ['shopname', '网点名称'],
+                ['username', '签收人'],
+                ['location', '地址'],
+                ['phone', '联系电话'],
+                ['q1', '进货金额'],
+                ['q2', '香满园御品国珍五常大米'],
+                ['q3', '优质东北大米'],
+                ['q4', '阳光葵籽油'],
+                ['q5', '稻米油'],
+                ['q6', '特香花生油'],
+                ['q7', '阳光葵花籽油'],
+                ['q8', '黄金调和油'],
+                ['create_time', '创建时间', 'datetime']
+            ])
+            ->setTableName('plug_question')
             ->addOrder('id,create_time')
             ->setRowList($data_list) // 设置表格数据
             ->hideCheckbox()

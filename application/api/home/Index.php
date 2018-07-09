@@ -1701,7 +1701,7 @@ class Index
 
         $ret['image'] = $info['picture'];
         $ret['title'] = $info['title'];
-        $ret['college'] = db('toplearning_school')->where(['school_id'=>$info['school_id']])->column('school_name')?db('toplearning_school')->where(['school_id'=>$info['school_id']])->column('school_name')[0]
+        $ret['college'] = db('toplearning_school')->where('school_id'=>$info['school_id'])->column('school_name')?db('toplearning_school')->where('school_id'=>$info['school_id'])->column('school_name')[0]
         :'';
         $ret['type'] = $info['type'];
         $ret['keyword'] = $info['tags'];
