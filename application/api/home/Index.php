@@ -141,6 +141,24 @@ class Index
         return json($data);
     }
 
+    public function updatenickname($params)
+    {
+
+        //参数手机号，Nickname
+        $phone = trim($params['account']);
+        $nickname = trim($params['nickname']);
+
+        $data['nickname'] = $nickname;
+        db('member')->where(['username'=>$phone])->update($data);
+
+        $data = [
+            'Success'=>true,
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>1
+        ];
+        return json($data);
+    }
     /**
      * [story 故事列表]
      * @param  [type] $params [description]
