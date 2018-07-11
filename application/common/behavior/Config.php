@@ -103,6 +103,11 @@ class Config
         ];
         config('view_replace_str', $view_replace_str);
 
+        //链接页面
+        $app_link = [
+            '_www/view/item/detail.html'=>'故事祥情页'
+        ];
+        config('app_link',$app_link);
         // 如果定义了入口为admin，则修改默认的访问控制器层
         if(defined('ENTRANCE') && ENTRANCE == 'admin') {
             define('ADMIN_FILE', substr($base_file, strripos($base_file, '/') + 1));

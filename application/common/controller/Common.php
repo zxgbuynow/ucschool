@@ -18,12 +18,12 @@ class Common extends Controller
     protected function _initialize()
     {
         // 后台公共模板
-        if ($this->request->module()=='admin') {
-           $this->assign('_admin_base_layout', config('admin_base_layout'));
-        }else{
-            $this->assign('_admin_base_layout', config('shop_base_layout'));
-        }
-        
+        // if ($this->request->module()=='admin') {
+        //    $this->assign('_admin_base_layout', config('admin_base_layout'));
+        // }else{
+        //     $this->assign('_admin_base_layout', config('shop_base_layout'));
+        // }
+        $this->assign('_admin_base_layout', config('admin_base_layout'));
         // 当前配色方案
         $this->assign('system_color', config('system_color'));
 
