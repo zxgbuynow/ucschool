@@ -15,8 +15,8 @@ class Advert extends Validate
     // 定义验证规则
     protected $rule = [
         'typeid|广告分类'   => 'require',
-        'tagname|广告位标识' => 'require|regex:^[a-z]+[a-z0-9_]{0,20}$|unique:cms_advert',
-        'name|广告位名称'    => 'require|unique:cms_advert',
+        'tagname|广告位标识' => 'require|regex:^[a-z]+[a-z0-9_]{0,20}$',
+        'name|广告位名称'    => 'require',
         'start_time'    => 'requireIf:timeset,1',
         'end_time'      => 'requireIf:timeset,1',
         'title'         => 'requireIf:ad_type,1',

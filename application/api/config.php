@@ -8,6 +8,7 @@ return [
         'story'=>'user.story',//故事
         'memberinfo'=>'member.info',//会员列表
         'updatenickname'=>'update.nickname',//更新会员Nickname
+        'advlist'=>'adv.list'//广告列表
 
     ],
     'param'=>[

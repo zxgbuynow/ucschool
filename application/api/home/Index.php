@@ -159,6 +159,37 @@ class Index
         ];
         return json($data);
     }
+
+    /**
+     * [advlist 广告列表]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function advlist($params)
+    {
+        //广告标识
+        $type = trim($params['type']);
+
+        $map['tagname'] = $type;
+        $map['status'] = 1;
+        $info = db('cms_advert')->where($map)->order('create_time DESC')->limit(5)->select();
+
+        $ret = array();
+        foreach ($info as $key => $value) {
+            $ret[$key]['pic'] = $value['cover'];
+            $ret[$key]['webview'] = $value['link'];
+            $ret[$key]['webparam'] = $value['params'];
+        }
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
     /**
      * [story 故事列表]
      * @param  [type] $params [description]
@@ -168,25 +199,30 @@ class Index
     {
 
         //params
-        $collegeid = trim($params['collegeid']);
         $page = trim($params['page']);
         $size = trim($params['size']);
 
         //学院老师
-        $map['del'] = 0;
-        $map['school_id'] = $collegeid;
+        $map['status'] = 1;
         $page = $page ==''?0:$page;
         $size = $size == ''?10:$size;
 
         $limit = $page*$size;
-        $teachers = db('toplearning_school_teacher')->where($map)->limit($limit, $size)->select();
+        $story = db('story')->where($map)->limit($limit, $size)->select();
 
-       
+        $ret = array();
+
+        foreach ($story as $key => $value) {
+            $ret[$key]['id'] = $value['id'];
+            $ret[$key]['title'] = $value['title'];
+            $ret[$key]['description'] = $value['description'];
+            $ret[$key]['pic'] = get_file_path($value['pic']);
+        }
         //返回信息
         $data = [
             'Code'=>'0',
             'Msg'=>'操作成功',
-            'Data'=>$teachers,
+            'Data'=>$ret,
             'Success'=>true
         ];
 
