@@ -257,8 +257,39 @@ class Index
         foreach ($story as $key => $value) {
             $ret[$key]['id'] = $value['id'];
             $ret[$key]['title'] = $value['title'];
+            $ret[$key]['source'] = $value['source'];
             $ret[$key]['description'] = $value['description'];
             $ret[$key]['pic'] = get_file_path($value['pic']);
+        }
+
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
+
+    /**
+     * [storydetail 祥情页]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function storydetail($params)
+    {
+        //params
+        $storyid = trim($params['storyid']);
+        $info = db('story')->where(['id'=>$storyid])->find();
+
+        $ret = array();
+        if ($info) {
+            $ret['title'] = $info['title'];
+            $ret['create_time'] = $info['create_time'];
+            $ret['content'] = $info['content'];
+            $ret['source'] = $info['source'];
         }
 
         //返回信息
