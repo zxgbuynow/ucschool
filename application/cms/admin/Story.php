@@ -80,11 +80,12 @@ class Story extends Admin
             ->setPageTitle('新增') // 设置页面标题
             ->addFormItems([ // 批量添加表单项
                 ['text', 'title', '标题'],
-                ['text', 'description', '描述'],
+                ['textarea', 'description', '描述'],
                 ['image', 'pic', '单页封面'],
                 ['select', 'cateid', '分类', '', $list],
                 ['radio', 'status', '状态', '', ['禁用', '启用'], 1]
             ])
+            ->addWangeditor('content', '内容')
             ->fetch();
     }
 
@@ -126,11 +127,12 @@ class Story extends Admin
             ->addFormItems([ // 批量添加表单项
                 ['hidden', 'id'],
                 ['text', 'title', '标题'],
-                ['text', 'description', '描述'],
+                ['textarea', 'description', '描述'],
                 ['image', 'pic', '单页封面'],
                 ['select', 'cateid', '分类', '', $list],
                 ['radio', 'status', '状态', '', ['禁用', '启用'], 1]
             ])
+            ->addWangeditor('content', '内容')
             ->setFormData($info) // 设置表单数据
             ->fetch();
     }
