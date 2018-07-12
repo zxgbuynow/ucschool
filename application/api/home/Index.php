@@ -215,6 +215,7 @@ class Index
         foreach ($story as $key => $value) {
             $ret[$key]['id'] = $value['id'];
             $ret[$key]['title'] = $value['title'];
+            $ret[$key]['source'] = $value['source'];
             $ret[$key]['description'] = $value['description'];
             $ret[$key]['pic'] = get_file_path($value['pic']);
         }
