@@ -80,6 +80,7 @@ class Story extends Admin
             ->setPageTitle('新增') // 设置页面标题
             ->addFormItems([ // 批量添加表单项
                 ['text', 'title', '标题'],
+                ['text', 'source', '来源'],
                 ['textarea', 'description', '描述'],
                 ['image', 'pic', '单页封面'],
                 ['select', 'cateid', '分类', '', $list],
@@ -127,6 +128,7 @@ class Story extends Admin
             ->addFormItems([ // 批量添加表单项
                 ['hidden', 'id'],
                 ['text', 'title', '标题'],
+                ['text', 'source', '来源'],
                 ['textarea', 'description', '描述'],
                 ['image', 'pic', '单页封面'],
                 ['select', 'cateid', '分类', '', $list],
