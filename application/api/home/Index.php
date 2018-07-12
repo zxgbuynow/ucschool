@@ -228,6 +228,49 @@ class Index
 
         return json($data);
     }
+
+    /**
+     * [searchlist 搜索]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function searchlist($params)
+    {
+        //params
+        $page = trim($params['page']);
+        $size = trim($params['size']);
+        $title = trim($params['title']);
+
+        if ($title) {
+            $map['title'] = array('like','%'.$title.'%');
+        }
+        //学院老师
+        $map['status'] = 1;
+        $page = $page ==''?0:$page;
+        $size = $size == ''?10:$size;
+
+        $limit = $page*$size;
+        $story = db('story')->where($map)->limit($limit, $size)->select();
+
+        $ret = array();
+
+        foreach ($story as $key => $value) {
+            $ret[$key]['id'] = $value['id'];
+            $ret[$key]['title'] = $value['title'];
+            $ret[$key]['description'] = $value['description'];
+            $ret[$key]['pic'] = get_file_path($value['pic']);
+        }
+
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>$ret,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
     //---------- common function-----------
     /**
      * 发送
