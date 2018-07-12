@@ -305,6 +305,28 @@ class Index
 
         return json($data);
     }
+
+    /**
+     * [upview 更新view量]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function upview($params)
+    {
+        //params
+        $storyid = trim($params['storyid']);
+        db('story')->where(['id'=>$storyid])->setInc('view',5);
+
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>1,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
     //---------- common function-----------
     /**
      * 发送

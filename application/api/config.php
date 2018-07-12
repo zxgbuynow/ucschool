@@ -10,7 +10,8 @@ return [
         'updatenickname'=>'update.nickname',//更新会员Nickname
         'advlist'=>'adv.list',//广告列表
         'searchlist'=>'search.list',//搜索列表
-        'storydetail'=>'story.detail'//祥情
+        'storydetail'=>'story.detail',//祥情
+        'upview'=>'up.view'//更新view
 
     ],
     'param'=>[
