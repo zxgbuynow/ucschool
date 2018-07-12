@@ -216,6 +216,7 @@ class Index
             $ret[$key]['id'] = $value['id'];
             $ret[$key]['title'] = $value['title'];
             $ret[$key]['source'] = $value['source'];
+            $ret[$key]['view'] = $value['view'];
             $ret[$key]['description'] = $value['description'];
             $ret[$key]['pic'] = get_file_path($value['pic']);
         }
@@ -259,6 +260,7 @@ class Index
             $ret[$key]['id'] = $value['id'];
             $ret[$key]['title'] = $value['title'];
             $ret[$key]['source'] = $value['source'];
+            $ret[$key]['view'] = $value['view'];
             $ret[$key]['description'] = $value['description'];
             $ret[$key]['pic'] = get_file_path($value['pic']);
         }
