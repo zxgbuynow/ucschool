@@ -74,10 +74,11 @@ class Index extends Home
             $resp = json_decode($resp,true);
             if ($resp['status']==0) {
                 //
-                $s['address'] = $resp['result']['formatted_address'];
+                $s['address'] = $resp['result']['formatted_address'].$resp['result']['sematic_description'];
+                error_log(json_encode($resp),'3','/home/wwwroot/bullqt/error.log');
                 // $s['create_time'] = time();
                 db('postion')->insert($s);
-                echo json_decode($resp['result']['formatted_address']);exit;
+                echo json_encode($resp['result']['formatted_address']);exit;
             }
             
         }
