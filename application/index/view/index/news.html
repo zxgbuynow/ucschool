@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>news</title>
+  <link rel="stylesheet" type="text/css" href="__HOME_CSS__/main.css">
+</head>
+
+<body>
+  <div >
+    <!-- <img src="__HOME_IMG__/home_bg.png" alt="新品上市促销活动 赠品统计" class="bg" />
+    <a href="{:url('Index/question')}" class="btn btn-big">开 始</a>
+    <img src="__HOME_IMG__/gn_note.png" alt="公牛数码配件" class="note" /> -->
+    位置
+  </div>
+  <script type="text/javascript" src="__HOME_JS__/jquery.min.js"></script>
+  <!-- <script type="text/javascript" src="__HOME_JS__/rem.js"></script> -->
+  <!-- <script type="text/javascript" src="__HOME_JS__/pace.min.js"></script> -->
+  <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=xkqsnW9pPnM2Fi8tVCSBCGBzMpiSrGdg"></script>
+  <script type="text/javascript" src="http://developer.baidu.com/map/jsdemo/demo/convertor.js"></script>
+  <script type="text/javascript">
+//     if (navigator.geolocation){
+
+//       navigator.geolocation.getCurrentPosition(showPosition);
+// 　　 }
+//     function showPosition(position){  //showPosition() 函数获得并显示经度和纬度
+//         function showPosition(position){  //showPosition() 函数获得并显示经度和纬度
+//       //转换具体位置
+//       $.ajax({
+//         type:'POST',
+//         url:"{:url('Index/news')}",
+//         data:{latitude:position.coords.latitude,longitude:position.coords.longitude},
+//         dataType:'json',
+//         success:function(data){
+//             console.log(data);
+//             alert(data)
+//         }
+//      });
+//     }
+//     
+     window.onload = userType;
+            var long;
+            var lati;
+
+            function userType() {
+                var u = navigator.userAgent;
+                var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+                var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+                //alert('是否是Android：' + isAndroid);
+                if (isAndroid) {
+                    getLocation();
+                }
+                //alert('是否是iOS：' + isiOS);
+                if (isiOS) {
+                    getLocation2();
+                }
+            }
+
+            // 获取经纬度信息（安卓）
+
+            function getLocation() {
+                var options = {
+                    enableHighAccuracy: true,
+                    maximumAge: 1000
+                }
+                if (navigator.geolocation) {
+                    //浏览器支持geolocation
+                    navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
+                } else {
+                    //浏览器不支持geolocation
+                    //alert('您的浏览器不支持地理位置定位');
+                }
+            }
+
+
+            //成功时
+            function onSuccess(position) {
+                //返回用户位置
+                //经度
+                var longitude = position.coords.longitude;
+                //纬度
+                var latitude = position.coords.latitude;
+
+                var lo = longitude.toString().split(".");
+                var lo1 = lo[1].substring(0, 4);
+                var lo2 = parseInt(lo1) + 113;
+                long = lo[0].toString() + "." + lo2.toString();
+
+                var la = latitude.toString().split(".");
+                var la1 = la[1].substring(0, 4);
+                var la2 = parseInt(la1) + 43;
+                lati = la[0].toString() + "." + la2.toString();
+
+                $.ajax({
+                  type:'POST',
+                  url:"{:url('Index/news')}",
+                  data:{latitude:position.coords.latitude,longitude:position.coords.longitude},
+                  dataType:'json',
+                  success:function(data){
+                      console.log(data);
+                      // alert(data)
+                  }
+                });
+                /*alert('经度' + long + '，纬度' + lati);
+
+                //根据经纬度获取地理位置，不太准确，获取城市区域还是可以的
+                var map = new BMap.Map("allmap");
+                var point = new BMap.Point(long, lati);
+                var gc = new BMap.Geocoder();
+                gc.getLocation(point, function (rs) {
+                    var addComp = rs.addressComponents;
+                    alert(addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber);
+                });*/
+            }
+
+            //失败时
+            function onError(error) {
+                switch (error.code) {
+                    case 1:
+                        alert("位置服务被拒绝");
+                        break;
+                    case 2:
+                        alert("暂时获取不到位置信息");
+                        break;
+                    case 3:
+                        alert("获取信息超时");
+                        break;
+                    case 4:
+                        alert("未知错误");
+                        break;
+                }
+            }
+
+            // 获取经纬度信息（IOS）
+            function getLocation2() {
+                var geolocation = new BMap.Geolocation();
+                geolocation.getCurrentPosition(function (r) {
+                    if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+                        var mk = new BMap.Marker(r.point);
+                        lati = r.point.lat;
+                        long = r.point.lng;
+                        // alert('经度' + long + '，纬度' + lati);
+                        $.ajax({
+                          type:'POST',
+                          url:"{:url('Index/news')}",
+                          data:{latitude:lati,longitude:long},
+                          dataType:'json',
+                          success:function(data){
+                              console.log(data);
+                              // alert(data)
+                          }
+                        });
+                        /*var pt = new BMap.Point(long, lati);
+                        var geoc = new BMap.Geocoder();
+                        geoc.getLocation(pt, function (rs) {
+                            var addComp = rs.addressComponents;
+
+
+                            var city = addComp.city;
+                            var addComp = rs.addressComponents;
+                            var texts = addComp.district + "-" + addComp.street + "-" + addComp.streetNumber;
+                            //获取地理位置成功，跳转
+                            alert(texts);
+
+                        });*/
+                    }
+                });
+            }
+  </script>
+</body>
+</html>

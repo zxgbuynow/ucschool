@@ -61,4 +61,26 @@ class Index extends Home
     {
         return $this->fetch(); // 渲染模板
     } 
+
+    public function news()
+    {
+        if ($this->request->isAjax()) {
+            $post = Request::instance()->param();
+            $params['longitude'] = $post['longitude'];
+            $params['latitude'] = $post['latitude'];
+            $url = "http://api.map.baidu.com/geoconv/v1/?coords=".$params['longitude'].",".$params['latitude']."&from=1&to=5&ak=lDlfRKWEt1xLRyxgFE5RLONTx9ox42GI&mcode=BA:AD:09:3A:82:82:9F:B4:32:A7:B2:8C:B4:CC:F0:E9:F3:7D:AE:58;com.wangu.www";
+            $url = "http://api.map.baidu.com/geocoder/v2/?location=".$params['latitude'].",".$params['longitude']."&output=json&ak=lDlfRKWEt1xLRyxgFE5RLONTx9ox42GI&mcode=BA:AD:09:3A:82:82:9F:B4:32:A7:B2:8C:B4:CC:F0:E9:F3:7D:AE:58;com.wangu.www";
+            $resp = curlRequest($url,[]);
+            $resp = json_decode($resp,true);
+            if ($resp['status']==0) {
+                //
+                $s['address'] = $resp['result']['formatted_address'];
+                // $s['create_time'] = time();
+                db('postion')->insert($s);
+                echo json_decode($resp['result']['formatted_address']);exit;
+            }
+            
+        }
+        return $this->fetch(); // 渲染模板
+    }
 }
