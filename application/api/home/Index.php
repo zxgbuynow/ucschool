@@ -218,7 +218,13 @@ class Index
             $ret[$key]['source'] = $value['source'];
             $ret[$key]['view'] = $value['view'];
             $ret[$key]['description'] = $value['description'];
-            $ret[$key]['pic'] = get_file_path($value['pic']);
+            if (is_numeric($value['pic'])) {
+                $ret[$key]['pic'] = get_file_path($value['pic']);
+            }else{
+                if ($value['pic']) {
+                    $ret[$key]['pic'] = $value['pic'];
+                }
+            }
         }
         //返回信息
         $data = [
@@ -262,7 +268,14 @@ class Index
             $ret[$key]['source'] = $value['source'];
             $ret[$key]['view'] = $value['view'];
             $ret[$key]['description'] = $value['description'];
-            $ret[$key]['pic'] = get_file_path($value['pic']);
+            if (is_numeric($value['pic'])) {
+                $ret[$key]['pic'] = get_file_path($value['pic']);
+            }else{
+                if ($value['pic']) {
+                    $ret[$key]['pic'] = $value['pic'];
+                }
+            }
+            
         }
 
         //返回信息
