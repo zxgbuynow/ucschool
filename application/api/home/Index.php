@@ -208,7 +208,7 @@ class Index
         $size = $size == ''?10:$size;
 
         $limit = $page*$size;
-        $story = db('story')->where($map)->limit($limit, $size)->select();
+        $story = db('story')->where($map)->limit($limit, $size)->order('pic DESC')->select();
 
         $ret = array();
 
@@ -258,7 +258,7 @@ class Index
         $size = $size == ''?10:$size;
 
         $limit = $page*$size;
-        $story = db('story')->where($map)->limit($limit, $size)->select();
+        $story = db('story')->where($map)->limit($limit, $size)->order('pic DESC')->select();
 
         $ret = array();
 
