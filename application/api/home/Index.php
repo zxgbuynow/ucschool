@@ -340,6 +340,32 @@ class Index
 
         return json($data);
     }
+    /**
+     * [upfeedback description]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    public function upfeedback($params)
+    {
+        //params
+        $phone = trim($params['phone']);
+        $content = trim($params['content']);
+
+        $data['phone'] = $phone;
+        $data['content'] = $content;
+
+        db('feedback')->insert($data);
+
+        //返回信息
+        $data = [
+            'Code'=>'0',
+            'Msg'=>'操作成功',
+            'Data'=>1,
+            'Success'=>true
+        ];
+
+        return json($data);
+    }
     //---------- common function-----------
     /**
      * 发送
